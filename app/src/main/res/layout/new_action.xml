@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/title1"
@@ -51,8 +50,7 @@
         android:maxLength="2"
         android:textColorHint="@color/colorPrimaryDark"
         android:textColor="@color/colorPrimaryDark"
-        android:inputType="numberDecimal"
-        android:digits="true"/>
+        android:inputType="numberDecimal"/>
 
     <EditText
         android:id="@+id/begin_min"
@@ -66,8 +64,7 @@
         android:maxLength="2"
         android:textColorHint="@color/colorPrimaryDark"
         android:textColor="@color/colorPrimaryDark"
-        android:inputType="numberDecimal"
-        android:digits="true"/>
+        android:inputType="numberDecimal"/>
 
     <EditText
         android:id="@+id/end_hour"
@@ -81,8 +78,7 @@
         android:maxLength="2"
         android:textColorHint="@color/colorPrimaryDark"
         android:textColor="@color/colorPrimaryDark"
-        android:inputType="numberDecimal"
-        android:digits="true"/>
+        android:inputType="numberDecimal"/>
 
     <EditText
         android:id="@+id/end_min"
@@ -98,8 +94,7 @@
         android:maxLength="2"
         android:textColorHint="@color/colorPrimaryDark"
         android:textColor="@color/colorPrimaryDark"
-        android:inputType="numberDecimal"
-        android:digits="true"/>
+        android:inputType="numberDecimal"/>
 
     <TextView
         android:id="@+id/ending"
