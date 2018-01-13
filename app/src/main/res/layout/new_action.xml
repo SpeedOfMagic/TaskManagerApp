@@ -1,6 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/title1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Новое событие"
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        android:layout_marginTop="20dp"/>
+
+    <EditText
+        android:id="@+id/name_of_act"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title1"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:inputType="text"
+        android:hint="Название события"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimaryDark" />
+
+    <TextView
+        android:id="@+id/beginning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name_of_act"
+        android:layout_margin="10dp"
+        android:text="Начало"
+        android:textSize="20sp"
+        android:textColor="@color/black"/>
+
+    <EditText
+        android:id="@+id/begin_hour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/beginning"
+        android:layout_toRightOf="@id/beginning"
+        android:layout_alignBaseline="@id/beginning"
+        android:layout_below="@+id/name_of_act"
+        android:hint="00"
+        android:maxLength="2"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimaryDark"
+        android:inputType="numberDecimal"
+        android:digits="true"/>
+
+    <EditText
+        android:id="@+id/begin_min"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/begin_hour"
+        android:layout_toRightOf="@id/begin_hour"
+        android:layout_alignBaseline="@id/beginning"
+        android:layout_below="@+id/name_of_act"
+        android:hint="00"
+        android:maxLength="2"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimaryDark"
+        android:inputType="numberDecimal"
+        android:digits="true"/>
+
+    <EditText
+        android:id="@+id/end_hour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/end_min"
+        android:layout_toLeftOf="@id/end_min"
+        android:layout_alignBaseline="@id/beginning"
+        android:layout_below="@+id/name_of_act"
+        android:hint="00"
+        android:maxLength="2"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimaryDark"
+        android:inputType="numberDecimal"
+        android:digits="true"/>
+
+    <EditText
+        android:id="@+id/end_min"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBaseline="@id/beginning"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_below="@+id/name_of_act"
+        android:hint="00"
+        android:maxLength="2"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimaryDark"
+        android:inputType="numberDecimal"
+        android:digits="true"/>
+
+    <TextView
+        android:id="@+id/ending"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/beginning"
+        android:layout_toStartOf="@id/end_hour"
+        android:layout_toLeftOf="@id/end_hour"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="Конец"
+        android:textSize="20sp"
+        android:textColor="@color/black"/>
+
+    <EditText
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Описание события..."
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_below="@id/beginning"
+        android:layout_margin="10dp"
+        android:inputType="textMultiLine"
+        android:background="@color/colorPrimaryLight"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/notif_title"
+        android:text="Уведомления"
+        android:layout_below="@id/description"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:textSize="20sp"
+        android:textColor="@color/black"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/notif_title"
+        android:layout_margin="10dp"
+        android:id="@+id/container">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_below="@+id/container"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/ic_add_circle_24dp" />
+
+
+</RelativeLayout>
