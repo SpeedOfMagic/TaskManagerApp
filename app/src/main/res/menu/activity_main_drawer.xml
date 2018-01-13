@@ -17,6 +17,9 @@
 				android:id="@+id/nav_projects"
 				android:icon="@drawable/ic_folder_black_24dp"
 				android:title="Проекты" />
+			<item
+				android:id="@+id/new_act"
+				android:title="new action (temporary)" />
 		</menu>
 	</item>
 
