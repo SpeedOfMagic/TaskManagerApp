@@ -15,7 +15,7 @@
 
     <EditText
         android:id="@+id/name_of_act"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/title1"
         android:layout_marginTop="10dp"
@@ -46,11 +46,12 @@
         android:layout_toRightOf="@id/beginning"
         android:layout_alignBaseline="@id/beginning"
         android:layout_below="@+id/name_of_act"
-        android:hint="00"
         android:maxLength="2"
-        android:textColorHint="@color/colorPrimaryDark"
+        android:hint="@string/default_time_value"
+        android:textColorHint="@color/transparent"
         android:textColor="@color/colorPrimaryDark"
-        android:inputType="numberDecimal"/>
+        android:inputType="numberDecimal"
+        android:background="@color/colorPrimaryLight"/>
 
     <EditText
         android:id="@+id/begin_min"
@@ -60,11 +61,14 @@
         android:layout_toRightOf="@id/begin_hour"
         android:layout_alignBaseline="@id/beginning"
         android:layout_below="@+id/name_of_act"
-        android:hint="00"
+        android:layout_marginLeft="2dp"
+        android:layout_marginStart="2dp"
         android:maxLength="2"
-        android:textColorHint="@color/colorPrimaryDark"
+        android:hint="@string/default_time_value"
+        android:textColorHint="@color/transparent"
         android:textColor="@color/colorPrimaryDark"
-        android:inputType="numberDecimal"/>
+        android:inputType="numberDecimal"
+        android:background="@color/colorPrimaryLight"/>
 
     <EditText
         android:id="@+id/end_hour"
@@ -74,11 +78,14 @@
         android:layout_toLeftOf="@id/end_min"
         android:layout_alignBaseline="@id/beginning"
         android:layout_below="@+id/name_of_act"
-        android:hint="00"
+        android:layout_marginRight="2dp"
+        android:layout_marginEnd="2dp"
         android:maxLength="2"
-        android:textColorHint="@color/colorPrimaryDark"
+        android:hint="@string/default_time_value"
+        android:textColorHint="@color/transparent"
         android:textColor="@color/colorPrimaryDark"
-        android:inputType="numberDecimal"/>
+        android:inputType="numberDecimal"
+        android:background="@color/colorPrimaryLight"/>
 
     <EditText
         android:id="@+id/end_min"
@@ -90,11 +97,12 @@
         android:layout_marginRight="10dp"
         android:layout_marginEnd="10dp"
         android:layout_below="@+id/name_of_act"
-        android:hint="00"
         android:maxLength="2"
-        android:textColorHint="@color/colorPrimaryDark"
+        android:hint="@string/default_time_value"
+        android:textColorHint="@color/transparent"
         android:textColor="@color/colorPrimaryDark"
-        android:inputType="numberDecimal"/>
+        android:inputType="numberDecimal"
+        android:background="@color/colorPrimaryLight"/>
 
     <TextView
         android:id="@+id/ending"
@@ -119,7 +127,8 @@
         android:layout_below="@id/beginning"
         android:layout_margin="10dp"
         android:inputType="textMultiLine"
-        android:background="@color/colorPrimaryLight"/>
+        android:background="@color/colorPrimaryLight"
+        android:maxLines="9"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -137,22 +146,48 @@
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layoutMode="opticalBounds"
         android:layout_below="@id/notif_title"
         android:layout_margin="10dp"
-        android:id="@+id/container">
+        android:id="@+id/notif_cont">
 
     </android.support.v7.widget.RecyclerView>
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_below="@+id/container"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:id="@+id/add"
+        android:layout_width="33dp"
+        android:layout_height="33dp"
+        android:background="@drawable/ic_add_circle_outline_24dp"
+        android:layout_alignTop="@id/notif_title"
+        android:layout_toEndOf="@id/notif_title"
+        android:layout_toRightOf="@id/notif_title"/>
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@id/cancel"
+        android:layout_toLeftOf="@id/cancel"
+        android:text="@string/save"
+        android:textColor="@color/white"
+        android:background="@color/colorPrimary"
+        android:layout_marginBottom="5dp"/>
+
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/save"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        android:background="@drawable/ic_add_circle_24dp" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/cancel"
+        android:textColor="@color/white"
+        android:background="@color/colorAccent"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"/>
 
 
 </RelativeLayout>

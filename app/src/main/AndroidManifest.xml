@@ -20,7 +20,11 @@
 			</intent-filter>
 		</activity>
 
-		<activity android:name=".NewActionActivity"/>
+		<activity
+			android:name=".NewActionActivity"
+			android:windowSoftInputMode="adjustPan" />
+
+		<activity android:name=".EditNotificationActivity"/>
 	</application>
 
 </manifest>
