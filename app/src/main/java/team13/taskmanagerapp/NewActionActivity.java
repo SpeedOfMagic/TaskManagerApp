@@ -3,7 +3,6 @@ package team13.taskmanagerapp;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -22,13 +21,10 @@ public class NewActionActivity extends Activity {
     private RecyclerView notif_container;
     private volatile Integer next_id = 0;
     final NotificationDataSource notif = new NotificationDataSource();
-    private TextView title;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_action);
-
-        title = findViewById(R.id.title1);
 
         notif_container = findViewById(R.id.notif_cont);;
 
@@ -90,9 +86,20 @@ public class NewActionActivity extends Activity {
             return items.get(position);
         }
 
+        int timeInMinutes (int hours, int minutes) {
+            return hours * 60 + minutes;
+        }
+
         void addNotification(Notification item) {
-            items.add(item);
-            final int position = items.size() - 1;
+            int position = 0;
+            for ( ; position < items.size(); position++) {
+                int cur_min = timeInMinutes(items.get(position).getHours(), items.get(position).getHours());
+                int new_min = timeInMinutes(item.getHours(), item.getHours());
+                if (cur_min > new_min) {
+                    break;
+                }
+            }
+            items.add(position, item);
             notif_container.getAdapter().notifyItemInserted(position);
             notif_container.scrollToPosition(position);
         }
@@ -108,12 +115,15 @@ public class NewActionActivity extends Activity {
         }
 
         void changeNotification(int id, String new_message, int new_min, int new_hour) {
-            for (int ind = 0; ind < items.size(); ind++) {
-                if (items.get(ind).getId().equals(id)) {
-                    items.get(ind).setMessage(new_message);
-                    items.get(ind).setMinutes(new_min);
-                    items.get(ind).setHours(new_hour);
-                    notif_container.getAdapter().notifyItemChanged(ind);
+            for (int position = 0; position < items.size(); position++) {
+                if (items.get(position).getId().equals(id)) {
+                    Notification notification = items.get(position);
+                    items.remove(position);
+                    notif_container.getAdapter().notifyItemRemoved(position);
+                    notification.setMessage(new_message);
+                    notification.setMinutes(new_min);
+                    notification.setHours(new_hour);
+                    addNotification(notification);
                     break;
                 }
             }

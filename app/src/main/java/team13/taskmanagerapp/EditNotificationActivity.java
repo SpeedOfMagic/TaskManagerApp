@@ -19,10 +19,8 @@ public class EditNotificationActivity extends Activity {
         setContentView(R.layout.edit_notification);
         final TimePicker timePicker = findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
-        if (getIntent().hasExtra("current_hours") && getIntent().hasExtra("current_minutes")) {
-            timePicker.setCurrentHour(getIntent().getIntExtra("current_hours", 0));
-            timePicker.setCurrentMinute(getIntent().getIntExtra("current_minutes", 0));
-        }
+        timePicker.setCurrentHour(getIntent().getIntExtra("current_hours", 0));
+        timePicker.setCurrentMinute(getIntent().getIntExtra("current_minutes", 0));
 
         final EditText message = findViewById(R.id.editText);
         if (getIntent().hasExtra("current_message")) {
