@@ -93,8 +93,8 @@ public class NewActionActivity extends Activity {
         void addNotification(Notification item) {
             int position = 0;
             for ( ; position < items.size(); position++) {
-                int cur_min = timeInMinutes(items.get(position).getHours(), items.get(position).getHours());
-                int new_min = timeInMinutes(item.getHours(), item.getHours());
+                int cur_min = timeInMinutes(items.get(position).getHours(), items.get(position).getMinutes());
+                int new_min = timeInMinutes(item.getHours(), item.getMinutes());
                 if (cur_min > new_min) {
                     break;
                 }
