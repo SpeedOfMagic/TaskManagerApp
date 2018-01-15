@@ -1,16 +1,23 @@
 package team13.taskmanagerapp;
 
 import android.app.Activity;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.TimePicker;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -21,15 +28,49 @@ public class NewActionActivity extends Activity {
     private RecyclerView notif_container;
     private volatile Integer next_id = 0;
     final NotificationDataSource notif = new NotificationDataSource();
+
+    class ButtonListener implements View.OnClickListener {
+        TextView text_hour;
+        TextView text_min;
+
+        ButtonListener(TextView text_hour, TextView text_min) {
+            this.text_hour = text_hour;
+            this.text_min = text_min;
+        }
+
+        @Override
+        public void onClick(View view) {
+            final Calendar c = Calendar.getInstance();
+            final int hour = c.get(Calendar.HOUR_OF_DAY);
+            int min = c.get(Calendar.MINUTE);
+            TimePickerDialog timePickerDialog = new TimePickerDialog(NewActionActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
+                    text_hour.setText(format(hours));
+                    text_min.setText(format(minutes));
+                }
+            }, hour, min, true);
+            timePickerDialog.show();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_action);
 
-        notif_container = findViewById(R.id.notif_cont);;
+        final TextView begin_hour = findViewById(R.id.begin_hour);
+        final TextView begin_min = findViewById(R.id.begin_min);
+        Button btn = findViewById(R.id.btn1);
+        btn.setOnClickListener(new ButtonListener(begin_hour, begin_min));
 
+        final TextView end_hour = findViewById(R.id.end_hour);
+        final TextView end_min = findViewById(R.id.end_min);
+        btn = findViewById(R.id.btn2);
+        btn.setOnClickListener(new ButtonListener(end_hour, end_min));
+
+        notif_container = findViewById(R.id.notif_cont);
         notif_container.setLayoutManager(new LinearLayoutManager(this));
-
         notif_container.setAdapter(new RecyclerView.Adapter() {
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -47,6 +88,17 @@ public class NewActionActivity extends Activity {
                 return notif.getCount();
             }
 
+        });
+
+        Button reset = findViewById(R.id.reset);
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                begin_hour.setText("");
+                begin_min.setText("");
+                end_hour.setText("");
+                end_min.setText("");
+            }
         });
 
         Button add = findViewById(R.id.add);
@@ -169,12 +221,6 @@ public class NewActionActivity extends Activity {
             edit = itemView.findViewById(R.id.edit);
         }
 
-        private String format(int time) {
-            if (time < 10)
-                return "0" + time;
-            return "" + time;
-        }
-
         void bind(final Notification notification, final int id) {
             message.setText(notification.getMessage());
             hours.setText(format(notification.getHours()));
@@ -191,5 +237,11 @@ public class NewActionActivity extends Activity {
                 }
             });
         }
+    }
+
+    String format(int time) {
+        if (time < 10)
+            return "0" + time;
+        return "" + time;
     }
 }
