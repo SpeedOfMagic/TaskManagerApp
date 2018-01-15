@@ -53,7 +53,6 @@ public class NewActionActivity extends Activity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                notif.addNotification(new Notification("", 0, 0, next_id));
                 Intent intent = new Intent(NewActionActivity.this, EditNotificationActivity.class);
                 startActivityForResult(intent, next_id);
                 next_id++;
@@ -69,7 +68,16 @@ public class NewActionActivity extends Activity {
         }
         if (resultCode == RESULT_OK) {
             if (data.hasExtra("message") && data.hasExtra("minutes") && data.hasExtra("hours")) {
-                notif.changeNotification(id, data.getStringExtra("message"), data.getIntExtra("minutes", 0), data.getIntExtra("hours", 0));
+                String message = data.getStringExtra("message");
+                int minutes = data.getIntExtra("minutes", 0);
+                int hours = data.getIntExtra("hours", 0);
+
+                if (notif.NotificationExists(id)) {
+                    notif.changeNotification(id, message, minutes, hours);
+                } else {
+                    Notification new_notif = new Notification(message, hours, minutes, id);
+                    notif.addNotification(new_notif);
+                }
             }
         }
     }
@@ -127,6 +135,14 @@ public class NewActionActivity extends Activity {
                     break;
                 }
             }
+        }
+
+        boolean NotificationExists(int id) {
+            for (int position = 0; position < items.size(); position++) {
+                if (items.get(position).getId() == id)
+                    return true;
+            }
+            return false;
         }
     }
 
