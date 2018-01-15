@@ -1,10 +1,8 @@
 package team13.taskmanagerapp;
 
 import android.app.Activity;
-import android.app.Instrumentation;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,8 +19,15 @@ public class EditNotificationActivity extends Activity {
         setContentView(R.layout.edit_notification);
         final TimePicker timePicker = findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
+        if (getIntent().hasExtra("current_hours") && getIntent().hasExtra("current_minutes")) {
+            timePicker.setCurrentHour(getIntent().getIntExtra("current_hours", 0));
+            timePicker.setCurrentMinute(getIntent().getIntExtra("current_minutes", 0));
+        }
 
         final EditText message = findViewById(R.id.editText);
+        if (getIntent().hasExtra("current_message")) {
+            message.setText(getIntent().getStringExtra("current_message"));
+        }
 
         Button ready = findViewById(R.id.ready);
         ready.setOnClickListener(new View.OnClickListener() {

@@ -57,7 +57,7 @@ public class NewActionActivity extends Activity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                notif.addNotification(new Notification("Текст уведомления", 0, 0, next_id));
+                notif.addNotification(new Notification("", 0, 0, next_id));
                 Intent intent = new Intent(NewActionActivity.this, EditNotificationActivity.class);
                 startActivityForResult(intent, next_id);
                 next_id++;
@@ -141,13 +141,6 @@ public class NewActionActivity extends Activity {
                 }
             });
             edit = itemView.findViewById(R.id.edit);
-            edit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(NewActionActivity.this, EditNotificationActivity.class);
-                    startActivityForResult(intent, id);
-                }
-            });
         }
 
         private String format(int time) {
@@ -156,11 +149,21 @@ public class NewActionActivity extends Activity {
             return "" + time;
         }
 
-        void bind(Notification notification, final int id) {
+        void bind(final Notification notification, final int id) {
             message.setText(notification.getMessage());
             hours.setText(format(notification.getHours()));
             minutes.setText(format(notification.getMinutes()));
             this.id = id;
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(NewActionActivity.this, EditNotificationActivity.class);
+                    intent.putExtra("current_message", notification.getMessage());
+                    intent.putExtra("current_hours", notification.getHours());
+                    intent.putExtra("current_minutes", notification.getMinutes());
+                    startActivityForResult(intent, id);
+                }
+            });
         }
     }
 }
