@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/rl"
+    android:layout_margin="10dp">
+
+    <EditText
+        android:id="@+id/name_of_project"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:inputType="text"
+        android:hint="Название проекта"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimaryDark" />
+
+    <TextView
+        android:id="@+id/beginning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name_of_project"
+        android:layout_margin="10dp"
+        android:text="Начало"
+        android:textSize="20sp"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:layout_alignStart="@id/beginning"
+        android:id="@+id/ending"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/beginning"
+        android:text="Конец"
+        android:textSize="20sp"
+        android:textColor="@color/black"/>
+
+    <EditText
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Описание проекта..."
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_below="@id/ending"
+        android:layout_margin="10dp"
+        android:inputType="textMultiLine"
+        android:background="@color/colorPrimaryLight"
+        android:maxLines="15"/>
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@id/cancel"
+        android:text="@string/save"
+        android:textColor="@color/white"
+        android:background="@color/colorPrimary"
+        android:layout_marginBottom="5dp"/>
+
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/save"
+        android:layout_marginStart="10dp"
+        android:layout_alignParentEnd="true"
+        android:text="@string/cancel"
+        android:textColor="@color/white"
+        android:background="@color/colorAccent"
+        android:layout_marginEnd="20dp"/>
+
+    <TextView
+        android:id="@+id/begin_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/beginning"
+        android:layout_alignBottom="@id/beginning"
+        android:hint="00"
+        android:textSize="20sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textColorHint="@color/transparent"
+        android:background="@color/colorPrimaryLight"/>
+
+    <TextView
+        android:id="@+id/begin_month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/begin_day"
+        android:layout_marginStart="5dp"
+        android:layout_alignBottom="@id/beginning"
+        android:hint="00"
+        android:textSize="20sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textColorHint="@color/transparent"
+        android:background="@color/colorPrimaryLight"/>
+
+    <TextView
+        android:id="@+id/begin_year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/begin_month"
+        android:layout_marginStart="5dp"
+        android:layout_alignBottom="@id/beginning"
+        android:hint="0000"
+        android:textSize="20sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textColorHint="@color/transparent"
+        android:background="@color/colorPrimaryLight"/>
+
+    <TextView
+        android:id="@+id/end_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/begin_day"
+        android:layout_alignBottom="@id/ending"
+        android:hint="00"
+        android:textSize="20sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textColorHint="@color/transparent"
+        android:background="@color/colorPrimaryLight"/>
+
+    <TextView
+        android:id="@+id/end_month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/end_day"
+        android:layout_marginStart="5dp"
+        android:layout_alignBottom="@id/ending"
+        android:hint="00"
+        android:textSize="20sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textColorHint="@color/transparent"
+        android:background="@color/colorPrimaryLight"/>
+
+    <TextView
+        android:id="@+id/end_year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/end_month"
+        android:layout_marginStart="5dp"
+        android:layout_alignBottom="@id/ending"
+        android:hint="0000"
+        android:textSize="20sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textColorHint="@color/transparent"
+        android:background="@color/colorPrimaryLight"/>
+
+
+</RelativeLayout>
