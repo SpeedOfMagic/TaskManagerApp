@@ -1,16 +1,16 @@
 package team13.taskmanagerapp;
 
-import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -24,10 +24,10 @@ import java.util.List;
  * Created by kate on 13.01.2018.
  */
 
-public class NewActionActivity extends Activity {
-    private RecyclerView notif_container;
-    private volatile Integer next_id = 0;
-    final NotificationDataSource notif = new NotificationDataSource();
+public class NewActionActivity extends AppCompatActivity {
+    private static RecyclerView notif_container;
+    private Integer next_id = 0;
+    final static NotificationDataSource notif = new NotificationDataSource();
 
     class ButtonListener implements View.OnClickListener {
         TextView text_hour;
@@ -43,7 +43,7 @@ public class NewActionActivity extends Activity {
             final Calendar c = Calendar.getInstance();
             final int hour = c.get(Calendar.HOUR_OF_DAY);
             int min = c.get(Calendar.MINUTE);
-            TimePickerDialog timePickerDialog = new TimePickerDialog(NewActionActivity.this, new TimePickerDialog.OnTimeSetListener() {
+            TimePickerDialog timePickerDialog = new TimePickerDialog(NewActionActivity.this, 3, new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
                     text_hour.setText(format(hours));
@@ -105,37 +105,70 @@ public class NewActionActivity extends Activity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(NewActionActivity.this, EditNotificationActivity.class);
-                startActivityForResult(intent, next_id);
+                Bundle args = new Bundle();
+                args.putInt("id", next_id);
+                popupWindow(args);
                 next_id++;
+            }
+        });
+
+        Button cancel = findViewById(R.id.cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NewActionActivity.this.finish();
             }
         });
     }
 
-    @Override
-    protected void onActivityResult(int id, int resultCode, Intent data) {
-        super.onActivityResult(id, resultCode, data);
-        if (data == null) {
-            return;
-        }
-        if (resultCode == RESULT_OK) {
-            if (data.hasExtra("message") && data.hasExtra("minutes") && data.hasExtra("hours")) {
-                String message = data.getStringExtra("message");
-                int minutes = data.getIntExtra("minutes", 0);
-                int hours = data.getIntExtra("hours", 0);
+    public static void changeData(Bundle data) {
+        if (data != null) {
+            String message = data.getString("message", "");
+            int minutes = data.getInt("minutes", 0);
+            int hours = data.getInt("hours", 0);
+            int id = data.getInt("id");
 
-                if (notif.NotificationExists(id)) {
-                    notif.changeNotification(id, message, minutes, hours);
-                } else {
-                    Notification new_notif = new Notification(message, hours, minutes, id);
-                    notif.addNotification(new_notif);
-                }
+            if (notif.NotificationExists(id)) {
+                notif.changeNotification(id, message, minutes, hours);
+            } else {
+                Notification new_notif = new Notification(message, hours, minutes, id);
+                notif.addNotification(new_notif);
             }
         }
     }
 
+    public void popupWindow(final Bundle data) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(NewActionActivity.this);
 
-    private class NotificationDataSource {
+        View rootView = getLayoutInflater().inflate(R.layout.edit_notification, null);
+
+        final TimePicker timePicker = rootView.findViewById(R.id.timePicker);
+        timePicker.setIs24HourView(true);
+        timePicker.setCurrentHour(data.getInt("current_hours", 0));
+        timePicker.setCurrentMinute(data.getInt("current_minutes", 0));
+
+        final EditText message = rootView.findViewById(R.id.editText);
+        message.setText(data.getString("current_message"));
+
+        builder.setView(rootView)
+                .setNegativeButton("Готово", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        final Bundle new_data = new Bundle();
+                        new_data.putInt("id", data.getInt("id"));
+                        new_data.putString("message", message.getText().toString());
+                        new_data.putInt("hours", timePicker.getCurrentHour());
+                        new_data.putInt("minutes", timePicker.getCurrentMinute());
+                        NewActionActivity.changeData(new_data);
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private static class NotificationDataSource {
         private final List<Notification> items = new ArrayList<>();
 
         int getCount() {
@@ -229,11 +262,12 @@ public class NewActionActivity extends Activity {
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(NewActionActivity.this, EditNotificationActivity.class);
-                    intent.putExtra("current_message", notification.getMessage());
-                    intent.putExtra("current_hours", notification.getHours());
-                    intent.putExtra("current_minutes", notification.getMinutes());
-                    startActivityForResult(intent, id);
+                    Bundle args = new Bundle();
+                    args.putInt("id", notification.getId());
+                    args.putInt("current_hours", notification.getHours());
+                    args.putInt("current_minutes", notification.getMinutes());
+                    args.putString("current_message", notification.getMessage());
+                    popupWindow(args);
                 }
             });
         }

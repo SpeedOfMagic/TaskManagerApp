@@ -1,5 +1,7 @@
 package team13.taskmanagerapp;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -26,6 +28,12 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Fragment fragment = new CalendarFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
+        setTitle("Календарь");
+
         /*Intent intent = new Intent(MainActivity.this, log.class);
         startActivity(intent);*/
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -60,7 +68,10 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_today) {
 
         } else if (id == R.id.nav_calendar) {
-
+            Fragment fragment = new CalendarFragment();
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
+            setTitle("Календарь");
         } else if (id == R.id.nav_projects) {
 
         } else if (id == R.id.new_act) {
