@@ -32,6 +32,8 @@ public class NewActionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_action);
 
+        setTitle("Новое событие");
+
         final TextView begin_hour = findViewById(R.id.begin_hour);
         final TextView begin_min = findViewById(R.id.begin_min);
         Button btn = findViewById(R.id.btn1);
