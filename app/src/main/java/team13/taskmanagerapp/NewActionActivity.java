@@ -14,8 +14,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -25,34 +23,9 @@ import java.util.List;
  */
 
 public class NewActionActivity extends AppCompatActivity {
-    private static RecyclerView notif_container;
+    private RecyclerView notif_container;
     private Integer next_id = 0;
-    final static NotificationDataSource notif = new NotificationDataSource();
-
-    class ButtonListener implements View.OnClickListener {
-        TextView text_hour;
-        TextView text_min;
-
-        ButtonListener(TextView text_hour, TextView text_min) {
-            this.text_hour = text_hour;
-            this.text_min = text_min;
-        }
-
-        @Override
-        public void onClick(View view) {
-            final Calendar c = Calendar.getInstance();
-            final int hour = c.get(Calendar.HOUR_OF_DAY);
-            int min = c.get(Calendar.MINUTE);
-            TimePickerDialog timePickerDialog = new TimePickerDialog(NewActionActivity.this, 3, new TimePickerDialog.OnTimeSetListener() {
-                @Override
-                public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
-                    text_hour.setText(format(hours));
-                    text_min.setText(format(minutes));
-                }
-            }, hour, min, true);
-            timePickerDialog.show();
-        }
-    }
+    final NotificationDataSource notif = new NotificationDataSource();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +35,14 @@ public class NewActionActivity extends AppCompatActivity {
         final TextView begin_hour = findViewById(R.id.begin_hour);
         final TextView begin_min = findViewById(R.id.begin_min);
         Button btn = findViewById(R.id.btn1);
-        btn.setOnClickListener(new ButtonListener(begin_hour, begin_min));
+        final ButtonListener beginListener = new ButtonListener(begin_hour, begin_min);
+        btn.setOnClickListener(beginListener);
 
         final TextView end_hour = findViewById(R.id.end_hour);
         final TextView end_min = findViewById(R.id.end_min);
         btn = findViewById(R.id.btn2);
-        btn.setOnClickListener(new ButtonListener(end_hour, end_min));
+        final ButtonListener endListener = new ButtonListener(end_hour, end_min);
+        btn.setOnClickListener(endListener);
 
         notif_container = findViewById(R.id.notif_cont);
         notif_container.setLayoutManager(new LinearLayoutManager(this));
@@ -94,10 +69,8 @@ public class NewActionActivity extends AppCompatActivity {
         reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                begin_hour.setText("");
-                begin_min.setText("");
-                end_hour.setText("");
-                end_min.setText("");
+                beginListener.reset();
+                endListener.reset();
             }
         });
 
@@ -119,9 +92,76 @@ public class NewActionActivity extends AppCompatActivity {
                 NewActionActivity.this.finish();
             }
         });
+
+        final Button save = findViewById(R.id.save);
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int begin = beginListener.getTime();
+                int end = endListener.getTime();
+                if (begin > end) {
+                    int color = getResources().getColor(R.color.lightRed);
+                    begin_hour.setBackgroundColor(color);
+                    begin_min.setBackgroundColor(color);
+                    end_hour.setBackgroundColor(color);
+                    end_min.setBackgroundColor(color);
+                    color = getResources().getColor(R.color.darkRed);
+                    begin_hour.setTextColor(color);
+                    begin_min.setTextColor(color);
+                    end_hour.setTextColor(color);
+                    end_min.setTextColor(color);
+                } else {
+                    // Запоминаем событие
+                    NewActionActivity.this.finish();
+                }
+            }
+        });
     }
 
-    public static void changeData(Bundle data) {
+    class ButtonListener implements View.OnClickListener {
+        private TextView text_hour;
+        private TextView text_min;
+        int time = (int) 1e9;
+
+        ButtonListener(TextView text_hour, TextView text_min) {
+            this.text_hour = text_hour;
+            this.text_min = text_min;
+        }
+
+        int getTime() {
+            return time;
+        }
+
+        void reset() {
+            time = (int) 1e9;
+            text_hour.setText("");
+            text_min.setText("");
+            int color = getResources().getColor(R.color.colorPrimaryLight);
+            text_hour.setBackgroundColor(color);
+            text_min.setBackgroundColor(color);
+            color = getResources().getColor(R.color.colorPrimaryDark);
+            text_hour.setTextColor(color);
+            text_min.setTextColor(color);
+        }
+
+        @Override
+        public void onClick(View view) {
+            final Calendar c = Calendar.getInstance();
+            final int hour = c.get(Calendar.HOUR_OF_DAY);
+            int min = c.get(Calendar.MINUTE);
+            TimePickerDialog timePickerDialog = new TimePickerDialog(NewActionActivity.this, 3, new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
+                    text_hour.setText(format(hours));
+                    text_min.setText(format(minutes));
+                    time = timeInMinutes(hours, minutes);
+                }
+            }, hour, min, true);
+            timePickerDialog.show();
+        }
+    }
+
+    public static void changeData(Bundle data, NotificationDataSource notif) {
         if (data != null) {
             String message = data.getString("message", "");
             int minutes = data.getInt("minutes", 0);
@@ -159,7 +199,7 @@ public class NewActionActivity extends AppCompatActivity {
                         new_data.putString("message", message.getText().toString());
                         new_data.putInt("hours", timePicker.getCurrentHour());
                         new_data.putInt("minutes", timePicker.getCurrentMinute());
-                        NewActionActivity.changeData(new_data);
+                        NewActionActivity.changeData(new_data, notif);
                         dialog.cancel();
                     }
                 });
@@ -168,7 +208,11 @@ public class NewActionActivity extends AppCompatActivity {
         alert.show();
     }
 
-    private static class NotificationDataSource {
+    static int timeInMinutes (int hours, int minutes) {
+        return hours * 60 + minutes;
+    }
+
+    private class NotificationDataSource {
         private final List<Notification> items = new ArrayList<>();
 
         int getCount() {
@@ -177,10 +221,6 @@ public class NewActionActivity extends AppCompatActivity {
 
         Notification getNotification(int position) {
             return items.get(position);
-        }
-
-        int timeInMinutes (int hours, int minutes) {
-            return hours * 60 + minutes;
         }
 
         void addNotification(Notification item) {
