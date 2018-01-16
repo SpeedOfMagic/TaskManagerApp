@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="team13.taskmanagerapp">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -18,14 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-		<activity
-			android:name=".NewActionActivity"
-			android:windowSoftInputMode="adjustPan" />
-
-		<activity android:name=".EditNotificationActivity"/>
-
-        <activity android:name=".log"></activity>
+        <activity
+            android:name=".NewActionActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".EditNotificationActivity" />
+        <activity android:name=".WebLog"></activity>
+        <activity android:name=".Log"></activity>
     </application>
 
 </manifest>
