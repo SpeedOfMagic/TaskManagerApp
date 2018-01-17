@@ -17,8 +17,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db){
         db.rawQuery(
-                "CREATE TABLE Token (value TEXT);"//+
-                //""
+                ""+
+                "CREATE TABLE Token (value TEXT PRIMARY KEY NOT NULL);"+
+                "CREATE TABLE Notification("+
+                ""
+                "CREATE TABLE Task ("+
+                "notificationsId"
 
             ,null
         );
