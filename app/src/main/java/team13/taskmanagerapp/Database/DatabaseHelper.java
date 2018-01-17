@@ -16,12 +16,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db){
         db.rawQuery(
-                ""+
                 "CREATE TABLE Token (value TEXT PRIMARY KEY NOT NULL);"+
+                "CREATE TABLE User ("+
+                        "id TEXT NOT NULL PRIMARY KEY,"+
+                        "firstName TEXT NOT NULL,"+
+                        " lastName TEXT NOT NULL,"+
+                        "avatarUrl TEXT NOT NULL" +
+                ");"+
                 "CREATE TABLE Account ("+
                         "id TEXT NOT NULL PRIMARY KEY,"+
                         "accountName TEXT NOT NULL,"+
-                        "rootFolderId TEXT NOT NULL"+
+                        "rootFolderId TEXT NOT NULL,"+
+                        "userId TEXT NOT NULL,"+
+                        "FOREIGN KEY (userId) REFERENCES User(id)"+
                 ");"+
                 "CREATE TABLE Task ("+
                         "id TEXT NOT NULL PRIMARY KEY,"+
@@ -35,7 +42,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "duration INTEGER,"+
                         "FOREIGN KEY (accountId) REFERENCES Account(id)"+
                 ")"
-
             ,null
         );
 
@@ -53,6 +59,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return token;
     }
+
     @Override
     public void onUpgrade(SQLiteDatabase db,int oldVersion,int newVersion){
         db.setVersion(newVersion);
