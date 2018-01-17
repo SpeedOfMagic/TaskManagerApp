@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
 import android.util.Log;
 import team13.taskmanagerapp.TokenNotFoundException;
-
 public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(Context context){
         super(context, "TaskDB", null, 1);
@@ -19,10 +18,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.rawQuery(
                 ""+
                 "CREATE TABLE Token (value TEXT PRIMARY KEY NOT NULL);"+
-                "CREATE TABLE Notification("+
-                ""
+                "CREATE TABLE Account ("+
+                        "id TEXT NOT NULL PRIMARY KEY,"+
+                        "accountName TEXT NOT NULL,"+
+                        "rootFolderId TEXT NOT NULL"+
+                ");"+
                 "CREATE TABLE Task ("+
-                "notificationsId"
+                        "id TEXT NOT NULL PRIMARY KEY,"+
+                        "accountId TEXT NOT NULL,"+
+                        "title TEXT NOT NULL,"+
+                        "description TEXT,"+
+                        "status TEXT NOT NULL,"+
+                        "startDate TEXT,"+
+                        "endDate TEXT,"+
+                        "duration INTEGER,"+
+                        "FOREIGN KEY (accountId) REFERENCES Account(id)"+
+                ")"
 
             ,null
         );
