@@ -1,7 +1,9 @@
 package team13.taskmanagerapp;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +14,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TimePicker;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -21,13 +26,31 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Fragment fragment = new CalendarFragment();
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
-        setTitle("Календарь");
+        if (true) { // Проверка того, авторизован ли пользователь
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        /*Intent intent = new Intent(MainActivity.this, log.class);
-        startActivity(intent);*/
+            View rootView = getLayoutInflater().inflate(R.layout.activity_log, null);
+
+            (rootView.findViewById(R.id.sendBtn)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(MainActivity.this, WebLog.class);
+                    startActivity(intent);
+                }
+            });
+
+            builder.setView(rootView);
+
+            AlertDialog alert = builder.create();
+            alert.setCanceledOnTouchOutside(false);
+            alert.show();
+        } else {
+            Fragment fragment = new CalendarFragment();
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
+            setTitle("Календарь");
+        }
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

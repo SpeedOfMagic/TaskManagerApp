@@ -181,7 +181,7 @@
             android:layout_toStartOf="@id/cancel"
             android:text="@string/save"
             android:textColor="@color/white"
-            android:background="@color/colorPrimary"
+            android:backgroundTint="@color/colorPrimary"
             android:layout_marginBottom="5dp"/>
 
         <Button
@@ -193,6 +193,6 @@
             android:layout_alignParentEnd="true"
             android:text="@string/cancel"
             android:textColor="@color/white"
-            android:background="@color/colorAccent"
+            android:backgroundTint="@color/colorAccent"
             android:layout_marginEnd="20dp"/>
 </RelativeLayout>

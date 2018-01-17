@@ -26,7 +26,6 @@
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".EditNotificationActivity" />
         <activity android:name=".WebLog"></activity>
-        <activity android:name=".Log"></activity>
     </application>
 
 </manifest>
