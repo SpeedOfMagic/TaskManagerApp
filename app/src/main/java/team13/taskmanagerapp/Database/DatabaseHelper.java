@@ -29,6 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "title TEXT NOT NULL,"+
                         "description TEXT,"+
                         "status TEXT NOT NULL,"+
+                        "taskType TEXT NOT NULL,"+
                         "startDate TEXT,"+
                         "endDate TEXT,"+
                         "duration INTEGER,"+
@@ -39,6 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         );
 
     }
+
     public String getToken(Context context) throws TokenNotFoundException{
         SQLiteDatabase db=getInstance(context).getReadableDatabase();
         Cursor cursor=db.rawQuery("SELECT * FROM Token;",null);
