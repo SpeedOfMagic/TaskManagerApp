@@ -1,9 +1,8 @@
 package team13.taskmanagerapp;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.content.DialogInterface;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,8 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.TimePicker;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -26,7 +23,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (true) { // Проверка того, авторизован ли пользователь
+        if (false) { // Проверка того, авторизован ли пользователь
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
             View rootView = getLayoutInflater().inflate(R.layout.activity_log, null);
@@ -46,7 +43,7 @@ public class MainActivity extends AppCompatActivity
             alert.show();
         } else {
             Fragment fragment = new CalendarFragment();
-            FragmentManager fragmentManager = getFragmentManager();
+            FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
             setTitle("Календарь");
         }
@@ -83,14 +80,17 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_calendar) {
             Fragment fragment = new CalendarFragment();
-            FragmentManager fragmentManager = getFragmentManager();
+            FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
-            setTitle("Календарь");
         } else if (id == R.id.nav_projects) {
 
         } else if (id == R.id.new_act) {
             Intent intent = new Intent(this, NewActionActivity.class);
             startActivity(intent);
+        } else if (id == R.id.view_act) {
+            Fragment fragment = new ViewActionFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

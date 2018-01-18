@@ -49,6 +49,8 @@
             android:layout_height="35dp"
             android:background="@drawable/ic_edit_24dp"
             android:layout_toStartOf="@id/delete"
-            android:layout_alignBaseline="@id/notif_message"/>
+            android:layout_alignBaseline="@id/notif_message"
+            android:elevation="6dp"
+            android:translationZ="4dp"/>
 
 </RelativeLayout>

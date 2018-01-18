@@ -1,7 +1,6 @@
 package team13.taskmanagerapp;
 
-import android.app.Fragment;
-import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -16,6 +15,7 @@ import android.widget.CalendarView;
 public class CalendarFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        getActivity().setTitle("Календарь");
         View rootView = inflater.inflate(R.layout.calendar, container, false);
         CalendarView calendar = rootView.findViewById(R.id.calendarView);
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {

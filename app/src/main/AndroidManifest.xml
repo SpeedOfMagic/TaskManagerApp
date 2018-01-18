@@ -17,15 +17,15 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".NewActionActivity"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".EditNotificationActivity" />
-        <activity android:name=".WebLog"></activity>
+            android:windowSoftInputMode="adjustPan"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name=".WebLog" />
     </application>
 
 </manifest>
