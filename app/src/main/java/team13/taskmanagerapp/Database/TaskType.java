@@ -1,4 +1,4 @@
-package team13.taskmanagerapp;
+package team13.taskmanagerapp.Database;
 
 public enum TaskType {
     BACKLOG, // Task without begin or end time (Chaos zone). Only OPTIONAL duration time.
