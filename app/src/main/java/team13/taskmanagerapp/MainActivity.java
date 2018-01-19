@@ -1,34 +1,53 @@
 package team13.taskmanagerapp;
 
+import android.app.AlertDialog;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
-import android.view.View;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.TextView;
-import okhttp3.OkHttpClient;
+import android.view.View;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    @SuppressWarnings("unused")
-    private final OkHttpClient okHttpClient = new OkHttpClient();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*Intent intent = new Intent(MainActivity.this, log.class);
-        startActivity(intent);*/
+
+        if (false) { // Проверка того, авторизован ли пользователь
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            View rootView = getLayoutInflater().inflate(R.layout.activity_log, null);
+
+            (rootView.findViewById(R.id.sendBtn)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(MainActivity.this, WebLog.class);
+                    startActivity(intent);
+                }
+            });
+
+            builder.setView(rootView);
+
+            AlertDialog alert = builder.create();
+            alert.setCanceledOnTouchOutside(false);
+            alert.show();
+        } else {
+            Fragment fragment = new CalendarFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
+            setTitle("Календарь");
+        }
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -54,19 +73,26 @@ public class MainActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.nav_today) {
-
+            Fragment fragment = new TasksForToday();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
         } else if (id == R.id.nav_calendar) {
-
+            Fragment fragment = new CalendarFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
         } else if (id == R.id.nav_projects) {
 
         } else if (id == R.id.new_act) {
             Intent intent = new Intent(this, NewActionActivity.class);
             startActivity(intent);
+        } else if (id == R.id.view_act) {
+            Fragment fragment = new ViewActionFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

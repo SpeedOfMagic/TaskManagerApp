@@ -8,8 +8,7 @@
             android:layout_alignBaseline="@id/notif_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="2dp"
-            android:layout_marginEnd="2dp"
+            android:layout_marginEnd="3dp"
             android:text="@string/default_time_value"
             android:textSize="20sp"
             android:textColor="@color/colorPrimaryDark"
@@ -18,7 +17,6 @@
             android:id="@+id/min"
             android:layout_alignBaseline="@id/notif_message"
             android:layout_toEndOf="@id/hour"
-            android:layout_toRightOf="@id/hour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/default_time_value"
@@ -29,12 +27,9 @@
         <TextView
             android:id="@+id/notif_message"
             android:layout_toEndOf="@id/min"
-            android:layout_toRightOf="@id/min"
             android:layout_toStartOf="@id/edit"
-            android:layout_toLeftOf="@id/edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
             android:layout_marginStart="15dp"
             android:text="@string/message_default"
             android:textColor="@color/colorAccentDark"
@@ -44,7 +39,6 @@
             android:id="@+id/delete"
             android:layout_alignBaseline="@id/notif_message"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_width="30dp"
             android:layout_height="35dp"
             android:background="@drawable/ic_delete_24dp" />
@@ -55,7 +49,8 @@
             android:layout_height="35dp"
             android:background="@drawable/ic_edit_24dp"
             android:layout_toStartOf="@id/delete"
-            android:layout_toLeftOf="@id/delete"
-            android:layout_alignBaseline="@id/notif_message"/>
+            android:layout_alignBaseline="@id/notif_message"
+            android:elevation="6dp"
+            android:translationZ="4dp"/>
 
 </RelativeLayout>

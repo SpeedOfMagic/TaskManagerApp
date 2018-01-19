@@ -20,6 +20,10 @@
 			<item
 				android:id="@+id/new_act"
 				android:title="new action (temporary)" />
+
+			<item
+				android:id="@+id/view_act"
+				android:title="view action (temporary)" />
 		</menu>
 	</item>
 
