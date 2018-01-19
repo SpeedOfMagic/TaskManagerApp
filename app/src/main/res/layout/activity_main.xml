@@ -19,8 +19,8 @@
 			android:background="?attr/colorPrimary"
 			android:minHeight="?attr/actionBarSize"
 			android:theme="?attr/actionBarTheme"
-			android:elevation="5dp"
-			android:translationZ="5dp"/>
+			android:elevation="3dp"
+			android:translationZ="3dp"/>
 
 		<FrameLayout
 			android:layout_width="match_parent"
