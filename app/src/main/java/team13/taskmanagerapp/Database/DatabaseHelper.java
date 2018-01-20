@@ -1,27 +1,27 @@
 package team13.taskmanagerapp.Database;
 
-import android.content.Context;
+import java.lang.*;
+import android.content.*;
 import android.database.sqlite.*;
 import android.database.*;
-import android.util.Log;
+import android.util.*;
 import android.support.annotation.*;
-
-import java.security.InvalidParameterException;
-import java.util.Locale;
+import java.util.*;
+import java.security.*;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final String[] intToCol=new String[9];
-    private static void initIntToCol(){
-        intToCol[0]="id";
-        intToCol[1]="accountId";
-        intToCol[2]="title";
-        intToCol[3]="description";
-        intToCol[4]="status";
-        intToCol[5]="type";
-        intToCol[6]="startDate";
-        intToCol[7]="endDate";
-        intToCol[8]="duration";
+    private static final String[] intToCol={
+            "id","accountId","title","description","status","type","startDate","endDate","duration"
+    };
+    private static final HashMap<String,String> monthsToNumber=new HashMap<>();
+    private static void initMonthsToNumber(){
+        monthsToNumber.put("Jan","01"); monthsToNumber.put("Feb","02");monthsToNumber.put("Mar","03");
+        monthsToNumber.put("Apr","04");monthsToNumber.put("May","05");monthsToNumber.put("Jun","06");
+        monthsToNumber.put("Jul","07");monthsToNumber.put("Aug","08");monthsToNumber.put("Sep","09");
+        monthsToNumber.put("Oct","10");monthsToNumber.put("Nov","11");monthsToNumber.put("Dec","12");
+
     }
+
     public DatabaseHelper(Context context){
         super(context, "TaskDB", null, 1);
     }
@@ -30,7 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     @Override
     public void onCreate(SQLiteDatabase db){
-        initIntToCol();
+        initMonthsToNumber();
         db.rawQuery(
                 "CREATE TABLE Token (value TEXT PRIMARY KEY NOT NULL);"+
                 "CREATE TABLE User ("+
@@ -65,6 +65,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private Cursor executeQuery(Context context,String query){
         SQLiteDatabase db=getInstance(context).getReadableDatabase();
         return db.rawQuery(query,null);
+    }
+    public List<Task> getTasksAtCurrentDate(Context context,Date rawDate) {
+        String[]partsOfDate=rawDate.toString().split(" ");
+        String date = String.valueOf(Integer.valueOf(partsOfDate[5])-1900)+"-"
+                +partsOfDate[1]+"-"+partsOfDate[2];
+        Cursor cursor=executeQuery(context,String.format("SELECT * FROM Task WHERE startDate=%s",date));
+        List<Task>taskList=new ArrayList<>();
+        while (cursor.moveToNext()){
+            taskList.add(getTaskFromCursor(cursor));
+        }
+        return taskList;
     }
     public Task getTaskById(Context context,String taskId){
         String query=String.format("SELECT * FROM Task WHERE id=?",new String[]{taskId});
