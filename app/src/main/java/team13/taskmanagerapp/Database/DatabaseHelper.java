@@ -68,8 +68,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     public List<Task> getTasksAtCurrentDate(Context context,Date rawDate) {
         String[]partsOfDate=rawDate.toString().split(" ");
+        //Date.toString => <День недели> <Месяц> <День> <ЧЧ:ММ:СС> UTC <Год+1900>
         String date = String.valueOf(Integer.valueOf(partsOfDate[5])-1900)+"-"
-                +partsOfDate[1]+"-"+partsOfDate[2];
+                +partsOfDate[1]+"-"
+                + (Integer.valueOf(partsOfDate[2])<10?"0":"")+partsOfDate[2];
         Cursor cursor=executeQuery(context,String.format("SELECT * FROM Task WHERE startDate=%s",date));
         List<Task>taskList=new ArrayList<>();
         while (cursor.moveToNext()){
