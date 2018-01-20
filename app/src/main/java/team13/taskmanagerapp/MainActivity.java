@@ -26,8 +26,8 @@ public class MainActivity extends AppCompatActivity
         fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
         setTitle("Календарь");
 
-        /*Intent intent = new Intent(MainActivity.this, log.class);
-        startActivity(intent);*/
+        Intent intent = new Intent(MainActivity.this, WebLog.class);
+        startActivity(intent);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

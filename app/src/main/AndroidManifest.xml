@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="team13.taskmanagerapp">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -24,9 +24,8 @@
         <activity
             android:name=".NewActionActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".EditNotificationActivity" />
-        <activity android:name=".WebLog"></activity>
-        <activity android:name=".Log"></activity>
+        <activity android:name=".WebLog" />
+        <activity android:name=".Auth" />
     </application>
 
 </manifest>

@@ -11,4 +11,5 @@
     <string name="cancel">Отмена</string>
     <string name="message_default">Текст уведомления</string>
     <string name="sendBtnText">Sign in</string>
+    <string name="load">Loading...</string>
 </resources>
