@@ -1,14 +1,22 @@
 package team13.taskmanagerapp.Database;
 
-import android.content.*;
-import android.database.sqlite.*;
-import android.database.*;
-import android.util.*;
-import android.support.annotation.*;
 
-import java.util.*;
-import java.security.*;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.util.Log;
 
+import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
+@SuppressWarnings("unused")
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String[] intToCol={
             "id","accountId","title","description","status","type","startDate","endDate","duration"
@@ -22,7 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         monthsToNumber.put("Oct","10");monthsToNumber.put("Nov","11");monthsToNumber.put("Dec","12");
     }
 
-    public DatabaseHelper(Context context){
+    private DatabaseHelper(Context context){
         super(context, "TaskDB", null, 1);
     }
     private static DatabaseHelper getInstance(Context context){
@@ -63,7 +71,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
     @NonNull
-    private Cursor executeQuery(Context context,@NonNull String query){
+    private Cursor executeQuery(Context context, @NonNull String query){
         SQLiteDatabase db=getInstance(context).getReadableDatabase();
         return db.rawQuery(query,null);
     }
@@ -71,7 +79,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<Task> getTasksAtCurrentDate(Context context,@NonNull Date rawDate) {
         Cursor cursor=executeQuery(context,
                 String.format("SELECT * FROM Task WHERE startDate=\"%s\"",dateToDBDate(rawDate)));
-        List<Task>taskList=new ArrayList<>();
+        List<Task> taskList=new ArrayList<>();
         while (!cursor.isLast()){
             taskList.add(getTaskFromCursor(cursor));
             cursor.moveToNext();
@@ -97,13 +105,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cursor.getString(6),cursor.getString(7),cursor.getInt(8));
     }
     @NonNull
-    public String dateToDBDate(@NonNull Date rawDate){
+    private String dateToDBDate(@NonNull Date rawDate){
         String[]partsOfDate=rawDate.toString().split(" ");
         //Date.toString => <День недели> <Месяц> <День> <ЧЧ:ММ:СС> UTC <Год+1900>
-        String date = String.valueOf(Integer.valueOf(partsOfDate[5])-1900)+"-"
-                +partsOfDate[1]+"-"
+        return String.valueOf(Integer.valueOf(partsOfDate[5])-1900)+"-"
+                +monthsToNumber.get(partsOfDate[1])+"-"
                 + (Integer.valueOf(partsOfDate[2])<10?"0":"")+partsOfDate[2];
-        return date;
     }
     public void addTask(Context context,@NonNull Task task){
         Cursor cursor=executeQuery(context,
@@ -141,13 +148,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor=executeQuery(context,toSend);
         cursor.close();
     }
+
+    /*
     public void removeTask(Context context,@NonNull Task task){
         removeTaskById(context,task.getId());
     }
     public void removeTaskById(Context context,String id){
-        Cursor cursor=executeQuery(context,"DELETE FROM Task WHE RE Task.id="+"\""+id+"\"");
+        Cursor cursor=executeQuery(context,"DELETE FROM Task WHERE Task.id="+"\""+id+"\"");
         cursor.close();
     }
+    */
 
     @Nullable
     public String getToken(Context context) throws TokenNotFoundException{
@@ -166,7 +176,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
     }
     @Override
-    public void onUpgrade(@NonNull SQLiteDatabase db,@NonNull int oldVersion,@NonNull int newVersion){
+    public void onUpgrade(@NonNull SQLiteDatabase db, int oldVersion, int newVersion){
         db.setVersion(newVersion);
     }
 }
