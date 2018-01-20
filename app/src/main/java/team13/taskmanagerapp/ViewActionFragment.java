@@ -36,8 +36,9 @@ public class ViewActionFragment extends Fragment {
             ((TextView) layout.findViewById(R.id.title)).setText("Начало");
             int hour = 12;
             int minutes = 0;
-            ((TextView) layout.findViewById(R.id.hour)).setText(format(hour));
-            ((TextView) layout.findViewById(R.id.min)).setText(format(minutes));
+            RelativeLayout timeBox = layout.findViewById(R.id.time_box);
+            ((TextView) timeBox.findViewById(R.id.hour)).setText(format(hour));
+            ((TextView) timeBox.findViewById(R.id.min)).setText(format(minutes));
         }
 
 
@@ -47,8 +48,9 @@ public class ViewActionFragment extends Fragment {
             ((TextView) layout.findViewById(R.id.title)).setText("Конец");
             int hour = 13;
             int minutes = 0;
-            ((TextView) layout.findViewById(R.id.hour)).setText(format(hour));
-            ((TextView) layout.findViewById(R.id.min)).setText(format(minutes));
+            RelativeLayout timeBox = layout.findViewById(R.id.time_box);
+            ((TextView) timeBox.findViewById(R.id.hour)).setText(format(hour));
+            ((TextView) timeBox.findViewById(R.id.min)).setText(format(minutes));
         }
 
         final List<Notification> notif = new ArrayList<>();

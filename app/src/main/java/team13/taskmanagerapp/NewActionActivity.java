@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -38,14 +40,16 @@ public class NewActionActivity extends AppCompatActivity {
 
         setTitle("Новое событие");
 
-        final TextView begin_hour = findViewById(R.id.begin_hour);
-        final TextView begin_min = findViewById(R.id.begin_min);
+        RelativeLayout begin_layout = findViewById(R.id.time_box_begin);
+        final TextView begin_hour = begin_layout.findViewById(R.id.hour);
+        final TextView begin_min = begin_layout.findViewById(R.id.min);
         Button btn = findViewById(R.id.btn1);
         final ButtonListener beginListener = new ButtonListener(begin_hour, begin_min);
         btn.setOnClickListener(beginListener);
 
-        final TextView end_hour = findViewById(R.id.end_hour);
-        final TextView end_min = findViewById(R.id.end_min);
+        RelativeLayout end_layout = findViewById(R.id.time_box_end);
+        final TextView end_hour = end_layout.findViewById(R.id.hour);
+        final TextView end_min = end_layout.findViewById(R.id.min);
         btn = findViewById(R.id.btn2);
         final ButtonListener endListener = new ButtonListener(end_hour, end_min);
         btn.setOnClickListener(endListener);
@@ -186,7 +190,7 @@ public class NewActionActivity extends AppCompatActivity {
     public void popupWindow(final Bundle data) {
         AlertDialog.Builder builder = new AlertDialog.Builder(NewActionActivity.this);
 
-        View rootView = getLayoutInflater().inflate(R.layout.edit_notification, null);
+        View rootView = getLayoutInflater().inflate(R.layout.edit_notification, (LinearLayout) findViewById(R.id.lin_layout), false);
 
         final TimePicker timePicker = rootView.findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);

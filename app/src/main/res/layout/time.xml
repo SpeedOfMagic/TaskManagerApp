@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content">
         <TextView
             android:id="@+id/title"
@@ -12,34 +13,13 @@
             android:textColor="@color/black"
             android:layout_marginBottom="10dp"/>
 
-        <TextView
-            android:id="@+id/hour"
-            android:layout_width="wrap_content"
+        <include layout="@layout/time_box"
+            android:id="@+id/time_box"
             android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_toEndOf="@id/title"
             android:layout_alignBaseline="@id/title"
             android:layout_marginStart="10dp"
-            android:maxLength="2"
-            android:hint="@string/default_time_value"
-            android:textColorHint="@color/transparent"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="20sp"
-            android:background="@color/colorPrimaryLight"
-            android:layout_marginBottom="10dp" />
-
-        <TextView
-            android:id="@+id/min"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/hour"
-            android:layout_alignBaseline="@id/title"
-            android:layout_marginStart="3dp"
-            android:maxLength="2"
-            android:hint="@string/default_time_value"
-            android:textColorHint="@color/transparent"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="20sp"
-            android:background="@color/colorPrimaryLight"
-            android:layout_marginBottom="10dp" />
+            android:layout_marginBottom="10dp"/>
 
 </RelativeLayout>

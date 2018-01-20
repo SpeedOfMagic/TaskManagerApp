@@ -2,31 +2,13 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:layout_margin="8dp">
-    <TextView
-        android:id="@+id/hour"
-        android:layout_alignBaseline="@id/notif_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="3dp"
-        android:text="@string/default_time_value"
-        android:textSize="20sp"
-        android:textColor="@color/colorPrimaryDark"
-        android:background="@color/colorPrimaryLight" />
-    <TextView
-        android:id="@+id/min"
-        android:layout_alignBaseline="@id/notif_message"
-        android:layout_toEndOf="@id/hour"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/default_time_value"
-        android:textSize="20sp"
-        android:textColor="@color/colorPrimaryDark"
-        android:background="@color/colorPrimaryLight" />
+
+    <include layout="@layout/time_box"
+        android:id="@+id/time_box"/>
 
     <TextView
         android:id="@+id/notif_message"
-        android:layout_toEndOf="@id/min"
-        android:layout_toStartOf="@id/edit"
+        android:layout_toEndOf="@id/time_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
