@@ -1,0 +1,18 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_margin="8dp">
+
+    <include layout="@layout/time_box"
+        android:id="@+id/time_box"/>
+
+    <TextView
+        android:id="@+id/notif_message"
+        android:layout_toEndOf="@id/time_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="@string/message_default"
+        android:textColor="@color/colorAccentDark"
+        android:textSize="20sp" />
+</RelativeLayout>
