@@ -1,11 +1,11 @@
 package team13.taskmanagerapp.Database;
 
-import java.lang.*;
 import android.content.*;
 import android.database.sqlite.*;
 import android.database.*;
 import android.util.*;
 import android.support.annotation.*;
+
 import java.util.*;
 import java.security.*;
 
@@ -14,12 +14,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "id","accountId","title","description","status","type","startDate","endDate","duration"
     };
     private static final HashMap<String,String> monthsToNumber=new HashMap<>();
-    private static void initMonthsToNumber(){
-        monthsToNumber.put("Jan","01"); monthsToNumber.put("Feb","02");monthsToNumber.put("Mar","03");
+
+    private void initMonthsToNumber(){
+        monthsToNumber.put("Jan","01");monthsToNumber.put("Feb","02");monthsToNumber.put("Mar","03");
         monthsToNumber.put("Apr","04");monthsToNumber.put("May","05");monthsToNumber.put("Jun","06");
         monthsToNumber.put("Jul","07");monthsToNumber.put("Aug","08");monthsToNumber.put("Sep","09");
         monthsToNumber.put("Oct","10");monthsToNumber.put("Nov","11");monthsToNumber.put("Dec","12");
-
     }
 
     public DatabaseHelper(Context context){
@@ -145,7 +145,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         removeTaskById(context,task.getId());
     }
     public void removeTaskById(Context context,String id){
-        Cursor cursor=executeQuery(context,"DELETE FROM Task WHERE Task.id="+"\""+id+"\"");
+        Cursor cursor=executeQuery(context,"DELETE FROM Task WHE RE Task.id="+"\""+id+"\"");
         cursor.close();
     }
 
