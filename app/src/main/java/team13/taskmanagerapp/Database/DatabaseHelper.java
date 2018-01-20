@@ -74,13 +74,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + (Integer.valueOf(partsOfDate[2])<10?"0":"")+partsOfDate[2];
         Cursor cursor=executeQuery(context,String.format("SELECT * FROM Task WHERE startDate=%s",date));
         List<Task>taskList=new ArrayList<>();
-        while (cursor.moveToNext()){
+        while (!cursor.isLast()){
             taskList.add(getTaskFromCursor(cursor));
-        }
+            cursor.moveToNext();
+        } taskList.add(getTaskFromCursor(cursor));
+        cursor.close();
         return taskList;
     }
-    public Task getTaskById(Context context,String taskId){
-        String query=String.format("SELECT * FROM Task WHERE id=?",new String[]{taskId});
+    public Task getTaskById(Context context,@NonNull String taskId){
+        String query=String.format("SELECT * FROM Task WHERE id=%s",taskId);
         Cursor cursor=executeQuery(context,query);
         if (cursor.getCount()==0) {
             Log.e("Database", "Task with that id hasn't been found");
@@ -90,13 +92,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return getTaskFromCursor(cursor);
     }
     @NonNull
-    private Task getTaskFromCursor(Cursor cursor){
+    private Task getTaskFromCursor(@NonNull Cursor cursor){
         return new Task(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),
                 TaskStatus.valueOf(cursor.getString(4)),TaskType.valueOf(cursor.getString(5)),
                 cursor.getString(6),cursor.getString(7),cursor.getInt(8));
     }
-    public void addTask(Context context,Task task){
-        executeQuery(context,
+    public void addTask(Context context,@NonNull Task task){
+        Cursor cursor=executeQuery(context,
                 String.format(Locale.US,"INSERT INTO Task VALUES (" +
                                 "%s,%s,%s,%s,%s,%s,%s,%s,%d);",
                         task.getId(),task.getAccountId(),task.getTitle(),task.getDescription(),
@@ -104,8 +106,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         task.getStartDate(),task.getEndDate(),task.getDuration()
                 )
         );
+        cursor.close();
     }
-    public void editTask(Context context,String taskId,boolean[] colsToEdit,String[] valuesToEdit){
+    public void editTask(Context context,@NonNull String taskId,boolean[] colsToEdit,String[] valuesToEdit){
         if (valuesToEdit.length!=colsToEdit.length) {
             Log.e("Database","Wrong parameters: valuesToEdit.length!=colsToEdit.length",
                     new InvalidParameterException());
@@ -126,20 +129,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         String toSend=query.substring(0,query.length()-1)+
                 String.format(" WHERE Task.id = %s",taskId);
-        executeQuery(context,toSend);
+        Cursor cursor=executeQuery(context,toSend);
+        cursor.close();
     }
-    public void removeTask(Context context,Task task){
+    public void removeTask(Context context,@NonNull Task task){
         removeTaskById(context,task.getId());
     }
     public void removeTaskById(Context context,String id){
-        executeQuery(context,"DELETE FROM Task WHERE Task.id="+id);
+        Cursor cursor=executeQuery(context,"DELETE FROM Task WHERE Task.id="+id);
+        cursor.close();
     }
+
+    @Nullable
     public String getToken(Context context) throws TokenNotFoundException{
         Cursor cursor=executeQuery(context,"SELECT * FROM Token");
         if (cursor.getCount()==0){
             cursor.close();
             Log.e("Token","Token not found",new TokenNotFoundException());
-            return "";
+            return null;
         }
         String token=cursor.getString(0);
         cursor.close();
