@@ -3,6 +3,7 @@ package team13.taskmanagerapp;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,7 +39,11 @@ public class NewActionActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        setTitle("Новое событие");
+        if (getIntent().hasExtra("title")) {
+            setTitle(getIntent().getStringExtra("title"));
+        } else {
+            setTitle("Новое событие");
+        }
 
         RelativeLayout begin_layout = findViewById(R.id.time_box_begin);
         final TextView begin_hour = begin_layout.findViewById(R.id.hour);
@@ -122,6 +127,10 @@ public class NewActionActivity extends AppCompatActivity {
                     end_min.setTextColor(color);
                 } else {
                     // Запоминаем событие
+                    Intent intent = new Intent();
+                    intent.putExtra("title", ((TextView) findViewById(R.id.name_of_act)).getText().toString());
+                    intent.putExtra("id", getIntent().getIntExtra("id", 0));
+                    setResult(RESULT_OK, intent);
                     NewActionActivity.this.finish();
                 }
             }

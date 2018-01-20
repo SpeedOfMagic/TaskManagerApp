@@ -23,9 +23,14 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 // Вызов Fragment с делами на выбранный день
-                Fragment fragment = new ViewActionFragment();
+                Fragment fragment = new TasksForToday();
+                Bundle date = new Bundle();
+                date.putInt("year", year);
+                date.putInt("month", month);
+                date.putInt("dayOfMonth", dayOfMonth);
+                fragment.setArguments(date);
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.frame, fragment).addToBackStack("ViewAction").commit();
+                fragmentManager.beginTransaction().replace(R.id.frame, fragment).addToBackStack("ViewTasksForDay").commit();
             }
         });
         return rootView;
