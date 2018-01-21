@@ -102,7 +102,6 @@ public class NewActionActivity extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TasksForToday.READY = true;
                 NewActionActivity.this.finish();
             }
         });
@@ -135,7 +134,6 @@ public class NewActionActivity extends AppCompatActivity {
                     intent.putExtra("endMin", end_min.getText().toString());
 
                     setResult(RESULT_OK, intent);
-                    TasksForToday.READY = true;
                     NewActionActivity.this.finish();
                 }
             }
@@ -192,12 +190,9 @@ public class NewActionActivity extends AppCompatActivity {
             int hours = data.getInt("hours", 0);
             int id = data.getInt("id");
 
-            if (notif.NotificationExists(id)) {
-                notif.changeNotification(id, message, minutes, hours);
-            } else {
-                Notification new_notif = new Notification(message, hours, minutes, id);
-                notif.addNotification(new_notif);
-            }
+            notif.removeNotification(id);
+            Notification new_notif = new Notification(message, hours, minutes, id);
+            notif.addNotification(new_notif);
         }
     }
 
@@ -269,29 +264,6 @@ public class NewActionActivity extends AppCompatActivity {
                     break;
                 }
             }
-        }
-
-        void changeNotification(int id, String new_message, int new_min, int new_hour) {
-            for (int position = 0; position < items.size(); position++) {
-                if (items.get(position).getId().equals(id)) {
-                    Notification notification = items.get(position);
-                    items.remove(position);
-                    notif_container.getAdapter().notifyItemRemoved(position);
-                    notification.setMessage(new_message);
-                    notification.setMinutes(new_min);
-                    notification.setHours(new_hour);
-                    addNotification(notification);
-                    break;
-                }
-            }
-        }
-
-        boolean NotificationExists(int id) {
-            for (int position = 0; position < items.size(); position++) {
-                if (items.get(position).getId() == id)
-                    return true;
-            }
-            return false;
         }
     }
 

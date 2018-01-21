@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -32,27 +33,30 @@ public class ViewActionFragment extends Fragment {
 
         //Каким-то образом загружаем данные о времени начала и конца
 
+        ViewGroup layout = rootView.findViewById(R.id.begin);
         if (true) { // Проверка, есть ли начало у события
-            RelativeLayout layout = rootView.findViewById(R.id.begin);
-            getLayoutInflater().inflate(R.layout.time, layout, true);
+            layout.setVisibility(View.VISIBLE);
             ((TextView) layout.findViewById(R.id.title)).setText("Начало");
             int hour = 12;
             int minutes = 0;
             RelativeLayout timeBox = layout.findViewById(R.id.time_box);
             ((TextView) timeBox.findViewById(R.id.hour)).setText(format(hour));
             ((TextView) timeBox.findViewById(R.id.min)).setText(format(minutes));
+        } else {
+            layout.setVisibility(View.GONE);
         }
 
-
+        layout = rootView.findViewById(R.id.end);
         if (true) { // Проверка, есть ли конец у события
-            RelativeLayout layout = rootView.findViewById(R.id.end);
-            getLayoutInflater().inflate(R.layout.time, layout, true);
+            layout.setVisibility(View.VISIBLE);
             ((TextView) layout.findViewById(R.id.title)).setText("Конец");
             int hour = 13;
             int minutes = 0;
             RelativeLayout timeBox = layout.findViewById(R.id.time_box);
             ((TextView) timeBox.findViewById(R.id.hour)).setText(format(hour));
             ((TextView) timeBox.findViewById(R.id.min)).setText(format(minutes));
+        } else {
+            layout.setVisibility(View.GONE);
         }
 
         final List<Notification> notif = new ArrayList<>();

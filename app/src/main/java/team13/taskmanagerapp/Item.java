@@ -9,6 +9,8 @@ class Item {
     private Integer id;
     private String begin_min = "", begin_hour = "";
     private String end_min = "", end_hour = "";
+    private boolean ready = false;
+    private int timeInMinutes = 0;
 
     Item(String title, int id) {
         this.title = title;
@@ -18,6 +20,13 @@ class Item {
     void setBegin(String hour, String min) {
         begin_hour = hour;
         begin_min = min;
+        timeInMinutes = getBeginTime();
+    }
+
+    private int getBeginTime() {
+        if (begin_hour.equals("") || begin_min.equals(""))
+            return 0;
+        return Integer.valueOf(begin_hour) * 60 + Integer.valueOf(begin_min);
     }
 
     void setEnd(String hour, String min) {
@@ -25,8 +34,16 @@ class Item {
         end_min = min;
     }
 
+    void setIfReady(boolean ready) {
+        this.ready = ready;
+    }
+
+    Boolean ifReady() {
+        return ready;
+    }
+
     String getTitle() {
-        return this.title;
+        return title;
     }
 
     Integer getId() {
@@ -47,5 +64,12 @@ class Item {
 
     String getEndMin() {
         return end_min;
+    }
+
+    int getTimeInMinutes() {
+        int res = timeInMinutes;
+        if (ready)
+            res += 1e9;
+        return res;
     }
 }
