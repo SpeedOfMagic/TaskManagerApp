@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -24,6 +25,9 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 
 public class TasksForToday extends Fragment {
+    static boolean EDIT = false;
+    static int EDIT_ID;
+    static boolean READY;
     private int nextId = 0;
     private RecyclerView recyclerView;
     final DataSource dataSource = new DataSource();
@@ -32,6 +36,11 @@ public class TasksForToday extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        if (EDIT) {
+            EDIT = false;
+            editTask(EDIT_ID);
+        }
 
         Calendar now = Calendar.getInstance();
 
@@ -129,12 +138,15 @@ public class TasksForToday extends Fragment {
         private final TextView title;
         private Button dlttsk;
         private Button edttsk;
+        RelativeLayout begin, end;
 
         ItemViewHolder(View itemView) {
             super(itemView);
             this.title = itemView.findViewById(R.id.text1);
             dlttsk = itemView.findViewById(R.id.dlttsk);
             edttsk = itemView.findViewById(R.id.edttsk);
+            begin = itemView.findViewById(R.id.begin);
+            end = itemView.findViewById(R.id.end);
         }
 
         void bind(Item item, final int id) {
@@ -151,6 +163,7 @@ public class TasksForToday extends Fragment {
                     Fragment fragment = new ViewActionFragment();
                     Bundle inf = new Bundle();
                     // кладем нужную информацию
+                    inf.putInt("Id", id);
                     fragment.setArguments(inf);
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     fragmentManager.beginTransaction().replace(R.id.frame, fragment).addToBackStack("ViewExactTask").commit();
@@ -159,14 +172,28 @@ public class TasksForToday extends Fragment {
             edttsk.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(getActivity(), NewActionActivity.class);
-                    intent.putExtra("title", "Редактирование события");
-                    intent.putExtra("id", id);
-                    // добавляем нужную информацию
-                    startActivityForResult(intent, NEW_TASK_CODE);
+                editTask(id);
                 }
             });
+            if (!item.getBeginHour().equals("") && !item.getBeginHour().equals("")) {
+                getLayoutInflater().inflate(R.layout.time_box, begin, true);
+                ((TextView) begin.findViewById(R.id.hour)).setText(item.getBeginHour());
+                ((TextView) begin.findViewById(R.id.min)).setText(item.getBeginMin());
+            }
+            if (!item.getEndHour().equals("") && !item.getEndHour().equals("")) {
+                getLayoutInflater().inflate(R.layout.time_box, end, true);
+                ((TextView) end.findViewById(R.id.hour)).setText(item.getEndHour());
+                ((TextView) end.findViewById(R.id.min)).setText(item.getEndMin());
+            }
         }
+    }
+
+    void editTask(int id) {
+        Intent intent = new Intent(getActivity(), NewActionActivity.class);
+        intent.putExtra("title", "Редактирование события");
+        intent.putExtra("id", id);
+        // добавляем нужную информацию
+        startActivityForResult(intent, NEW_TASK_CODE);
     }
 
     @Override
@@ -178,9 +205,21 @@ public class TasksForToday extends Fragment {
                 int id = data.getIntExtra("id", 0);
                 dataSource.removeTask(id);
                 Item task = new Item(data.getStringExtra("title"), id);
+
+                String beginHour = data.getStringExtra("beginHour");
+                String beginMin = data.getStringExtra("beginMin");
+                String endHour = data.getStringExtra("endHour");
+                String endMin = data.getStringExtra("endMin");
+
+                if (!(beginHour).equals("") && !(beginMin).equals("")) {
+                    task.setBegin(beginHour, beginMin);
+                }
+                if (!(endHour).equals("") && !(endMin).equals("")) {
+                    task.setEnd(endHour, endMin);
+                }
+
                 dataSource.addItem(task);
             }
         }
     }
-
 }

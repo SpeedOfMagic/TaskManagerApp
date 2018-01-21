@@ -48,16 +48,14 @@ public class NewActionActivity extends AppCompatActivity {
         RelativeLayout begin_layout = findViewById(R.id.time_box_begin);
         final TextView begin_hour = begin_layout.findViewById(R.id.hour);
         final TextView begin_min = begin_layout.findViewById(R.id.min);
-        Button btn = findViewById(R.id.btn1);
         final ButtonListener beginListener = new ButtonListener(begin_hour, begin_min);
-        btn.setOnClickListener(beginListener);
+        begin_layout.setOnClickListener(beginListener);
 
         RelativeLayout end_layout = findViewById(R.id.time_box_end);
         final TextView end_hour = end_layout.findViewById(R.id.hour);
         final TextView end_min = end_layout.findViewById(R.id.min);
-        btn = findViewById(R.id.btn2);
         final ButtonListener endListener = new ButtonListener(end_hour, end_min);
-        btn.setOnClickListener(endListener);
+        end_layout.setOnClickListener(endListener);
 
         notif_container = findViewById(R.id.notif_cont);
         notif_container.setLayoutManager(new LinearLayoutManager(this));
@@ -104,6 +102,7 @@ public class NewActionActivity extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                TasksForToday.READY = true;
                 NewActionActivity.this.finish();
             }
         });
@@ -130,7 +129,13 @@ public class NewActionActivity extends AppCompatActivity {
                     Intent intent = new Intent();
                     intent.putExtra("title", ((TextView) findViewById(R.id.name_of_act)).getText().toString());
                     intent.putExtra("id", getIntent().getIntExtra("id", 0));
+                    intent.putExtra("beginHour", begin_hour.getText().toString());
+                    intent.putExtra("beginMin", begin_min.getText().toString());
+                    intent.putExtra("endHour", end_hour.getText().toString());
+                    intent.putExtra("endMin", end_min.getText().toString());
+
                     setResult(RESULT_OK, intent);
+                    TasksForToday.READY = true;
                     NewActionActivity.this.finish();
                 }
             }

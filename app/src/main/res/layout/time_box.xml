@@ -22,7 +22,7 @@
         android:layout_alignBaseline="@id/hour"
         android:layout_toEndOf="@id/hour"
         android:id="@+id/colon"
-        android:layout_marginStart="2dp"
+        android:layout_marginStart="1dp"
         android:textColor="@color/colorPrimaryDark"
         android:textStyle="bold"/>
 
@@ -37,5 +37,5 @@
         android:textSize="20sp"
         android:background="@color/colorPrimaryLight"
         android:layout_toEndOf="@id/colon"
-        android:layout_marginStart="2dp"/>
+        android:layout_marginStart="1dp"/>
 </RelativeLayout>
