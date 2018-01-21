@@ -1,10 +1,10 @@
 package team13.taskmanagerapp.Database;
 
 public class TaskBuilder {
-    private Task task;
+    private Task task=new Task();
     public Task build() {return this.task;}
     public TaskBuilder(){}
-    public TaskBuilder(Task task){this.task=task;}
+    //public TaskBuilder(Task task){this.task=task;}
     public TaskBuilder id(String id){
         task.setId(id);
         return this;

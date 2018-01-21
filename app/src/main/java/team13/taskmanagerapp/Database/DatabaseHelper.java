@@ -50,7 +50,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(
                 "CREATE TABLE IF NOT EXISTS Task ("+
                         "id TEXT NOT NULL PRIMARY KEY,"+
-                        "accountId TEXT NOT NULL,"+
+                        "accountId TEXT /*NOT NULL*/,"+
                         "title TEXT NOT NULL,"+
                         "description TEXT,"+
                         "status TEXT NOT NULL,"+
@@ -95,9 +95,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     @NonNull
     private static Task getTaskFromCursor(@NonNull Cursor cursor){
-        return new Task(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),
-                TaskStatus.valueOf(cursor.getString(4)),TaskType.valueOf(cursor.getString(5)),
-                cursor.getString(6),cursor.getString(7),cursor.getInt(8));
+        cursor.moveToFirst();
+        return new TaskBuilder()
+                .id(cursor.getString(0))
+                .accountId(cursor.getString(1))
+                .title(cursor.getString(2))
+                .description(cursor.getString(3))
+                .status(TaskStatus.valueOf(cursor.getString(4)))
+                .type(TaskType.valueOf(cursor.getString(5)))
+                .startDate(cursor.getString(6))
+                .endDate(cursor.getString(7))
+                .duration(cursor.getInt(8))
+                .build();
     }
     public static void addTask(SQLiteDatabase db,@NonNull Task task){
         executeChangeQuery(db,
@@ -109,18 +118,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 )
         );
     }
-
+    /*
     public static void editTask(SQLiteDatabase db,@NonNull String taskId,
-                                boolean[] colsToEdit,String[] valuesToEdit){
-        if (valuesToEdit.length!=colsToEdit.length) {
+                                String colsToEdit,String[] valuesToEdit){
+        if (valuesToEdit.length!=colsToEdit.length()) {
             Log.e("Database","Wrong parameters: valuesToEdit.length!=colsToEdit.length",
                     new InvalidParameterException());
             return;
         }
         StringBuilder query=new StringBuilder("UPDATE Task SET ");
         boolean useful=false;
-        for (int i=0;i<colsToEdit.length;i++){
-            if (colsToEdit[i]){
+        for (int i=0;i<colsToEdit.length();i++){
+            if (colsToEdit.charAt(i)=='1'){
                 useful=true;
                 String toAppend=intToCol[i]+" = \""+valuesToEdit[i]+"\",";
                 query.append(toAppend);
@@ -134,25 +143,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 String.format(" WHERE Task.id = \"%s\"",taskId);
         executeChangeQuery(db,toSend);
     }
-
-    /*
-    public void removeTask(Context context,@NonNull Task task){
-        removeTaskById(context,task.getId());
-    }
-    public void removeTaskById(Context context,String id){
-        Cursor cursor=executeQuery(context,"DELETE FROM Task WHERE Task.id="+"\""+id+"\"");
-        cursor.close();
-    }
     */
 
+    public static void eraseTask(SQLiteDatabase db,@NonNull Task task){
+        eraseTaskById(db,task.getId());
+    }
+    public static void eraseTaskById(SQLiteDatabase db,String id){
+        executeChangeQuery(db,"DELETE FROM Task WHERE Task.id="+"\""+id+"\"");
+    }
+    public static void eraseAllTasks(SQLiteDatabase db){executeChangeQuery(db,"DELETE FROM Task");}
     @Nullable
     public static String getToken(SQLiteDatabase db) throws TokenNotFoundException{
-        Cursor cursor=executeSelectQuery(db,"SELECT * FROM Token");
-        if (cursor.getCount()!=1){
+        Cursor cursor=executeSelectQuery(db,"SELECT value FROM Token");
+        if (cursor.getCount()!=1) {
             cursor.close();
-            Log.e("Token","Token not found",new TokenNotFoundException());
-            return null;
+            Log.e("Token", "Token not found");
+            throw new TokenNotFoundException();
         }
+        cursor.moveToFirst();
         String token=cursor.getString(0);
         cursor.close();
         return token;
@@ -160,6 +168,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static void setToken(SQLiteDatabase db,@NonNull String token){
         executeChangeQuery(db,"INSERT INTO Token VALUES(\""+token+"\");");
     }
+    public static void eraseToken(SQLiteDatabase db){executeChangeQuery(db,"DELETE FROM Token");}
     @Override
     public void onUpgrade(@NonNull SQLiteDatabase db, int oldVersion, int newVersion){
         db.setVersion(newVersion);
