@@ -22,7 +22,7 @@ public class WebLog extends AppCompatActivity {
         webView.setWebViewClient(new WebViewClient(){
             @Override
             public boolean shouldOverrideUrlLoading(WebView view,  String url) {
-                //android.util.Log.d("MyLog", url);
+                android.util.Log.d("MyLog", url);
                 view.loadUrl(url);
                 if(url.substring(18,22).equals("code")){
                      code = url.substring(23);
