@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=":"
-        android:textSize="20sp"
+        android:textSize="20dp"
         android:layout_alignBaseline="@id/hour"
         android:layout_toEndOf="@id/hour"
         android:id="@+id/colon"
@@ -38,4 +38,5 @@
         android:background="@color/colorPrimaryLight"
         android:layout_toEndOf="@id/colon"
         android:layout_marginStart="1dp"/>
+
 </RelativeLayout>

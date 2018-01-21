@@ -4,21 +4,21 @@
     android:layout_height="match_parent"
     android:layout_margin="10dp">
 
-    <RelativeLayout
+    <include layout="@layout/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:id="@+id/begin">
-    </RelativeLayout>
+    </include>
 
-    <RelativeLayout
+    <include layout="@layout/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/begin"
         android:layout_toEndOf="@id/begin"
         android:layout_marginStart="30dp"
         android:id="@+id/end">
-    </RelativeLayout>
+    </include>
 
     <TextView
         android:id="@+id/description"

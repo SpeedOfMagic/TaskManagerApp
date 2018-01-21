@@ -1,12 +1,15 @@
 package team13.taskmanagerapp;
 
+/**
+ * Created by anton on 15.01.2018.
+ */
 
-import android.app.Application;
-import android.database.sqlite.SQLiteDatabase;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,23 +17,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RelativeLayout;
+import android.widget.CheckBox;
 import android.widget.TextView;
-import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import team13.taskmanagerapp.Database.DatabaseHelper;
-import team13.taskmanagerapp.Database.Task;
 
 import static android.app.Activity.RESULT_OK;
 
 public class TasksForToday extends Fragment {
     static boolean EDIT = false;
     static int EDIT_ID;
-    static boolean READY;
     private int nextId = 0;
     private RecyclerView recyclerView;
     final DataSource dataSource = new DataSource();
@@ -64,6 +62,17 @@ public class TasksForToday extends Fragment {
 
         View rootView = inflater.inflate(R.layout.tasksfortoday, container, false);
 
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              Intent intent = new Intent(getActivity(), NewActionActivity.class);
+              intent.putExtra("id", nextId);
+              startActivityForResult(intent, NEW_TASK_CODE);
+              nextId++;
+          }
+        });
+
         recyclerView = rootView.findViewById(R.id.container);
         recyclerView.setAdapter(new RecyclerView.Adapter() {
             @Override
@@ -86,19 +95,6 @@ public class TasksForToday extends Fragment {
         });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        DatabaseHelper dbh=new DatabaseHelper(getActivity().getApplicationContext());
-        List<Item> tasksId=DatabaseHelper.
-                getTasksAtCurrentDate(dbh.database,year,month,dayOfMonth);
-
-        rootView.findViewById(R.id.add).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), NewActionActivity.class);
-                intent.putExtra("id", nextId);
-                startActivityForResult(intent, NEW_TASK_CODE);
-                nextId++;
-            }
-        });
 
         return rootView;
     }
@@ -109,21 +105,28 @@ public class TasksForToday extends Fragment {
         return "" + time;
     }
 
-    class DataSource {
+    private class DataSource {
 
         private final List<Item> items = new ArrayList<>();
 
-        int getCount() {
+        public int getCount() {
             return items.size();
         }
 
-        Item getItem(int position) {
+        public Item getItem(int position) {
             return items.get(position);
         }
 
         void addItem(Item item) {
-            items.add(item);
-            final int position = items.size() - 1;
+            int position = 0;
+            for ( ; position < items.size(); position++) {
+                int cur_min = items.get(position).getTimeInMinutes();
+                int new_min = item.getTimeInMinutes();
+                if (cur_min > new_min) {
+                    break;
+                }
+            }
+            items.add(position, item);
             recyclerView.getAdapter().notifyItemInserted(position);
             recyclerView.scrollToPosition(position);
         }
@@ -144,7 +147,10 @@ public class TasksForToday extends Fragment {
         private final TextView title;
         private Button dlttsk;
         private Button edttsk;
-        RelativeLayout begin, end;
+        ViewGroup begin, end;
+        private int id;
+        private CheckBox checkBox;
+        Button dash;
 
         ItemViewHolder(View itemView) {
             super(itemView);
@@ -153,16 +159,13 @@ public class TasksForToday extends Fragment {
             edttsk = itemView.findViewById(R.id.edttsk);
             begin = itemView.findViewById(R.id.begin);
             end = itemView.findViewById(R.id.end);
+            checkBox = itemView.findViewById(R.id.checkBox);
+            dash = itemView.findViewById(R.id.dash);
         }
 
-        void bind(Item item, final int id) {
+        void bind(final Item item, final int id) {
+            this.id = id;
             title.setText(item.getTitle());
-            dlttsk.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dataSource.removeTask(id);
-                }
-            });
             title.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -178,19 +181,47 @@ public class TasksForToday extends Fragment {
             edttsk.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                editTask(id);
+                    editTask(id);
                 }
             });
+
+            dlttsk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dataSource.removeTask(id);
+                }
+            });
+
             if (!item.getBeginHour().equals("") && !item.getBeginHour().equals("")) {
-                getLayoutInflater().inflate(R.layout.time_box, begin, true);
+                begin.setVisibility(View.VISIBLE);
                 ((TextView) begin.findViewById(R.id.hour)).setText(item.getBeginHour());
                 ((TextView) begin.findViewById(R.id.min)).setText(item.getBeginMin());
+            } else {
+                begin.setVisibility(View.GONE);
             }
+
+            Log.d("End from bind()", item.getEndHour() + " " + item.getEndMin());
+
             if (!item.getEndHour().equals("") && !item.getEndHour().equals("")) {
-                getLayoutInflater().inflate(R.layout.time_box, end, true);
+                end.setVisibility(View.VISIBLE);
+                dash.setVisibility(View.VISIBLE);
+                Log.d("End from bind()", "I am here!");
                 ((TextView) end.findViewById(R.id.hour)).setText(item.getEndHour());
                 ((TextView) end.findViewById(R.id.min)).setText(item.getEndMin());
+            } else {
+                end.setVisibility(View.GONE);
+                dash.setVisibility(View.GONE);
             }
+
+            checkBox.setChecked(item.ifReady());
+            checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dataSource.removeTask(id);
+                    item.setIfReady(checkBox.isChecked());
+                    dataSource.addItem(item);
+                }
+            });
         }
     }
 
@@ -217,12 +248,11 @@ public class TasksForToday extends Fragment {
                 String endHour = data.getStringExtra("endHour");
                 String endMin = data.getStringExtra("endMin");
 
-                if (!(beginHour).equals("") && !(beginMin).equals("")) {
-                    task.setBegin(beginHour, beginMin);
-                }
-                if (!(endHour).equals("") && !(endMin).equals("")) {
-                    task.setEnd(endHour, endMin);
-                }
+                task.setBegin(beginHour, beginMin);
+                task.setEnd(endHour, endMin);
+
+                Log.d("Begin", beginHour + ":" + beginMin + "   " + task.getBeginHour() + ":" + task.getBeginMin());
+                Log.d("End", endHour + ":" + endMin + "   " + task.getEndHour() + ":" + task.getEndMin());
 
                 dataSource.addItem(task);
             }
