@@ -18,14 +18,11 @@ import team13.taskmanagerapp.Item;
 
 @SuppressWarnings("unused")
 public class DatabaseHelper extends SQLiteOpenHelper {
-    public SQLiteDatabase database;
     private static final String[] intToCol={
             "id","accountId","title","description","status","type","startDate","endDate","duration"
     };
     public DatabaseHelper(Context context){
         super(context, "TaskDB", null, 1);
-        database=this.getWritableDatabase();
-
     }
     private static DatabaseHelper getInstance(Context context){return new DatabaseHelper(context);}
     @Override
@@ -71,9 +68,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     @NonNull
     public static List<Item> getTasksAtCurrentDate(SQLiteDatabase db,int years,int months,int days) {
-        String date=years+"-"+(months<10?"0":"")+months+"-"+(days<10?"0":"")+days;
+        String date=years+"-"+(months<10?"0":"")+months+"-"+(days<10?"0":"")+days+"*";
+        Log.d("DB",date);
         Cursor cursor=executeSelectQuery(db,
-                String.format("SELECT * FROM Task WHERE startDate GLOB \"%s*\"",date));
+                String.format(
+                 "SELECT * FROM Task WHERE startDate GLOB \"%s*\" OR endDate GLOB \"%s\""
+                        ,date,date));
         List<Item> taskList=new ArrayList<>();
         while (!cursor.isAfterLast()){
             taskList.add(Item.valueOf(getTaskFromCursor(cursor)));
@@ -107,6 +107,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 .endDate(cursor.getString(7))
                 .duration(cursor.getInt(8))
                 .build();
+    }
+    public static void addTask(SQLiteDatabase db,@NonNull Item item){
+        addTask(db,Task.valueOf(item));
     }
     public static void addTask(SQLiteDatabase db,@NonNull Task task){
         executeChangeQuery(db,

@@ -1,7 +1,10 @@
 package team13.taskmanagerapp.Database;
 import android.support.annotation.*;
 
+import team13.taskmanagerapp.Item;
+
 public class Task{
+    private static long rowId=0;
     @Nullable private String description, accountId, startDate, endDate;
     @Nullable private Integer duration;
     @NonNull private String id="Stub!", title="Stub!";
@@ -9,6 +12,14 @@ public class Task{
     @NonNull private TaskType type=TaskType.BACKLOG;
 
     public Task(){}
+
+    public static Task valueOf(Item item){
+        rowId++;
+        return new TaskBuilder()
+                .title(item.getTitle()).type(TaskType.PLANNED)
+                .status((item.ifReady()?TaskStatus.COMPLETED:TaskStatus.ACTIVE))
+                .id(String.valueOf(rowId)).build();
+    }
 
     @Nullable public String getBeginHour() {
         if (this.getStartDate() == null || this.getStartDate().length() < 16) return null;
@@ -26,6 +37,7 @@ public class Task{
         if (this.getEndDate() == null || this.getEndDate().length() < 16) return null;
         return this.getEndDate().substring(14,16);
     }
+    public static long getRowId() {return rowId;}
     @NonNull  public String getId() {return id;}
     @NonNull  public TaskStatus getStatus() {return status;}
     @NonNull  public TaskType getType() {return type;}
@@ -36,6 +48,7 @@ public class Task{
     @Nullable public String getEndDate() {return endDate;}
     @Nullable public Integer getDuration() {return duration;}
 
+    public static void setRowId(int rowId) {Task.rowId = rowId;}
     public void setId(@NonNull String id) {this.id = id;}
     public void setAccountId(@NonNull String accountId) {this.accountId = accountId;}
     public void setStatus(@NonNull TaskStatus status) {this.status = status;}

@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import team13.taskmanagerapp.Database.*;
 
@@ -134,6 +135,7 @@ public class DatabaseTest {
         assertEquals(task4.getDuration().longValue(),600);
 
         DatabaseHelper.eraseTask(writableDB,task2);
+        DatabaseHelper.eraseTaskById(writableDB,"id1");
         DatabaseHelper.addTask(writableDB,task3);
 
         task4=DatabaseHelper.getTaskById(readableDB,"id2");
@@ -165,6 +167,18 @@ public class DatabaseTest {
     */
     //Subtask #3 - List of tasks
     @Test
+    public void getListOfItems1() throws Exception{ //#1 - 2 tasks with that date
+        clearDatabase();
+        Task task1=new TaskBuilder().id("id").title("title").status(TaskStatus.ACTIVE)
+                .type(TaskType.BACKLOG).startDate("2018-01-21T22:30:00").build(),
+             task2=new TaskBuilder().id("id2").title("title2").startDate("2018-01-21T23:30:00")
+                     .status(TaskStatus.ACTIVE).type(TaskType.BACKLOG).build();
+        DatabaseHelper.addTask(writableDB,task1);
+        DatabaseHelper.addTask(writableDB,task2);
+        List<Item> items=DatabaseHelper.getTasksAtCurrentDate(readableDB,2018,1,21);
+        assertEquals(items.get(0).getBeginHour(),"22");
+        assertEquals(items.get(1).getBeginHour(),"23");
+    }
     public void getListOfEmptyIDs1() throws Exception { //#1 - 0 tasks
         clearDatabase();
         assertEquals(DatabaseHelper.getTasksAtCurrentDate(readableDB,0,0,0),new ArrayList<Item>());
