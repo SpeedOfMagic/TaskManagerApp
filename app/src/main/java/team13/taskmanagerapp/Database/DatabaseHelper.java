@@ -68,17 +68,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @NonNull
     public static List<Item> getTasksAtCurrentDate(SQLiteDatabase db,int years,int months,int days) {
         String date=years+"-"+(months<10?"0":"")+months+"-"+(days<10?"0":"")+days+"*";
-        Log.d("DB",date);
         Cursor cursor=executeSelectQuery(db,
                 String.format(
                  "SELECT * FROM Task WHERE startDate GLOB \"%s\" OR endDate GLOB \"%s\""
                         ,date,date));
+        cursor.moveToFirst();
         List<Item> taskList=new ArrayList<>();
-        Log.d("DB",""+taskList.toArray().length);
-        while (!cursor.isAfterLast()){
+        if (cursor.getCount()==0)return taskList;
+        do {
             taskList.add(Item.valueOf(getTaskFromCursor(cursor)));
-            cursor.moveToNext();
-        }
+            Log.d("DB",""+cursor.getPosition());
+        } while (cursor.moveToNext());
         cursor.close();
         return taskList;
     }

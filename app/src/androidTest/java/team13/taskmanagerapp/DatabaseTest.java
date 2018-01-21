@@ -170,9 +170,9 @@ public class DatabaseTest {
     public void getListOfItems1() throws Exception{ //#1 - 2 tasks with that date
         clearDatabase();
         Task task1=new TaskBuilder().id("id").title("title").status(TaskStatus.ACTIVE)
-                .type(TaskType.BACKLOG).startDate("2018-01-21T22:30:00").build(),
+                .type(TaskType.PLANNED).startDate("2018-01-21T22:30:00").build(),
              task2=new TaskBuilder().id("id2").title("title2").endDate("2018-01-21T23:30:00")
-                     .status(TaskStatus.ACTIVE).type(TaskType.BACKLOG).build();
+                     .status(TaskStatus.ACTIVE).type(TaskType.PLANNED).build();
         DatabaseHelper.addTask(writableDB,task1);
         DatabaseHelper.addTask(writableDB,task2);
         List<Item> items=DatabaseHelper.getTasksAtCurrentDate(readableDB,2018,1,21);

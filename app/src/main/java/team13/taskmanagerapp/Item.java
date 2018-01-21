@@ -21,6 +21,7 @@ public class Item {
         Item newItem = new Item();
         newItem.databaseID = task.getId();
         newItem.title = task.getTitle();
+        newItem.description = task.getDescription();
         newItem.begin_hour = task.getBeginHour();
         newItem.begin_min = task.getBeginMinute();
         newItem.end_hour = task.getEndHour();
