@@ -15,10 +15,17 @@ public class Task{
 
     public static Task valueOf(Item item){
         rowId++;
+        String date=item.getYear()+"-"+(item.getMonth()<10?"0":"")+String.valueOf(item.getMonth())
+                +(item.getDayOfMonth()<10?"0":"")+item.getDayOfMonth(),
+            startDate=date+(item.getBeginHour().equals("")?"":"T"+item.getBeginHour()+":"+
+                    item.getBeginMin()+":00"),
+            endDate=date+(item.getEndHour().equals("")?"":"T"+item.getEndHour()+":"+
+                    item.getEndMin()+":00");
         return new TaskBuilder()
                 .title(item.getTitle()).type(TaskType.PLANNED)
                 .status((item.ifReady()?TaskStatus.COMPLETED:TaskStatus.ACTIVE))
-                .id(String.valueOf(rowId)).build();
+                .id(String.valueOf(rowId)).startDate(startDate).endDate(endDate)
+                .build();
     }
 
     @Nullable public String getBeginHour() {

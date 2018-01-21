@@ -171,13 +171,13 @@ public class DatabaseTest {
         clearDatabase();
         Task task1=new TaskBuilder().id("id").title("title").status(TaskStatus.ACTIVE)
                 .type(TaskType.BACKLOG).startDate("2018-01-21T22:30:00").build(),
-             task2=new TaskBuilder().id("id2").title("title2").startDate("2018-01-21T23:30:00")
+             task2=new TaskBuilder().id("id2").title("title2").endDate("2018-01-21T23:30:00")
                      .status(TaskStatus.ACTIVE).type(TaskType.BACKLOG).build();
         DatabaseHelper.addTask(writableDB,task1);
         DatabaseHelper.addTask(writableDB,task2);
         List<Item> items=DatabaseHelper.getTasksAtCurrentDate(readableDB,2018,1,21);
         assertEquals(items.get(0).getBeginHour(),"22");
-        assertEquals(items.get(1).getBeginHour(),"23");
+        assertEquals(items.get(1).getEndHour(),"23");
     }
     public void getListOfEmptyIDs1() throws Exception { //#1 - 0 tasks
         clearDatabase();

@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -72,9 +71,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.d("DB",date);
         Cursor cursor=executeSelectQuery(db,
                 String.format(
-                 "SELECT * FROM Task WHERE startDate GLOB \"%s*\" OR endDate GLOB \"%s\""
+                 "SELECT * FROM Task WHERE startDate GLOB \"%s\" OR endDate GLOB \"%s\""
                         ,date,date));
         List<Item> taskList=new ArrayList<>();
+        Log.d("DB",""+taskList.toArray().length);
         while (!cursor.isAfterLast()){
             taskList.add(Item.valueOf(getTaskFromCursor(cursor)));
             cursor.moveToNext();
