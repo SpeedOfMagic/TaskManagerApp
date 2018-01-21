@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import team13.taskmanagerapp.Database.DatabaseHelper;
+
 import static android.app.Activity.RESULT_OK;
 
 public class TasksForToday extends Fragment {
@@ -32,11 +34,14 @@ public class TasksForToday extends Fragment {
     private int nextId = 0;
     private RecyclerView recyclerView;
     final DataSource dataSource = new DataSource();
+    DatabaseHelper databaseHelper;
 
     private static final int NEW_TASK_CODE = 1171;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        databaseHelper = new DatabaseHelper(getActivity().getApplicationContext());
 
         if (EDIT) {
             EDIT = false;
@@ -62,7 +67,7 @@ public class TasksForToday extends Fragment {
 
         View rootView = inflater.inflate(R.layout.tasksfortoday, container, false);
 
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        FloatingActionButton fab = rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
@@ -96,6 +101,14 @@ public class TasksForToday extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        List <Item> list = DatabaseHelper.getTasksAtCurrentDate(databaseHelper.getWritableDatabase(), year, month, dayOfMonth);
+
+        for (Item item : list) {
+            item.setId(nextId);
+            nextId++;
+            dataSource.addItem(item);
+        }
+
         return rootView;
     }
 
@@ -109,11 +122,11 @@ public class TasksForToday extends Fragment {
 
         private final List<Item> items = new ArrayList<>();
 
-        public int getCount() {
+        int getCount() {
             return items.size();
         }
 
-        public Item getItem(int position) {
+        Item getItem(int position) {
             return items.get(position);
         }
 

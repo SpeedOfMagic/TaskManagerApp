@@ -18,13 +18,11 @@ import team13.taskmanagerapp.Item;
 
 @SuppressWarnings("unused")
 public class DatabaseHelper extends SQLiteOpenHelper {
-    public SQLiteDatabase database;
     private static final String[] intToCol={
             "id","accountId","title","description","status","type","startDate","endDate","duration"
     };
     public DatabaseHelper(Context context){
         super(context, "TaskDB", null, 1);
-        database=this.getWritableDatabase();
 
     }
     private static DatabaseHelper getInstance(Context context){return new DatabaseHelper(context);}
@@ -70,7 +68,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(query);
     }
     @NonNull
-    public static List<Item> getTasksAtCurrentDate(SQLiteDatabase db,int years,int months,int days) {
+    public static List<Item> getTasksAtCurrentDate(SQLiteDatabase db, int years, int months, int days) {
         String date=years+"-"+(months<10?"0":"")+months+"-"+(days<10?"0":"")+days;
         Cursor cursor=executeSelectQuery(db,
                 String.format("SELECT * FROM Task WHERE startDate GLOB \"%s*\"",date));

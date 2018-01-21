@@ -16,15 +16,24 @@ public class Item{
     private int timeInMinutes = 0;
 
     public static Item valueOf(Task task){
-        Item newItem=new Item();
-        newItem.databaseID=task.getId();newItem.title=task.getTitle();
-        newItem.begin_hour=task.getBeginHour();newItem.begin_min=task.getBeginMinute();
-        newItem.end_hour=task.getEndHour();newItem.end_min=task.getEndMinute();
+        Item newItem = new Item();
+        newItem.databaseID = task.getId();
+        newItem.title = task.getTitle();
+        newItem.begin_hour = task.getBeginHour();
+        newItem.begin_min = task.getBeginMinute();
+        newItem.end_hour = task.getEndHour();
+        newItem.end_min = task.getEndMinute();
         return newItem;
     }
-    private Item(){}
+
+    private Item() {}
+
     Item(String title, int id) {
         this.title = title;
+        this.id = id;
+    }
+
+    void setId(int id) {
         this.id = id;
     }
 
