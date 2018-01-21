@@ -1,10 +1,8 @@
 package team13.taskmanagerapp;
 
-/**
- * Created by anton on 15.01.2018.
- */
 
 import android.app.Application;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
@@ -88,9 +86,9 @@ public class TasksForToday extends Fragment {
         });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        List<Item> tasksId=
-                DatabaseHelper.getTasksAtCurrentDate(getActivity().getApplicationContext(),year,month,dayOfMonth);
+        DatabaseHelper dbh=new DatabaseHelper(getActivity().getApplicationContext());
+        List<Item> tasksId=DatabaseHelper.
+                getTasksAtCurrentDate(dbh.database,year,month,dayOfMonth);
 
         rootView.findViewById(R.id.add).setOnClickListener(new View.OnClickListener() {
             @Override

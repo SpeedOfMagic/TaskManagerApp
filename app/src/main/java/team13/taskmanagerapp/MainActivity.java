@@ -1,6 +1,9 @@
 package team13.taskmanagerapp;
 
 import android.app.AlertDialog;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Intent;
@@ -16,6 +19,10 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
+
+import team13.taskmanagerapp.Database.DatabaseHelper;
+import team13.taskmanagerapp.Database.TaskBuilder;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -23,7 +30,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         if (false) { // Проверка того, авторизован ли пользователь
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
