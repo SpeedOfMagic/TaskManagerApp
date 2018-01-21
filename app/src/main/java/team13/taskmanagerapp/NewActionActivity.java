@@ -83,7 +83,7 @@ public class NewActionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 beginListener.reset();
-                endListener.reset();
+                endListener.reset();;
             }
         });
 

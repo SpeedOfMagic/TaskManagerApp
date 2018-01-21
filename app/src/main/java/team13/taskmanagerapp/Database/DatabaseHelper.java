@@ -11,25 +11,16 @@ import android.util.Log;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+
+import team13.taskmanagerapp.Item;
 
 @SuppressWarnings("unused")
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String[] intToCol={
             "id","accountId","title","description","status","type","startDate","endDate","duration"
     };
-    private static final HashMap<String,String> monthsToNumber=new HashMap<>();
-
-    private void initMonthsToNumber(){
-        monthsToNumber.put("Jan","01");monthsToNumber.put("Feb","02");monthsToNumber.put("Mar","03");
-        monthsToNumber.put("Apr","04");monthsToNumber.put("May","05");monthsToNumber.put("Jun","06");
-        monthsToNumber.put("Jul","07");monthsToNumber.put("Aug","08");monthsToNumber.put("Sep","09");
-        monthsToNumber.put("Oct","10");monthsToNumber.put("Nov","11");monthsToNumber.put("Dec","12");
-    }
-
     private DatabaseHelper(Context context){
         super(context, "TaskDB", null, 1);
     }
@@ -38,7 +29,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     @Override
     public void onCreate(SQLiteDatabase db){
-        initMonthsToNumber();
         db.rawQuery(
                 "CREATE TABLE Token (value TEXT PRIMARY KEY NOT NULL);"+
                 "CREATE TABLE User ("+
@@ -71,24 +61,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
     @NonNull
-    private Cursor executeQuery(Context context, @NonNull String query){
+    private static Cursor executeQuery(Context context, @NonNull String query){
         SQLiteDatabase db=getInstance(context).getReadableDatabase();
         return db.rawQuery(query,null);
     }
     @NonNull
-    public List<Task> getTasksAtCurrentDate(Context context,@NonNull Date rawDate) {
+    public static List<Item> getTasksAtCurrentDate(Context context,int years,int months,int days) {
+        String date=years+"-"+(months<10?"0":"")+months+(days<10?"0":"")+days;
         Cursor cursor=executeQuery(context,
-                String.format("SELECT * FROM Task WHERE startDate=\"%s\"",dateToDBDate(rawDate)));
-        List<Task> taskList=new ArrayList<>();
+                String.format("SELECT * FROM Task WHERE startDate GLOB \"%s*\"",date));
+        List<Item> taskList=new ArrayList<>();
         while (!cursor.isLast()){
-            taskList.add(getTaskFromCursor(cursor));
+            taskList.add(Item.valueOf(getTaskFromCursor(cursor)));
             cursor.moveToNext();
-        } taskList.add(getTaskFromCursor(cursor));
+        } taskList.add(Item.valueOf(getTaskFromCursor(cursor)));
         cursor.close();
         return taskList;
     }
     @Nullable
-    public Task getTaskById(Context context,@NonNull String taskId){
+    public static Task getTaskById(Context context,@NonNull String taskId){
         String query=String.format("SELECT * FROM Task WHERE id=\"%s\"",taskId);
         Cursor cursor=executeQuery(context,query);
         if (cursor.getCount()==0) {
@@ -99,20 +90,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return getTaskFromCursor(cursor);
     }
     @NonNull
-    private Task getTaskFromCursor(@NonNull Cursor cursor){
+    private static Task getTaskFromCursor(@NonNull Cursor cursor){
         return new Task(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),
                 TaskStatus.valueOf(cursor.getString(4)),TaskType.valueOf(cursor.getString(5)),
                 cursor.getString(6),cursor.getString(7),cursor.getInt(8));
     }
-    @NonNull
-    private String dateToDBDate(@NonNull Date rawDate){
-        String[]partsOfDate=rawDate.toString().split(" ");
-        //Date.toString => <День недели> <Месяц> <День> <ЧЧ:ММ:СС> UTC <Год+1900>
-        return String.valueOf(Integer.valueOf(partsOfDate[5])-1900)+"-"
-                +monthsToNumber.get(partsOfDate[1])+"-"
-                + (Integer.valueOf(partsOfDate[2])<10?"0":"")+partsOfDate[2];
-    }
-    public void addTask(Context context,@NonNull Task task){
+    public static void addTask(Context context,@NonNull Task task){
         Cursor cursor=executeQuery(context,
                 String.format(Locale.US,"INSERT INTO Task VALUES (" +
                                 "\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%d);",
@@ -124,7 +107,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
     }
 
-    public void editTask(Context context,@NonNull String taskId,boolean[] colsToEdit,String[] valuesToEdit){
+    public static void editTask(Context context,@NonNull String taskId,boolean[] colsToEdit,String[] valuesToEdit){
         if (valuesToEdit.length!=colsToEdit.length) {
             Log.e("Database","Wrong parameters: valuesToEdit.length!=colsToEdit.length",
                     new InvalidParameterException());
@@ -160,7 +143,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     */
 
     @Nullable
-    public String getToken(Context context) throws TokenNotFoundException{
+    public static String getToken(Context context) throws TokenNotFoundException{
         Cursor cursor=executeQuery(context,"SELECT * FROM Token");
         if (cursor.getCount()!=1){
             cursor.close();
@@ -171,7 +154,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return token;
     }
-    public void setToken(Context context,@NonNull String token){
+    public static void setToken(Context context,@NonNull String token){
         Cursor cursor=executeQuery(context,"INSERT INTO Token VALUES(\""+token+"\");");
         cursor.close();
     }

@@ -4,6 +4,7 @@ package team13.taskmanagerapp;
  * Created by anton on 15.01.2018.
  */
 
+import android.app.Application;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
@@ -17,10 +18,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import team13.taskmanagerapp.Database.DatabaseHelper;
+import team13.taskmanagerapp.Database.Task;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -83,6 +88,9 @@ public class TasksForToday extends Fragment {
         });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        List<Item> tasksId=
+                DatabaseHelper.getTasksAtCurrentDate(getActivity().getApplicationContext(),year,month,dayOfMonth);
 
         rootView.findViewById(R.id.add).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -2,6 +2,16 @@ package team13.taskmanagerapp.Database;
 import android.support.annotation.*;
 
 public class Task{
+    @Nullable private String description;
+    @Nullable private String startDate;
+    @Nullable private String endDate;
+    @Nullable private int duration;
+    @NonNull private String id;
+    @NonNull private String accountId;
+    @NonNull private String title;
+    @NonNull private TaskStatus status;
+    @NonNull private TaskType type;
+
     public Task(){}
     public Task(String id,String accountId,String title,String description,TaskStatus status,
                 TaskType taskType,String startDate,String endDate,int duration){
@@ -15,16 +25,11 @@ public class Task{
         this.endDate = endDate;
         this.duration = duration;
     }
-    @Nullable private String description;
-    @Nullable private String startDate;
-    @Nullable private String endDate;
-    @Nullable private int duration;
-    @NonNull private String id;
-    @NonNull private String accountId;
-    @NonNull private String title;
-    @NonNull private TaskStatus status;
-    @NonNull private TaskType type;
 
+    @Nullable public String   getBeginHour(){return this.getStartDate().substring(13,15);}
+    @Nullable public String getBeginMinute(){return this.getStartDate().substring(15,17);}
+    @Nullable public String     getEndHour(){return this.getEndDate().substring(13,15);}
+    @Nullable public String   getEndMinute(){return this.getEndDate().substring(15,17);}
     @NonNull  public String getAccountId() {return accountId;}
     @NonNull  public TaskStatus getStatus() {return status;}
     @NonNull  public TaskType getType() {return type;}
