@@ -16,16 +16,17 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
-            android:id="@+id/begin">
+            android:id="@+id/begin"
+            android:layout_margin="3dp">
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/begin"
-            android:layout_marginTop="3dp"
             android:layout_alignStart="@id/begin"
-            android:id="@+id/end">
+            android:id="@+id/end"
+            android:layout_marginBottom="3dp">
         </RelativeLayout>
 
         <TextView

@@ -16,6 +16,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import team13.taskmanagerapp.Database.Task;
+
 /**
  * Created by kate on 18.01.2018.
  */
@@ -83,8 +85,9 @@ public class ViewActionFragment extends Fragment {
         (rootView.findViewById(R.id.change)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), NewActionActivity.class);
-                startActivity(intent);
+                TasksForToday.EDIT = true;
+                TasksForToday.EDIT_ID = getArguments().getInt("Id", 0);
+                getActivity().getSupportFragmentManager().popBackStack();
             }
         });
 

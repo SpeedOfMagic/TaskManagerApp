@@ -1,10 +1,8 @@
 package team13.taskmanagerapp;
 
-import android.annotation.TargetApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -24,8 +22,8 @@ public class WebLog extends AppCompatActivity {
         webView.setWebViewClient(new WebViewClient(){
             @Override
             public boolean shouldOverrideUrlLoading(WebView view,  String url) {
-                view.loadUrl(url);
-                return true;
+            view.loadUrl(url);
+            return true;
             }
         });
         //webView.loadUrl("https://google.com");
