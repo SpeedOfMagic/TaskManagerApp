@@ -135,7 +135,7 @@ public class NewActionActivity extends AppCompatActivity {
                     intent.putExtra("endHour", end_hour.getText().toString());
                     intent.putExtra("endMin", end_min.getText().toString());
 
-
+                    //Тут будет вызвана функция addTask
 
                     setResult(RESULT_OK, intent);
                     NewActionActivity.this.finish();
