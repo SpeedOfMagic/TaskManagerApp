@@ -11,7 +11,7 @@
         android:layout_below="@id/editText"
         android:id="@+id/timePicker"
         android:layout_centerHorizontal="true"
-        android:timePickerMode="spinner" />
+        android:timePickerMode="spinner"/>
 
     <EditText
         android:layout_marginTop="5dp"

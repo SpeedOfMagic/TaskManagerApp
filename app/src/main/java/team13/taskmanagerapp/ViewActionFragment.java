@@ -3,6 +3,8 @@ package team13.taskmanagerapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +15,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import team13.taskmanagerapp.Database.Task;
 
 /**
  * Created by kate on 18.01.2018.
@@ -34,8 +38,9 @@ public class ViewActionFragment extends Fragment {
             ((TextView) layout.findViewById(R.id.title)).setText("Начало");
             int hour = 12;
             int minutes = 0;
-            ((TextView) layout.findViewById(R.id.hour)).setText(format(hour));
-            ((TextView) layout.findViewById(R.id.min)).setText(format(minutes));
+            RelativeLayout timeBox = layout.findViewById(R.id.time_box);
+            ((TextView) timeBox.findViewById(R.id.hour)).setText(format(hour));
+            ((TextView) timeBox.findViewById(R.id.min)).setText(format(minutes));
         }
 
 
@@ -45,8 +50,9 @@ public class ViewActionFragment extends Fragment {
             ((TextView) layout.findViewById(R.id.title)).setText("Конец");
             int hour = 13;
             int minutes = 0;
-            ((TextView) layout.findViewById(R.id.hour)).setText(format(hour));
-            ((TextView) layout.findViewById(R.id.min)).setText(format(minutes));
+            RelativeLayout timeBox = layout.findViewById(R.id.time_box);
+            ((TextView) timeBox.findViewById(R.id.hour)).setText(format(hour));
+            ((TextView) timeBox.findViewById(R.id.min)).setText(format(minutes));
         }
 
         final List<Notification> notif = new ArrayList<>();
@@ -79,8 +85,9 @@ public class ViewActionFragment extends Fragment {
         (rootView.findViewById(R.id.change)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), NewActionActivity.class);
-                startActivity(intent);
+                TasksForToday.EDIT = true;
+                TasksForToday.EDIT_ID = getArguments().getInt("Id", 0);
+                getActivity().getSupportFragmentManager().popBackStack();
             }
         });
 

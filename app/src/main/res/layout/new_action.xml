@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/lin_layout">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -11,192 +12,130 @@
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
-            android:elevation="5dp"
-            android:translationZ="5dp"/>
+            android:elevation="3dp"
+            android:translationZ="3dp"/>
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="20dp">
+            android:layout_margin="10dp">
 
-                <EditText
-                    android:id="@+id/name_of_act"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:inputType="text"
-                    android:hint="Название события"
-                    android:textColorHint="@color/colorPrimaryDark"
-                    android:textColor="@color/colorPrimaryDark" />
+        <EditText
+            android:id="@+id/name_of_act"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:inputType="text"
+            android:hint="Название события"
+            android:textColorHint="@color/colorPrimaryDark"
+            android:textColor="@color/colorPrimaryDark" />
 
-                <TextView
-                    android:id="@+id/beginning"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/name_of_act"
-                    android:layout_marginTop="10dp"
-                    android:text="Начало"
-                    android:textSize="20sp"
-                    android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/beginning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/name_of_act"
+            android:layout_marginTop="10dp"
+            android:text="Начало"
+            android:textSize="20sp"
+            android:textColor="@color/black"/>
 
-                <Button
-                    android:id="@+id/btn1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/begin_hour"
-                    android:layout_alignEnd="@id/begin_min"
-                    android:layout_alignBaseline="@+id/begin_hour"
-                    android:background="@color/transparent"/>
+        <include layout="@layout/time_box"
+            android:id="@+id/time_box_begin"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_toEndOf="@id/beginning"
+            android:layout_alignBaseline="@id/beginning"
+            android:layout_marginStart="10dp"/>
 
-                <TextView
-                    android:id="@+id/begin_hour"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/beginning"
-                    android:layout_alignBaseline="@id/beginning"
-                    android:layout_marginStart="10dp"
-                    android:layout_below="@+id/name_of_act"
-                    android:maxLength="2"
-                    android:hint="@string/default_time_value"
-                    android:textColorHint="@color/transparent"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="20sp"
-                    android:background="@color/colorPrimaryLight"/>
+        <include layout="@layout/time_box"
+            android:id="@+id/time_box_end"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_toEndOf="@id/ending"
+            android:layout_alignBaseline="@id/beginning"
+            android:layout_marginStart="10dp"/>
 
-                <TextView
-                    android:id="@+id/begin_min"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/begin_hour"
-                    android:layout_alignBaseline="@id/beginning"
-                    android:layout_below="@+id/name_of_act"
-                    android:layout_marginStart="3dp"
-                    android:maxLength="2"
-                    android:hint="@string/default_time_value"
-                    android:textColorHint="@color/transparent"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="20sp"
-                    android:background="@color/colorPrimaryLight"/>
+        <Button
+            android:id="@+id/reset"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignBottom="@+id/ending"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/ic_clear_24dp"/>
 
-                <TextView
-                    android:id="@+id/end_hour"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/ending"
-                    android:layout_alignBaseline="@id/beginning"
-                    android:layout_below="@+id/name_of_act"
-                    android:layout_marginStart="10dp"
-                    android:maxLength="2"
-                    android:hint="@string/default_time_value"
-                    android:textColorHint="@color/transparent"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="20sp"
-                    android:background="@color/colorPrimaryLight"/>
+        <TextView
+            android:id="@+id/ending"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/beginning"
+            android:layout_toEndOf="@id/time_box_begin"
+            android:layout_marginStart="30dp"
+            android:text="Конец"
+            android:textSize="20sp"
+            android:textColor="@color/black"/>
 
-                <TextView
-                    android:id="@+id/end_min"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@id/beginning"
-                    android:layout_marginStart="3dp"
-                    android:layout_toEndOf="@id/end_hour"
-                    android:layout_below="@+id/name_of_act"
-                    android:maxLength="2"
-                    android:hint="@string/default_time_value"
-                    android:textColorHint="@color/transparent"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="20sp"
-                    android:background="@color/colorPrimaryLight"/>
+        <EditText
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Описание события..."
+            android:textColorHint="@color/colorPrimaryDark"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_below="@id/beginning"
+            android:layout_marginTop="10dp"
+            android:inputType="textMultiLine"
+            android:background="@color/colorPrimaryLight"
+            android:maxLines="9"/>
 
-                <Button
-                    android:id="@+id/btn2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/end_hour"
-                    android:layout_alignEnd="@id/end_min"
-                    android:layout_alignBaseline="@+id/end_hour"
-                    android:background="@color/transparent"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/notif_title"
+            android:text="Уведомления"
+            android:layout_below="@id/description"
+            android:layout_marginTop="10dp"
+            android:textSize="20sp"
+            android:textColor="@color/black"/>
 
-                <Button
-                    android:id="@+id/reset"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignBottom="@+id/end_hour"
-                    android:layout_alignParentEnd="true"
-                    android:background="@drawable/ic_clear_24dp"/>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/save"
+            android:layout_below="@id/notif_title"
+            android:layout_marginTop="10dp"
+            android:id="@+id/notif_cont">
 
-                <TextView
-                    android:id="@+id/ending"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@id/beginning"
-                    android:layout_toEndOf="@id/btn1"
-                    android:layout_marginStart="30dp"
-                    android:text="Конец"
-                    android:textSize="20sp"
-                    android:textColor="@color/black"/>
+        </android.support.v7.widget.RecyclerView>
 
-                <EditText
-                    android:id="@+id/description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Описание события..."
-                    android:textColorHint="@color/colorPrimaryDark"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:layout_below="@id/beginning"
-                    android:layout_marginTop="10dp"
-                    android:inputType="textMultiLine"
-                    android:background="@color/colorPrimaryLight"
-                    android:maxLines="9"/>
+        <Button
+            android:id="@+id/add"
+            android:layout_width="33dp"
+            android:layout_height="33dp"
+            android:background="@drawable/ic_add_circle_outline_24dp"
+            android:layout_marginStart="10dp"
+            android:layout_alignTop="@id/notif_title"
+            android:layout_toEndOf="@id/notif_title"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/notif_title"
-                    android:text="Уведомления"
-                    android:layout_below="@id/description"
-                    android:layout_marginTop="10dp"
-                    android:textSize="20sp"
-                    android:textColor="@color/black"/>
+        <Button
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toStartOf="@id/cancel"
+            android:text="@string/save"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/colorPrimary" />
 
-                <android.support.v7.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@id/save"
-                    android:layout_below="@id/notif_title"
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/notif_cont">
-
-                </android.support.v7.widget.RecyclerView>
-
-                <Button
-                    android:id="@+id/add"
-                    android:layout_width="33dp"
-                    android:layout_height="33dp"
-                    android:background="@drawable/ic_add_circle_outline_24dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_alignTop="@id/notif_title"
-                    android:layout_toEndOf="@id/notif_title"/>
-
-                <Button
-                    android:id="@+id/save"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_toStartOf="@id/cancel"
-                    android:text="@string/save"
-                    android:textColor="@color/white"
-                    android:backgroundTint="@color/colorPrimary" />
-
-                <Button
-                    android:id="@+id/cancel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@id/save"
-                    android:layout_marginStart="10dp"
-                    android:layout_alignParentEnd="true"
-                    android:text="@string/cancel"
-                    android:textColor="@color/white"
-                    android:backgroundTint="@color/colorAccent"/>
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/save"
+            android:layout_marginStart="10dp"
+            android:layout_alignParentEnd="true"
+            android:text="@string/cancel"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/colorAccent"/>
         </RelativeLayout>
 </LinearLayout>

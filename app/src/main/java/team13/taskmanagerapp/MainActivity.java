@@ -12,8 +12,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -26,7 +28,7 @@ public class MainActivity extends AppCompatActivity
         if (false) { // Проверка того, авторизован ли пользователь
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-            View rootView = getLayoutInflater().inflate(R.layout.activity_log, null);
+            View rootView = getLayoutInflater().inflate(R.layout.activity_log, (RelativeLayout) findViewById(R.id.layout), false);
 
             (rootView.findViewById(R.id.sendBtn)).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity
             AlertDialog alert = builder.create();
             alert.setCanceledOnTouchOutside(false);
             alert.show();
+            //alert.cancel();
         } else {
             Fragment fragment = new CalendarFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -64,8 +67,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        Log.d("FragmentCount", getSupportFragmentManager().getBackStackEntryCount() + "");
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (getSupportFragmentManager().getBackStackEntryCount() > 0){
+            getSupportFragmentManager().popBackStack();
         } else {
             super.onBackPressed();
         }
@@ -82,15 +88,6 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
         } else if (id == R.id.nav_calendar) {
             Fragment fragment = new CalendarFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
-        } else if (id == R.id.nav_projects) {
-
-        } else if (id == R.id.new_act) {
-            Intent intent = new Intent(this, NewActionActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.view_act) {
-            Fragment fragment = new ViewActionFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
         }
