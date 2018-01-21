@@ -19,7 +19,7 @@
         </activity>
         <activity
             android:name=".NewActionActivity"
-            android:windowSoftInputMode="adjustPan"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity

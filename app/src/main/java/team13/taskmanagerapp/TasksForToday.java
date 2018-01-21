@@ -4,10 +4,12 @@ package team13.taskmanagerapp;
  * Created by anton on 15.01.2018.
  */
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -62,6 +64,17 @@ public class TasksForToday extends Fragment {
 
         View rootView = inflater.inflate(R.layout.tasksfortoday, container, false);
 
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              Intent intent = new Intent(getActivity(), NewActionActivity.class);
+              intent.putExtra("id", nextId);
+              startActivityForResult(intent, NEW_TASK_CODE);
+              nextId++;
+          }
+        });
+
         recyclerView = rootView.findViewById(R.id.container);
         recyclerView.setAdapter(new RecyclerView.Adapter() {
             @Override
@@ -85,18 +98,6 @@ public class TasksForToday extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        //загрузка событий из базы данных
-
-        rootView.findViewById(R.id.add).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            Intent intent = new Intent(getActivity(), NewActionActivity.class);
-            intent.putExtra("id", nextId);
-            startActivityForResult(intent, NEW_TASK_CODE);
-            nextId++;
-            }
-        });
-
         return rootView;
     }
 
@@ -110,11 +111,11 @@ public class TasksForToday extends Fragment {
 
         private final List<Item> items = new ArrayList<>();
 
-        int getCount() {
+        public int getCount() {
             return items.size();
         }
 
-        Item getItem(int position) {
+        public Item getItem(int position) {
             return items.get(position);
         }
 
