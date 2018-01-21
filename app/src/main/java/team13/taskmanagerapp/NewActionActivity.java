@@ -83,7 +83,7 @@ public class NewActionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 beginListener.reset();
-                endListener.reset();;
+                endListener.reset();
             }
         });
 
@@ -105,6 +105,8 @@ public class NewActionActivity extends AppCompatActivity {
                 NewActionActivity.this.finish();
             }
         });
+
+        TextView description = findViewById(R.id.description);
 
         final Button save = findViewById(R.id.save);
         save.setOnClickListener(new View.OnClickListener() {
@@ -132,6 +134,8 @@ public class NewActionActivity extends AppCompatActivity {
                     intent.putExtra("beginMin", begin_min.getText().toString());
                     intent.putExtra("endHour", end_hour.getText().toString());
                     intent.putExtra("endMin", end_min.getText().toString());
+
+                    //Тут будет вызвана функция addTask
 
                     setResult(RESULT_OK, intent);
                     NewActionActivity.this.finish();
