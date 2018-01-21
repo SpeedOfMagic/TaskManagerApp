@@ -127,7 +127,9 @@ public class NewActionActivity extends AppCompatActivity {
                 } else {
                     // Запоминаем событие
                     Intent intent = new Intent();
-                    intent.putExtra("title", ((TextView) findViewById(R.id.name_of_act)).getText().toString());
+                    if (((TextView) findViewById(R.id.name_of_act)).getText().toString().equals(""))
+                        intent.putExtra("title", "Название");
+                    else intent.putExtra("title", ((TextView) findViewById(R.id.name_of_act)).getText().toString());
                     intent.putExtra("id", getIntent().getIntExtra("id", 0));
                     intent.putExtra("beginHour", begin_hour.getText().toString());
                     intent.putExtra("beginMin", begin_min.getText().toString());
