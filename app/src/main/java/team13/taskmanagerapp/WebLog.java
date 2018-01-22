@@ -1,9 +1,14 @@
 package team13.taskmanagerapp;
 
+/**
+ * Created by ilyauyutov on 16.01.2018.
+ */
+
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.*;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
@@ -17,6 +22,11 @@ public class WebLog extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_log);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        setTitle("Браузер");
+
         WebView webView;
         webView = findViewById(R.id.webLogin);
         webView.setWebViewClient(new WebViewClient(){

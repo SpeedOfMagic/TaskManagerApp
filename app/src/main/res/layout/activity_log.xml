@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="team13.taskmanagerapp.log">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="15dp"
+    android:id="@+id/layout"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/title"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Вы не авторизованы"
+        android:textSize="20sp"
+        android:layout_centerHorizontal="true"/>
 
     <Button
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/title"
         android:id="@+id/sendBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/sendBtnText"
-
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
         />
 </RelativeLayout>
