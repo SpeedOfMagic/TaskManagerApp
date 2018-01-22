@@ -32,6 +32,7 @@ public class DatabaseTest {
     private void clearDatabase(){
         DatabaseHelper.eraseAllTasks(writableDB);
         DatabaseHelper.eraseToken(writableDB);
+        Task.setRowId(0);
     }
 
     //Subtask #1 - Token

@@ -108,8 +108,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 .duration(cursor.getInt(8))
                 .build();
     }
-    public static void addTask(SQLiteDatabase db,@NonNull Item item){
+    public static long addTask(SQLiteDatabase db,@NonNull Item item){
         addTask(db,Task.valueOf(item));
+        return Task.getRowId();
     }
     public static void addTask(SQLiteDatabase db,@NonNull Task task){
         executeChangeQuery(db,
