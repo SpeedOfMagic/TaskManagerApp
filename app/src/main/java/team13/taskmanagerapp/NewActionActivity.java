@@ -120,7 +120,7 @@ public class NewActionActivity extends AppCompatActivity {
             }
         });*/
 
-        ((TextView) findViewById(R.id.notif_title)).setVisibility(View.GONE);
+        findViewById(R.id.notif_title).setVisibility(View.GONE);
 
         Button cancel = findViewById(R.id.cancel);
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -158,6 +158,9 @@ public class NewActionActivity extends AppCompatActivity {
                 intent.putExtra("endHour", end_hour.getText().toString());
                 intent.putExtra("endMin", end_min.getText().toString());
                 intent.putExtra("description", description.getText().toString());
+                if (getIntent().hasExtra("databaseID")) {
+                    intent.putExtra("databaseID", getIntent().getStringExtra("databaseID"));
+                }
 
                 setResult(RESULT_OK, intent);
                 NewActionActivity.this.finish();

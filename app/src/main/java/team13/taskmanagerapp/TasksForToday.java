@@ -153,7 +153,6 @@ public class TasksForToday extends Fragment {
         void removeTask(int id) {
             for (int position = 0; position < items.size(); position++) {
                 if (items.get(position).getId().equals(id)) {
-                    DatabaseHelper.eraseTaskById(databaseHelper.getWritableDatabase(), items.get(position).getDatabaseID());
                     items.remove(position);
                     recyclerView.getAdapter().notifyItemRemoved(position);
                     break;
@@ -208,6 +207,7 @@ public class TasksForToday extends Fragment {
                 @Override
                 public void onClick(View view) {
                     dataSource.removeTask(item.getId());
+                    DatabaseHelper.eraseTaskById(databaseHelper.getWritableDatabase(), item.getDatabaseID());
                 }
             });
 
@@ -251,11 +251,13 @@ public class TasksForToday extends Fragment {
 
     @Override
     public void onActivityResult(int code, int result, Intent data) {
-        Log.d("onActivityResult", code + " " + result + " " + RESULT_OK);
         if (code == NEW_TASK_CODE && result == RESULT_OK) {
             if (data.hasExtra("title") && data.hasExtra("id")) {
                 int id = data.getIntExtra("id", 0);
                 dataSource.removeTask(id);
+                if (data.hasExtra("databaseID")) {
+                    DatabaseHelper.eraseTaskById(databaseHelper.getWritableDatabase(), data.getStringExtra("databaseID"));
+                }
                 Item task = new Item(data.getStringExtra("title"), id);
 
                 String beginHour = data.getStringExtra("beginHour");
@@ -266,17 +268,13 @@ public class TasksForToday extends Fragment {
 
                 task.setBegin(beginHour, beginMin);
                 task.setEnd(endHour, endMin);
+                task.setDescription(description);
+                task.setYear(kyear);
+                task.setMonth(kmonth);
+                task.setDayOfMonth(kdayOfMonth);
 
-                Item item = new Item();
-                item.setId(id);
-                item.setBegin(beginHour, beginMin);
-                item.setEnd(endHour, endMin);
-                item.setDescription(description);
-                item.setYear(kyear);
-                item.setMonth(kmonth);
-                item.setDayOfMonth(kdayOfMonth);
-
-                //DatabaseHelper.addTask(databaseHelper.getWritableDatabase(), item);
+                //DatabaseHelper.addTask(databaseHelper.getWritableDatabase(), task);
+                //Нужно добавить в task databaseID
 
                 dataSource.addItem(task);
             }
