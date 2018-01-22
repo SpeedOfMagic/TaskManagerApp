@@ -60,7 +60,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     @NonNull
     private static Cursor executeSelectQuery(SQLiteDatabase db, @NonNull String query){
-        return db.rawQuery(query,null);
+        Cursor cursor=db.rawQuery(query,null);
+        cursor.moveToFirst();
+        return cursor;
     }
     private static void executeChangeQuery(SQLiteDatabase db, @NonNull String query){
         db.execSQL(query);
@@ -77,7 +79,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor.getCount()==0)return taskList;
         do {
             taskList.add(Item.valueOf(getTaskFromCursor(cursor)));
-            Log.d("DB",""+cursor.getPosition());
         } while (cursor.moveToNext());
         cursor.close();
         return taskList;
@@ -95,7 +96,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     @NonNull
     private static Task getTaskFromCursor(@NonNull Cursor cursor){
-        cursor.moveToFirst();
         return new TaskBuilder()
                 .id(cursor.getString(0))
                 .accountId(cursor.getString(1))
@@ -163,7 +163,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Log.e("Token", "Token not found");
             throw new TokenNotFoundException();
         }
-        cursor.moveToFirst();
         String token=cursor.getString(0);
         cursor.close();
         return token;

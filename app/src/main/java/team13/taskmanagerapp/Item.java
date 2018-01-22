@@ -1,10 +1,9 @@
 package team13.taskmanagerapp;
 
-import team13.taskmanagerapp.Database.Task;
+import android.util.Log;
 
-/**
- * Created by kate on 20.01.2018.
- */
+import team13.taskmanagerapp.Database.Task;
+import team13.taskmanagerapp.Database.TaskStatus;
 
 public class Item {
     private String title;
@@ -21,11 +20,23 @@ public class Item {
         Item newItem = new Item();
         newItem.databaseID = task.getId();
         newItem.title = task.getTitle();
-        newItem.description = task.getDescription();
-        newItem.begin_hour = task.getBeginHour();
-        newItem.begin_min = task.getBeginMinute();
-        newItem.end_hour = task.getEndHour();
-        newItem.end_min = task.getEndMinute();
+        newItem.setDescription(task.getDescription());
+        if (task.getStartDate()!=null&&task.getStartDate().length()>=16)
+            newItem.setBegin(task.getBeginHour(), task.getBeginMinute());
+        if (task.getEndDate()!=null&&task.getEndDate().length()>=16)
+            newItem.setEnd(task.getEndHour(), task.getEndMinute());
+        newItem.setIfReady(task.getStatus().equals(TaskStatus.COMPLETED));
+        if (task.getStartDate()==null||task.getStartDate().equals("null")){
+            if (task.getEndDate()!=null&&!task.getEndDate().equals("null")){
+                newItem.setDayOfMonth(Integer.valueOf(task.getEndDate().substring(8,10)));
+                newItem.setMonth(Integer.valueOf(task.getEndDate().substring(5,7)));
+                newItem.setYear(Integer.valueOf(task.getEndDate().substring(0,4)));
+            }
+        } else {
+            newItem.setDayOfMonth(Integer.valueOf(task.getStartDate().substring(8,10)));
+            newItem.setMonth(Integer.valueOf(task.getStartDate().substring(5,7)));
+            newItem.setYear(Integer.valueOf(task.getStartDate().substring(0,4)));
+        }
         return newItem;
     }
 
@@ -79,7 +90,7 @@ public class Item {
     }
 
     private int getBeginTime() {
-        if (begin_hour.equals("") || begin_min.equals(""))
+        if (begin_hour == null || begin_min == null || begin_hour.equals("") || begin_min.equals(""))
             return 0;
         return Integer.valueOf(begin_hour) * 60 + Integer.valueOf(begin_min);
     }
