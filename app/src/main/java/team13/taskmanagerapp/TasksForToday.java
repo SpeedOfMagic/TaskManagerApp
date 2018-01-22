@@ -31,10 +31,12 @@ import static android.app.Activity.RESULT_OK;
 public class TasksForToday extends Fragment {
     static boolean EDIT = false;
     static int EDIT_ID;
+    static String EDIT_DATABASE_ID;
     private int nextId = 0;
     private RecyclerView recyclerView;
     final DataSource dataSource = new DataSource();
     DatabaseHelper databaseHelper;
+    int kyear, kmonth, kdayOfMonth;
 
     private static final int NEW_TASK_CODE = 1171;
 
@@ -43,20 +45,24 @@ public class TasksForToday extends Fragment {
 
         databaseHelper = new DatabaseHelper(getActivity().getApplicationContext());
 
-        if (EDIT) {
-            EDIT = false;
-            editTask(EDIT_ID);
-        }
-
         Calendar now = Calendar.getInstance();
 
         int cur_year = now.get(Calendar.YEAR), cur_month = now.get(Calendar.MONTH), cur_day = now.get(Calendar.DAY_OF_MONTH);
 
-        int year = cur_year, month = cur_month, dayOfMonth = cur_day;
+        kyear = cur_year;
+        kmonth = cur_month;
+        kdayOfMonth = cur_day;
         if (getArguments() != null) {
-            year = getArguments().getInt("year", cur_year);
-            month = getArguments().getInt("month", cur_month);
-            dayOfMonth = getArguments().getInt("dayOfMonth", cur_day);
+            kyear = getArguments().getInt("year", cur_year);
+            kmonth = getArguments().getInt("month", cur_month);
+            kdayOfMonth = getArguments().getInt("dayOfMonth", cur_day);
+        }
+
+        final int year = kyear, month = kmonth, dayOfMonth = kdayOfMonth; // Простите за костыли
+
+        if (EDIT) {
+            EDIT = false;
+            editTask(EDIT_DATABASE_ID, EDIT_ID);
         }
 
         if (year == cur_year && month == cur_month && dayOfMonth == cur_day) {
@@ -90,7 +96,7 @@ public class TasksForToday extends Fragment {
             @Override
             public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
                 Item item = dataSource.getItem(position);
-                ((ItemViewHolder) holder).bind(item, item.getId());
+                ((ItemViewHolder) holder).bind(item);
             }
 
             @Override
@@ -101,13 +107,13 @@ public class TasksForToday extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        List <Item> list = DatabaseHelper.getTasksAtCurrentDate(databaseHelper.getWritableDatabase(), year, month, dayOfMonth);
+        /*List <Item> list = DatabaseHelper.getTasksAtCurrentDate(databaseHelper.getWritableDatabase(), year, month, dayOfMonth);
 
         for (Item item : list) {
             item.setId(nextId);
             nextId++;
             dataSource.addItem(item);
-        }
+        }*/
 
         return rootView;
     }
@@ -161,7 +167,6 @@ public class TasksForToday extends Fragment {
         private Button dlttsk;
         private Button edttsk;
         ViewGroup begin, end;
-        private int id;
         private CheckBox checkBox;
         Button dash;
 
@@ -176,8 +181,7 @@ public class TasksForToday extends Fragment {
             dash = itemView.findViewById(R.id.dash);
         }
 
-        void bind(final Item item, final int id) {
-            this.id = id;
+        void bind(final Item item) {
             title.setText(item.getTitle());
             title.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -185,7 +189,8 @@ public class TasksForToday extends Fragment {
                     Fragment fragment = new ViewActionFragment();
                     Bundle inf = new Bundle();
                     // кладем нужную информацию
-                    inf.putInt("Id", id);
+                    inf.putString("databaseID", item.getDatabaseID());
+                    inf.putInt("id", item.getId());
                     fragment.setArguments(inf);
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     fragmentManager.beginTransaction().replace(R.id.frame, fragment).addToBackStack("ViewExactTask").commit();
@@ -194,14 +199,15 @@ public class TasksForToday extends Fragment {
             edttsk.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    editTask(id);
+                    editTask(item.getDatabaseID(), item.getId());
                 }
             });
 
             dlttsk.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    dataSource.removeTask(id);
+                    dataSource.removeTask(item.getId());
+                    DatabaseHelper.eraseTaskById(databaseHelper.getWritableDatabase(), item.getDatabaseID());
                 }
             });
 
@@ -213,12 +219,9 @@ public class TasksForToday extends Fragment {
                 begin.setVisibility(View.GONE);
             }
 
-            Log.d("End from bind()", item.getEndHour() + " " + item.getEndMin());
-
             if (!item.getEndHour().equals("") && !item.getEndHour().equals("")) {
                 end.setVisibility(View.VISIBLE);
                 dash.setVisibility(View.VISIBLE);
-                Log.d("End from bind()", "I am here!");
                 ((TextView) end.findViewById(R.id.hour)).setText(item.getEndHour());
                 ((TextView) end.findViewById(R.id.min)).setText(item.getEndMin());
             } else {
@@ -230,7 +233,7 @@ public class TasksForToday extends Fragment {
             checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    dataSource.removeTask(id);
+                    dataSource.removeTask(item.getId());
                     item.setIfReady(checkBox.isChecked());
                     dataSource.addItem(item);
                 }
@@ -238,34 +241,40 @@ public class TasksForToday extends Fragment {
         }
     }
 
-    void editTask(int id) {
+    void editTask(String databeseID, int id) {
         Intent intent = new Intent(getActivity(), NewActionActivity.class);
         intent.putExtra("title", "Редактирование события");
         intent.putExtra("id", id);
-        // добавляем нужную информацию
+        intent.putExtra("databaseID", databeseID);
         startActivityForResult(intent, NEW_TASK_CODE);
     }
 
     @Override
     public void onActivityResult(int code, int result, Intent data) {
-        Log.d("onActivityResult", code + " " + result + " " + RESULT_OK);
         if (code == NEW_TASK_CODE && result == RESULT_OK) {
-            //Log.d("onActivityResult", "on");
             if (data.hasExtra("title") && data.hasExtra("id")) {
                 int id = data.getIntExtra("id", 0);
                 dataSource.removeTask(id);
+                if (data.hasExtra("databaseID")) {
+                    DatabaseHelper.eraseTaskById(databaseHelper.getWritableDatabase(), data.getStringExtra("databaseID"));
+                }
                 Item task = new Item(data.getStringExtra("title"), id);
 
                 String beginHour = data.getStringExtra("beginHour");
                 String beginMin = data.getStringExtra("beginMin");
                 String endHour = data.getStringExtra("endHour");
                 String endMin = data.getStringExtra("endMin");
+                String description = data.getStringExtra("description");
 
                 task.setBegin(beginHour, beginMin);
                 task.setEnd(endHour, endMin);
+                task.setDescription(description);
+                task.setYear(kyear);
+                task.setMonth(kmonth);
+                task.setDayOfMonth(kdayOfMonth);
 
-                Log.d("Begin", beginHour + ":" + beginMin + "   " + task.getBeginHour() + ":" + task.getBeginMin());
-                Log.d("End", endHour + ":" + endMin + "   " + task.getEndHour() + ":" + task.getEndMin());
+                //DatabaseHelper.addTask(databaseHelper.getWritableDatabase(), task);
+                //Нужно добавить в task databaseID
 
                 dataSource.addItem(task);
             }
