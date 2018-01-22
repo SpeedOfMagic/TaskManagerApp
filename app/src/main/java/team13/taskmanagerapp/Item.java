@@ -7,13 +7,13 @@ import team13.taskmanagerapp.Database.Task;
  */
 
 public class Item {
-    private String title;
-    private Integer id;
+    private String title = "";
+    private Integer id = 0;
     private String databaseID;
     private String begin_min = "", begin_hour = "";
     private String end_min = "", end_hour = "";
     private int year, month, dayOfMonth;
-    private String description;
+    private String description = "";
     private boolean ready = false;
     private int timeInMinutes = 0;
 
@@ -28,7 +28,11 @@ public class Item {
         return newItem;
     }
 
-    private Item() {}
+    Item() {}
+
+    String getDatabaseID() {
+        return databaseID;
+    }
 
     public String getDescription() {
         return description;
