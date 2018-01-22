@@ -32,7 +32,6 @@ public class DatabaseTest {
     private void clearDatabase(){
         DatabaseHelper.eraseAllTasks(writableDB);
         DatabaseHelper.eraseToken(writableDB);
-        Task.setRowId(0);
     }
 
     //Subtask #1 - Token
@@ -144,28 +143,16 @@ public class DatabaseTest {
         assertNotNull(task4);assertNotNull(task4.getDuration());
         assertEquals(task4.getDuration().longValue(),1500);
     }
-    /*
     @Test
-    public void getProperty4() throws Exception{ //#4 - 2 tasks, 1 replacement
-        Task task1=new TaskBuilder().id("id1").accountId("accountId").title("title").duration(300)
-                .description("description").status(TaskStatus.COMPLETED).type(TaskType.PLANNED)
-                .startDate("2018-01-25T09:30:00").endDate("2018-01-25T09:35:00").build(),
-                task2=new TaskBuilder().id("id2").accountId("accountId2").title("title").duration(300)
-                        .description("description").status(TaskStatus.COMPLETED).type(TaskType.PLANNED)
-                        .startDate("2018-01-25T09:30:00").endDate("2018-01-25T09:45:00").build();
-        DatabaseHelper.addTask(writableDB,task1);
-        DatabaseHelper.addTask(writableDB,task2);
-        Task task3=DatabaseHelper.getTaskById(readableDB,"id1");
-
-        assertNotNull(task3);
-        assertEquals(task3.getAccountId(),"accountId");
-
-        DatabaseHelper.editTask(writableDB,"id","01",new String[]{"","accountId3"});
-
-        assertNotNull(task3);
-        assertEquals(task3.getAccountId(),"accountId3");
+    public void getProperty4(){//#4 - Task is an Item
+        clearDatabase();
+        Item item=new Item("title",1);
+        item.setDescription("description");
+        DatabaseHelper.addTask(writableDB,item);
+        Task task=DatabaseHelper.getTaskById(readableDB,"1");
+        assertNotNull(task);
+        assertEquals(task.getDescription(),"description");
     }
-    */
     //Subtask #3 - List of tasks
     @Test
     public void getListOfItems1() throws Exception{ //#1 - 2 tasks with that date

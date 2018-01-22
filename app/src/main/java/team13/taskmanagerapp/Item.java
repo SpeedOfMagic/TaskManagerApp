@@ -21,10 +21,12 @@ public class Item {
         newItem.databaseID = task.getId();
         newItem.title = task.getTitle();
         newItem.setDescription(task.getDescription());
-        if (task.getStartDate()!=null&&task.getStartDate().length()>=16)
+        if (task.getStartDate()!=null&&task.getStartDate().length()>=16) {
             newItem.setBegin(task.getBeginHour(), task.getBeginMinute());
-        if (task.getEndDate()!=null&&task.getEndDate().length()>=16)
+        }
+        if (task.getEndDate()!=null&&task.getStartDate().length()>=16) {
             newItem.setEnd(task.getEndHour(), task.getEndMinute());
+        }
         newItem.setIfReady(task.getStatus().equals(TaskStatus.COMPLETED));
         if (task.getStartDate()==null||task.getStartDate().equals("null")){
             if (task.getEndDate()!=null&&!task.getEndDate().equals("null")){

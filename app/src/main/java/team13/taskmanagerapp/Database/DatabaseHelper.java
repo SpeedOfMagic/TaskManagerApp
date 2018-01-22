@@ -45,7 +45,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         );
         db.execSQL(
                 "CREATE TABLE IF NOT EXISTS Task ("+
-                        "id TEXT NOT NULL PRIMARY KEY,"+
+                        "id TEXT NOT NULL PRIMARY KEY AUTOINCREMENT,"+
                         "accountId TEXT /*NOT NULL*/,"+
                         "title TEXT NOT NULL,"+
                         "description TEXT,"+
@@ -116,9 +116,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     public static void addTask(SQLiteDatabase db,@NonNull Task task){
         executeChangeQuery(db,
-                String.format(Locale.US,"INSERT INTO Task VALUES (" +
-                                "\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%d);",
-                        task.getId(),task.getAccountId(),task.getTitle(),task.getDescription(),
+                String.format(Locale.US,"INSERT INTO Task" +
+                                "(accountId,title,description,status,type,startDate,endDate,duration)" +
+                                " VALUES (" +
+                                "\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%d);",
+                        /*task.getId(),*/task.getAccountId(),task.getTitle(),task.getDescription(),
                         String.valueOf(task.getStatus()),String.valueOf(task.getType()),
                         task.getStartDate(),task.getEndDate(),task.getDuration()
                 )
