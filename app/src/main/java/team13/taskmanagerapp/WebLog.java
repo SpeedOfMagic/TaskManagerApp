@@ -25,22 +25,22 @@ public class WebLog extends AppCompatActivity {
 
         WebView webView;
         webView = findViewById(R.id.webLogin);
-        webView.setWebViewClient(new WebViewClient(){
+        webView.setWebViewClient(new WebViewClient() {
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view,  String url) {
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 android.util.Log.d("MyLog", url);
                 view.loadUrl(url);
-                if(url.substring(18,22).equals("code")){
-                     code = url.substring(23);
-                    Log.d("MyLog",code);
+                if (url.substring(18, 22).equals("code")) {
+                    code = url.substring(23);
+                    Log.d("MyLog", code);
                     Intent intent = new Intent(WebLog.this, Auth.class);
-                    intent.putExtra("authcode",code);
+                    intent.putExtra("authcode", code);
                     startActivity(intent);
-                }
+                }//schedule
                 return true;
             }
         });
-        //webView.loadUrl("https://google.com");
-        webView.loadUrl("https://www.wrike.com/oauth2/authorize?client_id=01a00I4c&response_type=code");
+        webView.loadUrl("https://google.com");
+        //webView.loadUrl("https://www.wrike.com/oauth2/authorize?client_id=01a00I4c&response_type=code");
     }
 }

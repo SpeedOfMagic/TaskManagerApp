@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:id="@+id/space" />
+
+    <EditText
+        android:id="@+id/loginRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/space"
+        android:layout_alignStart="@+id/passwordRegister"
+        android:ems="10" />
+
+    <EditText
+        android:id="@+id/passwordRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/loginRegister"
+        android:layout_toEndOf="@+id/textView"
+        android:ems="10"
+        android:hint="Введите пароль"
+        android:inputType="textPassword" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/passwordRegister"
+        android:layout_alignBottom="@+id/loginRegister"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="22dp"
+        android:text="Пароль:"
+        android:textSize="25sp"
+        android:textColor="@color/black"
+        />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/loginRegister"
+        android:layout_toStartOf="@+id/loginRegister"
+        android:text="Логин:"
+        android:textColor="@color/black"
+        android:textSize="25sp" />
+
+    <Button
+        android:id="@+id/registerBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rememberMe"
+        android:layout_centerHorizontal="true"
+        android:text="Регистрация" />
+
+    <Button
+        android:id="@+id/authorizeLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/registerBtn"
+        android:layout_centerHorizontal="true"
+        android:background="@color/white"
+        android:text="@string/authorize"
+        android:textAllCaps="false"
+        android:textColor="@color/blue" />
+
+    <CheckBox
+        android:id="@+id/rememberMe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/passwordRegister"
+        android:layout_below="@+id/passwordRegister"
+        android:text="@string/rememberme" />
+</RelativeLayout>

@@ -14,8 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.RelativeLayout;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -25,32 +23,15 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (false) { // Проверка того, авторизован ли пользователь
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-            View rootView = getLayoutInflater().inflate(R.layout.activity_log, (RelativeLayout) findViewById(R.id.layout), false);
-
-            (rootView.findViewById(R.id.sendBtn)).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(MainActivity.this, WebLog.class);
-                    startActivity(intent);
-                }
-            });
-
-            builder.setView(rootView);
-
-            AlertDialog alert = builder.create();
-            alert.setCanceledOnTouchOutside(false);
-            alert.show();
-            //alert.cancel();
+        if (/*!hasCurrentUserSession()*/true) { // Проверка того, авторизован ли пользователь
+            startActivity(new Intent(this,LoginActivity.class));
         } else {
-            Fragment fragment = new CalendarFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
-            setTitle("Календарь");
-        }
 
+        }
+        Fragment fragment = new CalendarFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
+        setTitle("Календарь");
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

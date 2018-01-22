@@ -21,7 +21,8 @@
             android:name=".NewActionActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
-
+        <activity android:name=".RegisterActivity"/>
+        <activity android:name=".LoginActivity"/>
         <activity
             android:name=".WebLog"
             android:theme="@style/AppTheme.NoActionBar" />
