@@ -17,16 +17,14 @@
         android:layout_alignStart="@+id/passwordRegister"
         android:ems="10" />
 
-    <EditText
+    <EditText android:labelFor="@+id/passwordRegister"
         android:id="@+id/passwordRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/loginRegister"
         android:layout_toEndOf="@+id/textView"
         android:ems="10"
-        android:hint="Введите пароль"
         android:inputType="textPassword" />
-
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"

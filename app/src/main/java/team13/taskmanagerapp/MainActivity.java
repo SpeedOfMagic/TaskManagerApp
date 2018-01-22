@@ -1,6 +1,5 @@
 package team13.taskmanagerapp;
 
-import android.app.AlertDialog;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Intent;
@@ -24,7 +23,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         if (/*!hasCurrentUserSession()*/true) { // Проверка того, авторизован ли пользователь
-            startActivity(new Intent(this,LoginActivity.class));
+            startActivity(new Intent(this,AuthorizationActivity.class));
         } else {
 
         }
