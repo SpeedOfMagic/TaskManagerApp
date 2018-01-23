@@ -64,6 +64,7 @@
                 android:layout_alignBaseline="@id/text1"
                 android:id="@+id/dlttsk"
                 android:layout_toStartOf="@id/checkBox"
+                android:layout_marginRight="8dp"
                 android:layout_width="30dp"
                 android:layout_height="35dp"
                 android:background="@drawable/ic_delete_24dp" />
@@ -74,7 +75,8 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:background="@drawable/ic_edit_24dp"
-                android:layout_toStartOf="@id/dlttsk" />
+                android:layout_toStartOf="@id/dlttsk"
+                android:layout_marginRight="8dp" />
 
             <android.support.v7.widget.AppCompatCheckBox
                 android:layout_alignBaseline="@id/text1"
