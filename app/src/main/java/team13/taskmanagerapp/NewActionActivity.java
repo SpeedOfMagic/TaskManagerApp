@@ -228,7 +228,7 @@ public class NewActionActivity extends AppCompatActivity {
             final Calendar c = Calendar.getInstance();
             final int hour = c.get(Calendar.HOUR_OF_DAY);
             int min = c.get(Calendar.MINUTE);
-            TimePickerDialog timePickerDialog = new TimePickerDialog(NewActionActivity.this, 5, new TimePickerDialog.OnTimeSetListener() {
+            TimePickerDialog timePickerDialog = new TimePickerDialog(NewActionActivity.this, 10, new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
                     text_hour.setText(format(hours));
