@@ -17,15 +17,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.vk.sdk.VKSdk;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (false) { // Проверка того, авторизован ли пользователь
+
+        /*if (true) { // Проверка того, авторизован ли пользователь
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
             View rootView = getLayoutInflater().inflate(R.layout.activity_log, (RelativeLayout) findViewById(R.id.layout), false);
@@ -49,6 +53,14 @@ public class MainActivity extends AppCompatActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
             setTitle("Календарь");
+        }*/
+
+        if (getIntent().hasExtra("checkAuth")){
+            Log.d("MyLog","AUTH complete !!!");
+        }
+        else {
+            Intent intent = new Intent(MainActivity.this, WebLog.class);
+            startActivity(intent);
         }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
