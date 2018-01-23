@@ -226,8 +226,14 @@ public class NewActionActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             final Calendar c = Calendar.getInstance();
-            final int hour = c.get(Calendar.HOUR_OF_DAY);
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            if (!text_hour.getText().toString().equals("")) {
+                hour = Integer.valueOf(text_hour.getText().toString());
+            }
             int min = c.get(Calendar.MINUTE);
+            if (!text_min.getText().toString().equals("")) {
+                min = Integer.valueOf(text_min.getText().toString());
+            }
             TimePickerDialog timePickerDialog = new TimePickerDialog(NewActionActivity.this, 10, new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
