@@ -18,6 +18,7 @@ public class CalendarFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getActivity().setTitle("Календарь");
         View rootView = inflater.inflate(R.layout.calendar, container, false);
+        rootView.setBackgroundColor(getResources().getColor(R.color.white));
         CalendarView calendar = rootView.findViewById(R.id.calendarView);
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override

@@ -1,39 +1,30 @@
 package team13.taskmanagerapp;
 
-import team13.taskmanagerapp.Database.Task;
-
-/**
- * Created by kate on 20.01.2018.
- */
-
-public class Item{
-    private String title;
-    private Integer id;
-    private String databaseID;
+public class Item {
+    private String title = "";
+    private Integer id = 0;
+    private long databaseID;
     private String begin_min = "", begin_hour = "";
     private String end_min = "", end_hour = "";
     private boolean ready = false;
     private int timeInMinutes = 0;
 
-    public static Item valueOf(Task task){
-        Item newItem = new Item();
-        newItem.databaseID = task.getId();
-        newItem.title = task.getTitle();
-        newItem.begin_hour = task.getBeginHour();
-        newItem.begin_min = task.getBeginMinute();
-        newItem.end_hour = task.getEndHour();
-        newItem.end_min = task.getEndMinute();
-        return newItem;
+    Item() {}
+
+    long getDatabaseID() {
+        return databaseID;
     }
 
-    private Item() {}
+    void setDatabaseID(long databaseID) {
+        this.databaseID = databaseID;
+    }
 
     Item(String title, int id) {
         this.title = title;
         this.id = id;
     }
 
-    void setId(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -44,7 +35,7 @@ public class Item{
     }
 
     private int getBeginTime() {
-        if (begin_hour.equals("") || begin_min.equals(""))
+        if (begin_hour == null || begin_min == null || begin_hour.equals("") || begin_min.equals(""))
             return 0;
         return Integer.valueOf(begin_hour) * 60 + Integer.valueOf(begin_min);
     }
@@ -62,7 +53,7 @@ public class Item{
         return ready;
     }
 
-    String getTitle() {
+    public String getTitle() {
         return title;
     }
 

@@ -34,7 +34,7 @@
         <activity
             android:name=".WebLog"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".AuthErrorActivity"></activity>
+        <activity android:name=".AuthErrorActivity" />
     </application>
 
 </manifest>

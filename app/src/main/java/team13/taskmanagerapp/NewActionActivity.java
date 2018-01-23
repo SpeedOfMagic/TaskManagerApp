@@ -4,7 +4,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,19 +25,36 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import team13.taskmanagerapp.Database.Contract;
+import team13.taskmanagerapp.Database.DBMethods;
+import team13.taskmanagerapp.Database.DatabaseHelper;
+
+import static android.provider.BaseColumns._ID;
+import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_DATE;
+import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_DESCRIP;
+import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_END_HOUR;
+import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_END_MIN;
+import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_START_HOUR;
+import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_START_MIN;
+import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_STATUS;
+import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_TITLE;
+
 /**
  * Created by kate on 13.01.2018.
  */
 
 public class NewActionActivity extends AppCompatActivity {
-    private RecyclerView notif_container;
+    /*private RecyclerView notif_container;
     private Integer next_id = 0;
-    final NotificationDataSource notif = new NotificationDataSource();
+    final NotificationDataSource notif = new NotificationDataSource();*/
+    DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_action);
+
+        databaseHelper = new DatabaseHelper(getApplicationContext());
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -48,16 +68,59 @@ public class NewActionActivity extends AppCompatActivity {
         RelativeLayout begin_layout = findViewById(R.id.time_box_begin);
         final TextView begin_hour = begin_layout.findViewById(R.id.hour);
         final TextView begin_min = begin_layout.findViewById(R.id.min);
-        final ButtonListener beginListener = new ButtonListener(begin_hour, begin_min);
-        begin_layout.setOnClickListener(beginListener);
 
         RelativeLayout end_layout = findViewById(R.id.time_box_end);
         final TextView end_hour = end_layout.findViewById(R.id.hour);
         final TextView end_min = end_layout.findViewById(R.id.min);
+
+        final TextView description = findViewById(R.id.description);
+
+        final EditText taskName = findViewById(R.id.name_of_act);
+
+        taskName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                taskName.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
+                taskName.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                taskName.setHintTextColor(getResources().getColor(R.color.colorPrimaryDark));
+            }
+        });
+
+        if (getIntent().hasExtra("databaseID")) {
+            long databaseID = getIntent().getLongExtra("databaseID", 0);
+            SQLiteDatabase db = databaseHelper.getReadableDatabase();
+            Cursor cursor = db.query(Contract.TaskEntry.TABLE_TASK,
+                    new String[]{COL_TASK_TITLE, COL_TASK_START_HOUR, COL_TASK_START_MIN, COL_TASK_END_HOUR, COL_TASK_END_MIN, COL_TASK_DESCRIP},
+                    _ID + " = ? ", new String[] {String.valueOf(databaseID)},
+                    null, null, null, null);
+            while (cursor.moveToNext()) {
+                taskName.setText(DBMethods.getString(cursor, COL_TASK_TITLE));
+                begin_hour.setText(DBMethods.getString(cursor, COL_TASK_START_HOUR));
+                begin_min.setText(DBMethods.getString(cursor, COL_TASK_START_MIN));
+                end_hour.setText(DBMethods.getString(cursor, COL_TASK_END_HOUR));
+                end_min.setText(DBMethods.getString(cursor, COL_TASK_END_MIN));
+                description.setText(DBMethods.getString(cursor, COL_TASK_DESCRIP));
+            }
+            db.close();
+            cursor.close();
+        }
+
+        final ButtonListener beginListener = new ButtonListener(begin_hour, begin_min);
+        begin_layout.setOnClickListener(beginListener);
+
         final ButtonListener endListener = new ButtonListener(end_hour, end_min);
         end_layout.setOnClickListener(endListener);
 
-        notif_container = findViewById(R.id.notif_cont);
+        Button reset = findViewById(R.id.reset);
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                beginListener.reset();
+                endListener.reset();
+            }
+        });
+
+        /*notif_container = findViewById(R.id.notif_cont);
         notif_container.setLayoutManager(new LinearLayoutManager(this));
         notif_container.setAdapter(new RecyclerView.Adapter() {
             @Override
@@ -76,18 +139,9 @@ public class NewActionActivity extends AppCompatActivity {
                 return notif.getCount();
             }
 
-        });
+        });*/
 
-        Button reset = findViewById(R.id.reset);
-        reset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                beginListener.reset();
-                endListener.reset();
-            }
-        });
-
-        Button add = findViewById(R.id.add);
+        /*Button add = findViewById(R.id.add);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,7 +150,7 @@ public class NewActionActivity extends AppCompatActivity {
                 popupWindow(args);
                 next_id++;
             }
-        });
+        });*/
 
         Button cancel = findViewById(R.id.cancel);
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -106,40 +160,48 @@ public class NewActionActivity extends AppCompatActivity {
             }
         });
 
-        TextView description = findViewById(R.id.description);
-
         final Button save = findViewById(R.id.save);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int begin = beginListener.getTime();
-                int end = endListener.getTime();
-                if (begin > end) {
-                    int color = getResources().getColor(R.color.lightRed);
-                    begin_hour.setBackgroundColor(color);
-                    begin_min.setBackgroundColor(color);
-                    end_hour.setBackgroundColor(color);
-                    end_min.setBackgroundColor(color);
-                    color = getResources().getColor(R.color.darkRed);
-                    begin_hour.setTextColor(color);
-                    begin_min.setTextColor(color);
-                    end_hour.setTextColor(color);
-                    end_min.setTextColor(color);
-                } else {
-                    // Запоминаем событие
-                    Intent intent = new Intent();
-                    intent.putExtra("title", ((TextView) findViewById(R.id.name_of_act)).getText().toString());
-                    intent.putExtra("id", getIntent().getIntExtra("id", 0));
-                    intent.putExtra("beginHour", begin_hour.getText().toString());
-                    intent.putExtra("beginMin", begin_min.getText().toString());
-                    intent.putExtra("endHour", end_hour.getText().toString());
-                    intent.putExtra("endMin", end_min.getText().toString());
+            int begin = beginListener.getTime();
+            int end = endListener.getTime();
+            if (begin > end) {
+                int color = getResources().getColor(R.color.lightRed);
+                begin_hour.setBackgroundColor(color);
+                begin_min.setBackgroundColor(color);
+                end_hour.setBackgroundColor(color);
+                end_min.setBackgroundColor(color);
+                color = getResources().getColor(R.color.darkRed);
+                begin_hour.setTextColor(color);
+                begin_min.setTextColor(color);
+                end_hour.setTextColor(color);
+                end_min.setTextColor(color);
+            }
 
+            if (taskName.getText().toString().equals("")) {
+                taskName.setBackgroundColor(getResources().getColor(R.color.lightRed));
+                taskName.setHintTextColor(getResources().getColor(R.color.darkRed));
+            }
 
+            if (begin <= end && !taskName.getText().toString().equals("")) {
+                Intent intent = new Intent();
+                String title = taskName.getText().toString();
+                intent.putExtra("title", title);
+                intent.putExtra("id", getIntent().getIntExtra("id", -1));
+                intent.putExtra("beginHour", begin_hour.getText().toString());
+                intent.putExtra("beginMin", begin_min.getText().toString());
+                intent.putExtra("endHour", end_hour.getText().toString());
+                intent.putExtra("endMin", end_min.getText().toString());
+                intent.putExtra("description", description.getText().toString());
 
-                    setResult(RESULT_OK, intent);
-                    NewActionActivity.this.finish();
+                if (getIntent().hasExtra("databaseID")) {
+                    intent.putExtra("databaseID", getIntent().getLongExtra("databaseID", 0));
                 }
+
+                setResult(RESULT_OK, intent);
+                NewActionActivity.this.finish();
+            }
             }
         });
     }
@@ -152,6 +214,9 @@ public class NewActionActivity extends AppCompatActivity {
         ButtonListener(TextView text_hour, TextView text_min) {
             this.text_hour = text_hour;
             this.text_min = text_min;
+            if (!text_hour.getText().equals("") && !text_min.getText().equals("")) {
+                time = timeInMinutes(Integer.valueOf(text_hour.getText().toString()), Integer.valueOf(text_min.getText().toString()));
+            }
         }
 
         int getTime() {
@@ -173,9 +238,15 @@ public class NewActionActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             final Calendar c = Calendar.getInstance();
-            final int hour = c.get(Calendar.HOUR_OF_DAY);
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            if (!text_hour.getText().toString().equals("")) {
+                hour = Integer.valueOf(text_hour.getText().toString());
+            }
             int min = c.get(Calendar.MINUTE);
-            TimePickerDialog timePickerDialog = new TimePickerDialog(NewActionActivity.this, 3, new TimePickerDialog.OnTimeSetListener() {
+            if (!text_min.getText().toString().equals("")) {
+                min = Integer.valueOf(text_min.getText().toString());
+            }
+            TimePickerDialog timePickerDialog = new TimePickerDialog(NewActionActivity.this, 10, new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
                     text_hour.setText(format(hours));
@@ -187,7 +258,17 @@ public class NewActionActivity extends AppCompatActivity {
         }
     }
 
-    public static void changeData(Bundle data, NotificationDataSource notif) {
+    String format(int time) {
+        if (time < 10)
+            return "0" + time;
+        return "" + time;
+    }
+
+    static int timeInMinutes (int hours, int minutes) {
+        return hours * 60 + minutes;
+    }
+
+    /*public static void changeData(Bundle data, NotificationDataSource notif) {
         if (data != null) {
             String message = data.getString("message", "");
             int minutes = data.getInt("minutes", 0);
@@ -229,10 +310,6 @@ public class NewActionActivity extends AppCompatActivity {
 
         AlertDialog alert = builder.create();
         alert.show();
-    }
-
-    static int timeInMinutes (int hours, int minutes) {
-        return hours * 60 + minutes;
     }
 
     private class NotificationDataSource {
@@ -311,11 +388,5 @@ public class NewActionActivity extends AppCompatActivity {
                 }
             });
         }
-    }
-
-    String format(int time) {
-        if (time < 10)
-            return "0" + time;
-        return "" + time;
-    }
+    }*/
 }

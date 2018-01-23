@@ -4,10 +4,21 @@
     android:layout_height="match_parent"
     android:layout_margin="10dp">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Название"
+        android:textSize="23sp"
+        android:textColor="@color/colorPrimary"
+        android:gravity="center_horizontal"
+        android:layout_alignParentTop="true"
+        android:id="@+id/title"
+        android:layout_marginBottom="5dp"/>
+
     <include layout="@layout/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/title"
         android:id="@+id/begin">
     </include>
 
@@ -27,10 +38,13 @@
         android:textColor="@color/colorPrimaryDark"
         android:layout_below="@id/begin"
         android:background="@color/colorPrimaryLight"
-        android:maxLines="9"
-        android:textSize="20sp"/>
+        android:layout_above="@id/change"
+        android:layout_marginBottom="5dp"
+        android:textSize="20sp"
+        android:gravity="top"
+        android:inputType="textMultiLine"/>
 
-    <TextView
+    <!--<TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/notif_title"
@@ -48,7 +62,7 @@
         android:layout_marginTop="10dp"
         android:layout_above="@id/change">
 
-    </android.support.v7.widget.RecyclerView>
+    </android.support.v7.widget.RecyclerView> -->
 
     <Button
         android:id="@+id/change"

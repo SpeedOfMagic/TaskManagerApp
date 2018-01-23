@@ -1,6 +1,9 @@
 package team13.taskmanagerapp;
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Intent;
@@ -16,44 +19,32 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
-import com.vk.sdk.VKSdk;
+import team13.taskmanagerapp.Database.Contract;
+import team13.taskmanagerapp.Database.DatabaseHelper;
+
+import static android.provider.BaseColumns._ID;
+import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_DESCRIP;
+import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_END_HOUR;
+import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_END_MIN;
+import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_START_HOUR;
+import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_START_MIN;
+import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_STATUS;
+import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_TITLE;
+import static team13.taskmanagerapp.Database.Contract.TaskEntry.TABLE_TASK;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        /*if (true) { // Проверка того, авторизован ли пользователь
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-            View rootView = getLayoutInflater().inflate(R.layout.activity_log, (RelativeLayout) findViewById(R.id.layout), false);
-
-            (rootView.findViewById(R.id.sendBtn)).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(MainActivity.this, WebLog.class);
-                    startActivity(intent);
-                }
-            });
-
-            builder.setView(rootView);
-
-            AlertDialog alert = builder.create();
-            alert.setCanceledOnTouchOutside(false);
-            alert.show();
-            //alert.cancel();
-        } else {
-            Fragment fragment = new CalendarFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
-            setTitle("Календарь");
-        }*/
+        databaseHelper = new DatabaseHelper(getApplicationContext());
 
         if (getIntent().hasExtra("checkAuth")){
             Log.d("MyLog","AUTH complete !!!");

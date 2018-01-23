@@ -1,65 +1,114 @@
 package team13.taskmanagerapp;
 
-import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
+import team13.taskmanagerapp.Database.Contract;
+import team13.taskmanagerapp.Database.DBMethods;
+import team13.taskmanagerapp.Database.DatabaseHelper;
 
-import team13.taskmanagerapp.Database.Task;
+import static android.provider.BaseColumns._ID;
+import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_DESCRIP;
+import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_END_HOUR;
+import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_END_MIN;
+import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_START_HOUR;
+import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_START_MIN;
+import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_TITLE;
 
 /**
  * Created by kate on 18.01.2018.
  */
 
 public class ViewActionFragment extends Fragment {
+
+    DatabaseHelper databaseHelper;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getActivity().setTitle("Событие"); // тут название таска
+
+        if (getArguments() == null) {
+            Log.d("ViewActionFragment", "No databaseID");
+            return null;
+        }
+
+        getActivity().setTitle("Просмотр события");
+
         View rootView = inflater.inflate(R.layout.view_task, container, false);
+        rootView.setBackgroundColor(getResources().getColor(R.color.white));
 
-        ((TextView) rootView.findViewById(R.id.description)).setText("Описание");
+        databaseHelper = new DatabaseHelper(getActivity().getApplicationContext());
+        final long databaseID = getArguments().getLong("databaseID", 0);
 
-        //Каким-то образом загружаем данные о времени начала и конца
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        Cursor cursor = db.query(Contract.TaskEntry.TABLE_TASK,
+                new String[]{COL_TASK_TITLE, COL_TASK_START_HOUR, COL_TASK_START_MIN, COL_TASK_END_HOUR, COL_TASK_END_MIN, COL_TASK_DESCRIP},
+                _ID + " = ? ", new String[] {String.valueOf(databaseID)},
+                null, null, null, null);
+
+        String beginMin = "", beginHour = "", endMin = "", endHour = "";
+        String descript = "", title = "";
+        while (cursor.moveToNext()) {
+            beginHour = DBMethods.getString(cursor, COL_TASK_START_HOUR);
+            beginMin = DBMethods.getString(cursor, COL_TASK_START_MIN);
+            endHour = DBMethods.getString(cursor, COL_TASK_END_HOUR);
+            endMin = DBMethods.getString(cursor, COL_TASK_END_MIN);
+            descript = DBMethods.getString(cursor, COL_TASK_DESCRIP);
+            title = DBMethods.getString(cursor, COL_TASK_TITLE);
+        }
+
+        db.close();
+        cursor.close();
+
+        ((TextView) rootView.findViewById(R.id.title)).setText(title);
 
         ViewGroup layout = rootView.findViewById(R.id.begin);
-        if (true) { // Проверка, есть ли начало у события
+        if (!beginHour.equals("") && !beginMin.equals("")) {
             layout.setVisibility(View.VISIBLE);
             ((TextView) layout.findViewById(R.id.title)).setText("Начало");
-            int hour = 12;
-            int minutes = 0;
             RelativeLayout timeBox = layout.findViewById(R.id.time_box);
-            ((TextView) timeBox.findViewById(R.id.hour)).setText(format(hour));
-            ((TextView) timeBox.findViewById(R.id.min)).setText(format(minutes));
+            ((TextView) timeBox.findViewById(R.id.hour)).setText(beginHour);
+            ((TextView) timeBox.findViewById(R.id.min)).setText(beginMin);
         } else {
             layout.setVisibility(View.GONE);
         }
 
         layout = rootView.findViewById(R.id.end);
-        if (true) { // Проверка, есть ли конец у события
+        if (!endHour.equals("") && !endMin.equals("")) {
             layout.setVisibility(View.VISIBLE);
             ((TextView) layout.findViewById(R.id.title)).setText("Конец");
-            int hour = 13;
-            int minutes = 0;
             RelativeLayout timeBox = layout.findViewById(R.id.time_box);
-            ((TextView) timeBox.findViewById(R.id.hour)).setText(format(hour));
-            ((TextView) timeBox.findViewById(R.id.min)).setText(format(minutes));
+            ((TextView) timeBox.findViewById(R.id.hour)).setText(endHour);
+            ((TextView) timeBox.findViewById(R.id.min)).setText(endMin);
         } else {
             layout.setVisibility(View.GONE);
         }
 
-        final List<Notification> notif = new ArrayList<>();
+        TextView description = rootView.findViewById(R.id.description);
+        description.setText(descript);
+        description.setMovementMethod(new ScrollingMovementMethod());
+        if (descript.equals(""))
+            description.setText("Описание отсутствует");
+
+        (rootView.findViewById(R.id.change)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TasksForToday.EDIT = true;
+                TasksForToday.EDIT_DATABASE_ID = databaseID;
+                TasksForToday.EDIT_ID = getArguments().getInt("id", 0);
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
+
+        /*final List<Notification> notif = new ArrayList<>();
 
         //Каким-то образом загружаем данные об уведомлениях
         notif.add(new Notification("First", 12, 0, 0));
@@ -84,21 +133,12 @@ public class ViewActionFragment extends Fragment {
                 return notif.size();
             }
 
-        });
-
-        (rootView.findViewById(R.id.change)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TasksForToday.EDIT = true;
-                TasksForToday.EDIT_ID = getArguments().getInt("Id", 0);
-                getActivity().getSupportFragmentManager().popBackStack();
-            }
-        });
+        }); */
 
         return rootView;
     }
 
-    private class NotificationViewHolder extends RecyclerView.ViewHolder{
+    /*private class NotificationViewHolder extends RecyclerView.ViewHolder{
         private final TextView message;
         private TextView hours;
         private TextView minutes;
@@ -115,11 +155,5 @@ public class ViewActionFragment extends Fragment {
             hours.setText(format(notification.getHours()));
             minutes.setText(format(notification.getMinutes()));
         }
-    }
-
-    String format(int time) {
-        if (time < 10)
-            return "0" + time;
-        return "" + time;
-    }
+    }*/
 }
