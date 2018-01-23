@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import team13.taskmanagerapp.Database.Contract;
@@ -62,6 +64,11 @@ public class TasksForToday extends Fragment {
 
         int cur_year = now.get(Calendar.YEAR), cur_month = now.get(Calendar.MONTH), cur_day = now.get(Calendar.DAY_OF_MONTH);
 
+        Calendar tomorrow = Calendar.getInstance();
+        tomorrow.add(Calendar.DAY_OF_YEAR, 1);
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.add(Calendar.DAY_OF_YEAR, -1);
+
         kyear = cur_year;
         kmonth = cur_month;
         kdayOfMonth = cur_day;
@@ -80,8 +87,12 @@ public class TasksForToday extends Fragment {
 
         if (year == cur_year && month == cur_month && dayOfMonth == cur_day) {
             getActivity().setTitle("Сегодня");
-        } else {
-            getActivity().setTitle(format(dayOfMonth) + "." + format(month + 1) + "." + year);
+        } else if (year == tomorrow.get(Calendar.YEAR) && month == tomorrow.get(Calendar.MONTH) && dayOfMonth == tomorrow.get(Calendar.DAY_OF_MONTH)) {
+            getActivity().setTitle("Завтра");
+        } else if (year == yesterday.get(Calendar.YEAR) && month == yesterday.get(Calendar.MONTH) && dayOfMonth == yesterday.get(Calendar.DAY_OF_MONTH)) {
+            getActivity().setTitle("Вчера");
+        } else{
+            getActivity().setTitle(format(dayOfMonth) + " " + getResources().getStringArray(R.array.months)[month] + " " + year);
         }
 
         View rootView = inflater.inflate(R.layout.tasksfortoday, container, false);

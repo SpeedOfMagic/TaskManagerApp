@@ -66,10 +66,9 @@ public class MainActivity extends AppCompatActivity
             alert.show();
             //alert.cancel();
         } else {
-            Fragment fragment = new CalendarFragment();
+            Fragment fragment = new TasksForToday();
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
-            setTitle("Календарь");
         }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
