@@ -1,51 +1,133 @@
 package team13.taskmanagerapp;
 
+import team13.taskmanagerapp.Database.Task;
+
 /**
  * Created by kate on 20.01.2018.
  */
 
-class Item {
-    private final String title;
-    private Integer id;
+public class Item {
+    private String title = "";
+    private Integer id = 0;
+    private String databaseID;
     private String begin_min = "", begin_hour = "";
     private String end_min = "", end_hour = "";
+    private int year, month, dayOfMonth;
+    private String description = "";
+    private boolean ready = false;
+    private int timeInMinutes = 0;
 
-    Item(String title, int id) {
+    public static Item valueOf(Task task){
+        Item newItem = new Item();
+        newItem.databaseID = task.getId();
+        newItem.title = task.getTitle();
+        newItem.begin_hour = task.getBeginHour();
+        newItem.begin_min = task.getBeginMinute();
+        newItem.end_hour = task.getEndHour();
+        newItem.end_min = task.getEndMinute();
+        return newItem;
+    }
+
+    Item() {}
+
+    String getDatabaseID() {
+        return databaseID;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public int getDayOfMonth() {
+        return dayOfMonth;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
+    public void setDayOfMonth(int dayOfMonth) {
+        this.dayOfMonth = dayOfMonth;
+    }
+
+    public Item(String title, int id) {
         this.title = title;
         this.id = id;
     }
 
-    void setBegin(String hour, String min) {
-        begin_hour = hour;
-        begin_min = min;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    void setEnd(String hour, String min) {
+    public void setBegin(String hour, String min) {
+        begin_hour = hour;
+        begin_min = min;
+        timeInMinutes = getBeginTime();
+    }
+
+    private int getBeginTime() {
+        if (begin_hour.equals("") || begin_min.equals(""))
+            return 0;
+        return Integer.valueOf(begin_hour) * 60 + Integer.valueOf(begin_min);
+    }
+
+    public void setEnd(String hour, String min) {
         end_hour = hour;
         end_min = min;
     }
 
-    String getTitle() {
-        return this.title;
+    public void setIfReady(boolean ready) {
+        this.ready = ready;
+    }
+
+    public Boolean ifReady() {
+        return ready;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     Integer getId() {
         return id;
     }
 
-    String getBeginHour() {
+    public String getBeginHour() {
         return begin_hour;
     }
 
-    String getBeginMin() {
+    public String getBeginMin() {
         return begin_min;
     }
 
-    String getEndHour() {
+    public String getEndHour() {
         return end_hour;
     }
 
-    String getEndMin() {
+    public String getEndMin() {
         return end_min;
+    }
+
+    int getTimeInMinutes() {
+        int res = timeInMinutes;
+        if (ready)
+            res += 1e9;
+        return res;
     }
 }

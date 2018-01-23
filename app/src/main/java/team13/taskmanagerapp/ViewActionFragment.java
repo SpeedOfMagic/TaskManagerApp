@@ -7,15 +7,18 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import team13.taskmanagerapp.Database.DatabaseHelper;
 import team13.taskmanagerapp.Database.Task;
 
 /**
@@ -23,39 +26,59 @@ import team13.taskmanagerapp.Database.Task;
  */
 
 public class ViewActionFragment extends Fragment {
+
+    DatabaseHelper databaseHelper;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        if (getArguments() == null) {
+            Log.d("ViewActionFragment", "No databaseID");
+            return null;
+        }
+
         getActivity().setTitle("Событие"); // тут название таска
         View rootView = inflater.inflate(R.layout.view_task, container, false);
 
-        ((TextView) rootView.findViewById(R.id.description)).setText("Описание");
+        databaseHelper = new DatabaseHelper(getActivity().getApplicationContext());
+        final String databaseID = getArguments().getString("databaseID");
+        final int id = getArguments().getInt("id");
 
         //Каким-то образом загружаем данные о времени начала и конца
+        //final Item item = DatabaseHelper.getTaskById(databaseHelper.getWritableDatabase(), databaseID);
+        final Item item = new Item();
 
-        if (true) { // Проверка, есть ли начало у события
-            RelativeLayout layout = rootView.findViewById(R.id.begin);
-            getLayoutInflater().inflate(R.layout.time, layout, true);
+        ViewGroup layout = rootView.findViewById(R.id.begin);
+        if (!item.getBeginHour().equals("") && !item.getBeginMin().equals("")) {
+            layout.setVisibility(View.VISIBLE);
             ((TextView) layout.findViewById(R.id.title)).setText("Начало");
-            int hour = 12;
-            int minutes = 0;
             RelativeLayout timeBox = layout.findViewById(R.id.time_box);
-            ((TextView) timeBox.findViewById(R.id.hour)).setText(format(hour));
-            ((TextView) timeBox.findViewById(R.id.min)).setText(format(minutes));
+            ((TextView) timeBox.findViewById(R.id.hour)).setText(item.getBeginHour());
+            ((TextView) timeBox.findViewById(R.id.min)).setText(item.getBeginMin());
+        } else {
+            layout.setVisibility(View.GONE);
         }
 
-
-        if (true) { // Проверка, есть ли конец у события
-            RelativeLayout layout = rootView.findViewById(R.id.end);
-            getLayoutInflater().inflate(R.layout.time, layout, true);
+        layout = rootView.findViewById(R.id.end);
+        if (!item.getEndHour().equals("") && !item.getEndMin().equals("")) {
+            layout.setVisibility(View.VISIBLE);
             ((TextView) layout.findViewById(R.id.title)).setText("Конец");
-            int hour = 13;
-            int minutes = 0;
             RelativeLayout timeBox = layout.findViewById(R.id.time_box);
-            ((TextView) timeBox.findViewById(R.id.hour)).setText(format(hour));
-            ((TextView) timeBox.findViewById(R.id.min)).setText(format(minutes));
+            ((TextView) timeBox.findViewById(R.id.hour)).setText(item.getEndHour());
+            ((TextView) timeBox.findViewById(R.id.min)).setText(item.getEndMin());
+        } else {
+            layout.setVisibility(View.GONE);
         }
 
-        final List<Notification> notif = new ArrayList<>();
+        TextView description = rootView.findViewById(R.id.description);
+        description.setText(item.getDescription());
+        if (item.getDescription().equals(""))
+            description.setText("Описание отсутствует");
+
+        (rootView.findViewById(R.id.notif_title)).setVisibility(View.GONE);
+        (rootView.findViewById(R.id.notif_cont)).setVisibility(View.GONE);
+
+        /*final List<Notification> notif = new ArrayList<>();
 
         //Каким-то образом загружаем данные об уведомлениях
         notif.add(new Notification("First", 12, 0, 0));
@@ -80,13 +103,14 @@ public class ViewActionFragment extends Fragment {
                 return notif.size();
             }
 
-        });
+        }); */
 
         (rootView.findViewById(R.id.change)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 TasksForToday.EDIT = true;
-                TasksForToday.EDIT_ID = getArguments().getInt("Id", 0);
+                TasksForToday.EDIT_DATABASE_ID = databaseID;
+                TasksForToday.EDIT_ID = id;
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
@@ -94,7 +118,7 @@ public class ViewActionFragment extends Fragment {
         return rootView;
     }
 
-    private class NotificationViewHolder extends RecyclerView.ViewHolder{
+    /*private class NotificationViewHolder extends RecyclerView.ViewHolder{
         private final TextView message;
         private TextView hours;
         private TextView minutes;
@@ -111,11 +135,5 @@ public class ViewActionFragment extends Fragment {
             hours.setText(format(notification.getHours()));
             minutes.setText(format(notification.getMinutes()));
         }
-    }
-
-    String format(int time) {
-        if (time < 10)
-            return "0" + time;
-        return "" + time;
-    }
+    }*/
 }

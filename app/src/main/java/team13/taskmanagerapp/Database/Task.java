@@ -2,38 +2,41 @@ package team13.taskmanagerapp.Database;
 import android.support.annotation.*;
 
 public class Task{
-    public Task(){}
-    public Task(String id,String accountId,String title,String description,TaskStatus status,
-                TaskType taskType,String startDate,String endDate,int duration){
-        this.id = id;
-        this.accountId = accountId;
-        this.title = title;
-        this.description = description;
-        this.status = status;
-        type = taskType;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.duration = duration;
-    }
-    @Nullable private String description;
-    @Nullable private String startDate;
-    @Nullable private String endDate;
-    @Nullable private int duration;
-    @NonNull private String id;
-    @NonNull private String accountId;
-    @NonNull private String title;
-    @NonNull private TaskStatus status;
-    @NonNull private TaskType type;
+    @Nullable private String description, accountId, startDate, endDate;
+    @Nullable private Integer duration;
+    @NonNull private String id="Stub!", title="Stub!";
+    @NonNull private TaskStatus status=TaskStatus.ACTIVE;
+    @NonNull private TaskType type=TaskType.BACKLOG;
 
-    @NonNull  public String getAccountId() {return accountId;}
+    public Task(){}
+
+    @Nullable public String getBeginHour() {
+        if (this.getStartDate() == null || this.getStartDate().length() < 16) return null;
+        return this.getStartDate().substring(11,13);
+    }
+    @Nullable public String getBeginMinute() {
+        if (this.getStartDate() == null || this.getStartDate().length() < 16) return null;
+        return this.getStartDate().substring(14,16);
+    }
+    @Nullable public String getEndHour() {
+        if (this.getEndDate() == null || this.getEndDate().length() < 16) return null;
+        return this.getEndDate().substring(11,13);
+    }
+    @Nullable public String getEndMinute() {
+        if (this.getEndDate() == null || this.getEndDate().length() < 16) return null;
+        return this.getEndDate().substring(14,16);
+    }
+    @NonNull  public String getId() {return id;}
     @NonNull  public TaskStatus getStatus() {return status;}
     @NonNull  public TaskType getType() {return type;}
     @NonNull  public String getTitle() {return title;}
+    @Nullable public String getAccountId() {return accountId;}
     @Nullable public String getDescription() {return description;}
-    @NonNull  public String getId() {return id;}
     @Nullable public String getStartDate() {return startDate;}
     @Nullable public String getEndDate() {return endDate;}
-    @Nullable public int getDuration() {return duration;}
+    @Nullable public Integer getDuration() {return duration;}
+
+    public void setId(@NonNull String id) {this.id = id;}
     public void setAccountId(@NonNull String accountId) {this.accountId = accountId;}
     public void setStatus(@NonNull TaskStatus status) {this.status = status;}
     public void setType(@NonNull TaskType type) {this.type = type;}
@@ -42,93 +45,4 @@ public class Task{
     public void setStartDate(@Nullable String startDate) {this.startDate = startDate;}
     public void setEndDate(@Nullable String endDate) {this.endDate = endDate;}
     public void setDuration(@Nullable int duration) {this.duration = duration;}
-    public void setId(@NonNull String id) {this.id = id;}
-
-
-
-    public static class TaskBuilder {
-        private Task task;
-        public Task build() {return this.task;}
-        public TaskBuilder(){}
-        public TaskBuilder(Task task){this.task=task;}
-        public TaskBuilder id(String tid){
-            task.id=tid;
-            return this;
-        }
-        public TaskBuilder description(String tdescription){
-            task.description=tdescription;
-            return this;
-        }
-        public TaskBuilder duration(int tduration){
-            task.duration=tduration;
-            return this;
-        }
-        public TaskBuilder title(String ttitle){
-            task.title=ttitle;
-            return this;
-        }
-        public TaskBuilder status(TaskStatus tstatus){
-            task.status=tstatus;
-            return this;
-        }
-        public TaskBuilder type(TaskType ttype){
-            task.type=ttype;
-            return this;
-        }
-        public TaskBuilder startDate(String tstartDate){
-            task.startDate=tstartDate;
-            return this;
-        }
-        public TaskBuilder endDate(String tendDate){
-            task.endDate=tendDate;
-            return this;
-        }
-        public TaskBuilder accountId(String taccountId){
-            task.accountId=taccountId;
-            return this;
-        }
-        
-    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,14 +23,17 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import team13.taskmanagerapp.Database.DatabaseHelper;
+
 /**
  * Created by kate on 13.01.2018.
  */
 
 public class NewActionActivity extends AppCompatActivity {
     private RecyclerView notif_container;
-    private Integer next_id = 0;
-    final NotificationDataSource notif = new NotificationDataSource();
+    /*private Integer next_id = 0;
+    final NotificationDataSource notif = new NotificationDataSource();*/
+    DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,17 +52,43 @@ public class NewActionActivity extends AppCompatActivity {
         RelativeLayout begin_layout = findViewById(R.id.time_box_begin);
         final TextView begin_hour = begin_layout.findViewById(R.id.hour);
         final TextView begin_min = begin_layout.findViewById(R.id.min);
-        final ButtonListener beginListener = new ButtonListener(begin_hour, begin_min);
-        begin_layout.setOnClickListener(beginListener);
 
         RelativeLayout end_layout = findViewById(R.id.time_box_end);
         final TextView end_hour = end_layout.findViewById(R.id.hour);
         final TextView end_min = end_layout.findViewById(R.id.min);
+
+        final TextView description = findViewById(R.id.description);
+
+        databaseHelper = new DatabaseHelper(getApplicationContext());
+        if (getIntent().hasExtra("databaseID")) {
+            String databaseID = getIntent().getStringExtra("databaseID");
+            //Item item = DatabaseHelper.getTaskById(databaseHelper.getReadableDatabase(), databaseID);
+            Item item = new Item();
+            begin_hour.setText(item.getBeginHour());
+            begin_min.setText(item.getBeginMin());
+            end_hour.setText(item.getEndHour());
+            end_min.setText(item.getEndMin());
+            description.setText(item.getDescription());
+        }
+
+        final ButtonListener beginListener = new ButtonListener(begin_hour, begin_min);
+        begin_layout.setOnClickListener(beginListener);
+
         final ButtonListener endListener = new ButtonListener(end_hour, end_min);
         end_layout.setOnClickListener(endListener);
 
+        Button reset = findViewById(R.id.reset);
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                beginListener.reset();
+                endListener.reset();
+            }
+        });
+
         notif_container = findViewById(R.id.notif_cont);
-        notif_container.setLayoutManager(new LinearLayoutManager(this));
+        notif_container.setVisibility(View.GONE);
+        /*notif_container.setLayoutManager(new LinearLayoutManager(this));
         notif_container.setAdapter(new RecyclerView.Adapter() {
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -76,19 +106,11 @@ public class NewActionActivity extends AppCompatActivity {
                 return notif.getCount();
             }
 
-        });
-
-        Button reset = findViewById(R.id.reset);
-        reset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                beginListener.reset();
-                endListener.reset();
-            }
-        });
+        });*/
 
         Button add = findViewById(R.id.add);
-        add.setOnClickListener(new View.OnClickListener() {
+        add.setVisibility(View.GONE);
+        /*add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Bundle args = new Bundle();
@@ -96,13 +118,14 @@ public class NewActionActivity extends AppCompatActivity {
                 popupWindow(args);
                 next_id++;
             }
-        });
+        });*/
+
+        findViewById(R.id.notif_title).setVisibility(View.GONE);
 
         Button cancel = findViewById(R.id.cancel);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TasksForToday.READY = true;
                 NewActionActivity.this.finish();
             }
         });
@@ -111,35 +134,38 @@ public class NewActionActivity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int begin = beginListener.getTime();
-                int end = endListener.getTime();
-                if (begin > end) {
-                    int color = getResources().getColor(R.color.lightRed);
-                    begin_hour.setBackgroundColor(color);
-                    begin_min.setBackgroundColor(color);
-                    end_hour.setBackgroundColor(color);
-                    end_min.setBackgroundColor(color);
-                    color = getResources().getColor(R.color.darkRed);
-                    begin_hour.setTextColor(color);
-                    begin_min.setTextColor(color);
-                    end_hour.setTextColor(color);
-                    end_min.setTextColor(color);
-                } else {
-                    // Запоминаем событие
-                    Intent intent = new Intent();
-                    if (((TextView) findViewById(R.id.name_of_act)).getText().toString().equals(""))
-                        intent.putExtra("title", "Название");
-                    else intent.putExtra("title", ((TextView) findViewById(R.id.name_of_act)).getText().toString());
-                    intent.putExtra("id", getIntent().getIntExtra("id", 0));
-                    intent.putExtra("beginHour", begin_hour.getText().toString());
-                    intent.putExtra("beginMin", begin_min.getText().toString());
-                    intent.putExtra("endHour", end_hour.getText().toString());
-                    intent.putExtra("endMin", end_min.getText().toString());
-
-                    setResult(RESULT_OK, intent);
-                    TasksForToday.READY = true;
-                    NewActionActivity.this.finish();
+            int begin = beginListener.getTime();
+            int end = endListener.getTime();
+            if (begin > end) {
+                int color = getResources().getColor(R.color.lightRed);
+                begin_hour.setBackgroundColor(color);
+                begin_min.setBackgroundColor(color);
+                end_hour.setBackgroundColor(color);
+                end_min.setBackgroundColor(color);
+                color = getResources().getColor(R.color.darkRed);
+                begin_hour.setTextColor(color);
+                begin_min.setTextColor(color);
+                end_hour.setTextColor(color);
+                end_min.setTextColor(color);
+            }
+            else {
+                // Запоминаем событие
+                Intent intent = new Intent();
+                String title = ((TextView) findViewById(R.id.name_of_act)).getText().toString();
+                intent.putExtra("title", title);
+                intent.putExtra("id", getIntent().getIntExtra("id", 0));
+                intent.putExtra("beginHour", begin_hour.getText().toString());
+                intent.putExtra("beginMin", begin_min.getText().toString());
+                intent.putExtra("endHour", end_hour.getText().toString());
+                intent.putExtra("endMin", end_min.getText().toString());
+                intent.putExtra("description", description.getText().toString());
+                if (getIntent().hasExtra("databaseID")) {
+                    intent.putExtra("databaseID", getIntent().getStringExtra("databaseID"));
                 }
+
+                setResult(RESULT_OK, intent);
+                NewActionActivity.this.finish();
+            }
             }
         });
     }
@@ -187,19 +213,26 @@ public class NewActionActivity extends AppCompatActivity {
         }
     }
 
-    public static void changeData(Bundle data, NotificationDataSource notif) {
+    String format(int time) {
+        if (time < 10)
+            return "0" + time;
+        return "" + time;
+    }
+
+    static int timeInMinutes (int hours, int minutes) {
+        return hours * 60 + minutes;
+    }
+
+    /*public static void changeData(Bundle data, NotificationDataSource notif) {
         if (data != null) {
             String message = data.getString("message", "");
             int minutes = data.getInt("minutes", 0);
             int hours = data.getInt("hours", 0);
             int id = data.getInt("id");
 
-            if (notif.NotificationExists(id)) {
-                notif.changeNotification(id, message, minutes, hours);
-            } else {
-                Notification new_notif = new Notification(message, hours, minutes, id);
-                notif.addNotification(new_notif);
-            }
+            notif.removeNotification(id);
+            Notification new_notif = new Notification(message, hours, minutes, id);
+            notif.addNotification(new_notif);
         }
     }
 
@@ -232,10 +265,6 @@ public class NewActionActivity extends AppCompatActivity {
 
         AlertDialog alert = builder.create();
         alert.show();
-    }
-
-    static int timeInMinutes (int hours, int minutes) {
-        return hours * 60 + minutes;
     }
 
     private class NotificationDataSource {
@@ -271,29 +300,6 @@ public class NewActionActivity extends AppCompatActivity {
                     break;
                 }
             }
-        }
-
-        void changeNotification(int id, String new_message, int new_min, int new_hour) {
-            for (int position = 0; position < items.size(); position++) {
-                if (items.get(position).getId().equals(id)) {
-                    Notification notification = items.get(position);
-                    items.remove(position);
-                    notif_container.getAdapter().notifyItemRemoved(position);
-                    notification.setMessage(new_message);
-                    notification.setMinutes(new_min);
-                    notification.setHours(new_hour);
-                    addNotification(notification);
-                    break;
-                }
-            }
-        }
-
-        boolean NotificationExists(int id) {
-            for (int position = 0; position < items.size(); position++) {
-                if (items.get(position).getId() == id)
-                    return true;
-            }
-            return false;
         }
     }
 
@@ -337,11 +343,5 @@ public class NewActionActivity extends AppCompatActivity {
                 }
             });
         }
-    }
-
-    String format(int time) {
-        if (time < 10)
-            return "0" + time;
-        return "" + time;
-    }
+    }*/
 }
