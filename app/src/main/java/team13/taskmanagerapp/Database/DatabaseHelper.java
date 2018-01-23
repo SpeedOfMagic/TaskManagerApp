@@ -18,6 +18,9 @@ import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_STATUS;
 import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_TITLE;
 import static team13.taskmanagerapp.Database.Contract.TaskEntry.DONE;
 import static team13.taskmanagerapp.Database.Contract.TaskEntry.TABLE_TASK;
+import static team13.taskmanagerapp.Database.Contract.UserEntry.COL_PASSWORD;
+import static team13.taskmanagerapp.Database.Contract.UserEntry.COL_USER;
+import static team13.taskmanagerapp.Database.Contract.UserEntry.TABLE_USER;
 
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -28,8 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db){
-        Log.d("ColumnName", "--- onCreate database ---");
-        // создаем таблицу с полями
+        Log.d("Database", "--- onCreate database ---");
         db.execSQL(
                 "CREATE TABLE " + TABLE_TASK + " ( " +
                         Contract.TaskEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -41,6 +43,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         COL_TASK_END_MIN + " TEXT NOT NULL, " +
                         COL_TASK_DATE + " TEXT NOT NULL, " +
                         COL_TASK_DESCRIP + " TEXT NOT NULL ); "
+        );
+
+        db.execSQL(
+                "CREATE TABLE " + TABLE_USER + " ( " +
+                        Contract.TaskEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        COL_USER + " TEXT NOT NULL, " +
+                        COL_PASSWORD + " TEXT NOT NULL ); "
         );
     }
 

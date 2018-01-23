@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,13 +17,11 @@ import team13.taskmanagerapp.Database.DBMethods;
 import team13.taskmanagerapp.Database.DatabaseHelper;
 
 import static android.provider.BaseColumns._ID;
-import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_DATE;
 import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_DESCRIP;
 import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_END_HOUR;
 import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_END_MIN;
 import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_START_HOUR;
 import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_START_MIN;
-import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_STATUS;
 import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_TITLE;
 
 /**
@@ -41,7 +40,10 @@ public class ViewActionFragment extends Fragment {
             return null;
         }
 
+        getActivity().setTitle("Просмотр события");
+
         View rootView = inflater.inflate(R.layout.view_task, container, false);
+        rootView.setBackgroundColor(getResources().getColor(R.color.white));
 
         databaseHelper = new DatabaseHelper(getActivity().getApplicationContext());
         final long databaseID = getArguments().getLong("databaseID", 0);
@@ -66,7 +68,7 @@ public class ViewActionFragment extends Fragment {
         db.close();
         cursor.close();
 
-        getActivity().setTitle(title);
+        ((TextView) rootView.findViewById(R.id.title)).setText(title);
 
         ViewGroup layout = rootView.findViewById(R.id.begin);
         if (!beginHour.equals("") && !beginMin.equals("")) {
@@ -92,6 +94,7 @@ public class ViewActionFragment extends Fragment {
 
         TextView description = rootView.findViewById(R.id.description);
         description.setText(descript);
+        description.setMovementMethod(new ScrollingMovementMethod());
         if (descript.equals(""))
             description.setText("Описание отсутствует");
 
@@ -104,9 +107,6 @@ public class ViewActionFragment extends Fragment {
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
-
-        (rootView.findViewById(R.id.notif_title)).setVisibility(View.GONE);
-        (rootView.findViewById(R.id.notif_cont)).setVisibility(View.GONE);
 
         /*final List<Notification> notif = new ArrayList<>();
 

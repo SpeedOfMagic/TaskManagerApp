@@ -30,7 +30,7 @@
             android:background="@color/colorPrimaryDark"
             android:id="@+id/dash"
             android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"/>
+            android:layout_marginBottom="2dp" />
 
         <include layout="@layout/time_box"
             android:layout_width="wrap_content"

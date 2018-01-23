@@ -58,6 +58,9 @@ public class TasksForToday extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        View rootView = inflater.inflate(R.layout.tasksfortoday, container, false);
+        rootView.setBackgroundColor(getResources().getColor(R.color.white));
+
         databaseHelper = new DatabaseHelper(getActivity().getApplicationContext());
 
         Calendar now = Calendar.getInstance();
@@ -95,17 +98,15 @@ public class TasksForToday extends Fragment {
             getActivity().setTitle(format(dayOfMonth) + " " + getResources().getStringArray(R.array.months)[month] + " " + year);
         }
 
-        View rootView = inflater.inflate(R.layout.tasksfortoday, container, false);
-
         final FloatingActionButton fab = rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-              Intent intent = new Intent(getActivity(), NewActionActivity.class);
-              intent.putExtra("id", nextId);
-              startActivityForResult(intent, NEW_TASK_CODE);
-              nextId++;
-          }
+              @Override
+              public void onClick(View v) {
+                  Intent intent = new Intent(getActivity(), NewActionActivity.class);
+                  intent.putExtra("id", nextId);
+                  startActivityForResult(intent, NEW_TASK_CODE);
+                  nextId++;
+              }
         });
 
         recyclerView = rootView.findViewById(R.id.container);

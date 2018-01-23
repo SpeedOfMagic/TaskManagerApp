@@ -44,8 +44,8 @@ import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_TITLE;
  */
 
 public class NewActionActivity extends AppCompatActivity {
-    private RecyclerView notif_container;
-    /*private Integer next_id = 0;
+    /*private RecyclerView notif_container;
+    private Integer next_id = 0;
     final NotificationDataSource notif = new NotificationDataSource();*/
     DatabaseHelper databaseHelper;
 
@@ -76,6 +76,15 @@ public class NewActionActivity extends AppCompatActivity {
         final TextView description = findViewById(R.id.description);
 
         final EditText taskName = findViewById(R.id.name_of_act);
+
+        taskName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                taskName.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
+                taskName.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                taskName.setHintTextColor(getResources().getColor(R.color.colorPrimaryDark));
+            }
+        });
 
         if (getIntent().hasExtra("databaseID")) {
             long databaseID = getIntent().getLongExtra("databaseID", 0);
@@ -111,9 +120,8 @@ public class NewActionActivity extends AppCompatActivity {
             }
         });
 
-        notif_container = findViewById(R.id.notif_cont);
-        notif_container.setVisibility(View.GONE);
-        /*notif_container.setLayoutManager(new LinearLayoutManager(this));
+        /*notif_container = findViewById(R.id.notif_cont);
+        notif_container.setLayoutManager(new LinearLayoutManager(this));
         notif_container.setAdapter(new RecyclerView.Adapter() {
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -133,9 +141,8 @@ public class NewActionActivity extends AppCompatActivity {
 
         });*/
 
-        Button add = findViewById(R.id.add);
-        add.setVisibility(View.GONE);
-        /*add.setOnClickListener(new View.OnClickListener() {
+        /*Button add = findViewById(R.id.add);
+        add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Bundle args = new Bundle();
@@ -144,8 +151,6 @@ public class NewActionActivity extends AppCompatActivity {
                 next_id++;
             }
         });*/
-
-        findViewById(R.id.notif_title).setVisibility(View.GONE);
 
         Button cancel = findViewById(R.id.cancel);
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -172,7 +177,14 @@ public class NewActionActivity extends AppCompatActivity {
                 begin_min.setTextColor(color);
                 end_hour.setTextColor(color);
                 end_min.setTextColor(color);
-            } else {
+            }
+
+            if (taskName.getText().toString().equals("")) {
+                taskName.setBackgroundColor(getResources().getColor(R.color.lightRed));
+                taskName.setHintTextColor(getResources().getColor(R.color.darkRed));
+            }
+
+            if (begin <= end && !taskName.getText().toString().equals("")) {
                 Intent intent = new Intent();
                 String title = taskName.getText().toString();
                 intent.putExtra("title", title);
