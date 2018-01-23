@@ -42,48 +42,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*setContentView(R.layout.test);
-
-        final TextView text = findViewById(R.id.text);
-
-        databaseHelper = new DatabaseHelper(this);
-
-        (findViewById(R.id.add)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("add", "I am here");
-                SQLiteDatabase db = databaseHelper.getWritableDatabase();
-                ContentValues values = new ContentValues();
-                values.put(COL_TASK_DESCRIP, "aaaa");
-                db.insert(TABLE_TASK, null, values);
-                db.close();
-                text.setText("add");
-            }
-        });
-
-        (findViewById(R.id.see)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("see", "I am here");
-                SQLiteDatabase db = databaseHelper.getReadableDatabase();
-
-                Cursor cursor = db.query(Contract.TaskEntry.TABLE_TASK,
-                        new String[]{_ID, COL_TASK_DESCRIP},
-                /*COL_TASK_DATE + " = ? ", new String[] {format(kdayOfMonth) + ":" + format(kmonth) + ":" + kyear},
-                        null, null, null, null, null);
-
-                while (cursor.moveToNext()) {
-                    int idx = cursor.getColumnIndex(_ID);
-                    int i = cursor.getColumnIndex(COL_TASK_DESCRIP);
-                    //Log.d("database", cursor.getInt(idx) + " " + cursor.getString(i));
-                    text.setText(cursor.getString(i));
-                }
-
-                db.close();
-                cursor.close();
-            }
-        });*/
-
         setContentView(R.layout.activity_main);
 
         databaseHelper = new DatabaseHelper(getApplicationContext());
