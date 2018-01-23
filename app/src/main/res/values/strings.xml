@@ -5,16 +5,18 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
-    <string name="register" >"Нет аккаунта? Нажмите сюда,\nчтобы зарегистироваться"</string>
-    <string name="authorize">"Есть аккаунт? Нажмите сюда,\nчтобы авторизоваться"</string>
+    <string name="registerLink" >"Нет аккаунта? Нажмите сюда,\nчтобы зарегистироваться"</string>
+    <string name="authorizeLink">"Есть аккаунт? Нажмите сюда,\nчтобы авторизоваться"</string>
     <string name="default_time_value">00</string>
     <string name="save">Сохранить</string>
     <string name="cancel">Отмена</string>
     <string name="message_default">Текст уведомления</string>
     <string name="sendBtnText">Sign in</string>
     <string name="load">Loading…</string>
-    <string name="login">Логин</string>
-    <string name=""
-    <string name="password">Пароль</string>
-    <string name="rememberme">Запомнить меня</string>
+    <string name="loginColon">Логин:</string>
+    <string name="passColon">Пароль:</string>
+    <string name="authorization">Авторизация</string>
+    <string name="registration">Регистрация</string>
+    <string name="rememberMe">Запомнить меня</string>
+    <string name="incorrectPassOrLogin">Логин или пароль введены неверно</string>
 </resources>

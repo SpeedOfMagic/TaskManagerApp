@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 public class AuthorizationActivity extends AppCompatActivity {
     @Override
@@ -20,14 +19,13 @@ public class AuthorizationActivity extends AppCompatActivity {
                 CharSequence login = textView.getText();
                 textView = findViewById(R.id.password);
                 CharSequence pass = textView.getText();
-                /*TODO создать класс User и функцию verify()
-                int result=verify(new User(login,pass));
-                if (result==1){
+                User user=new User(login,pass);
+                /*TODO создать функцию verify()
+                if (verify(user)){
                     finish();
-                } else if (result==0){
-
                 } else {
-
+                    textView=findViewById(R.id.incorrectPassOrLogin);
+                    textView.setVisibility(View.VISIBLE);
                 }
                  */
             }

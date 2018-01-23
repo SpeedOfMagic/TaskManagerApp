@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //TODO сделать функцию hasCurrentUserSession()
         if (/*!hasCurrentUserSession()*/true) { // Проверка того, авторизован ли пользователь
             startActivity(new Intent(this,AuthorizationActivity.class));
         } else {

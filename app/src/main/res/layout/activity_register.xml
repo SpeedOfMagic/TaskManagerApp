@@ -9,13 +9,14 @@
         android:layout_centerVertical="true"
         android:id="@+id/space" />
 
-    <EditText
+    <EditText android:labelFor="@+id/loginRegister"
         android:id="@+id/loginRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/space"
         android:layout_alignStart="@+id/passwordRegister"
-        android:ems="10" />
+        android:ems="10"
+        android:inputType="textShortMessage" />
 
     <EditText android:labelFor="@+id/passwordRegister"
         android:id="@+id/passwordRegister"
@@ -33,7 +34,7 @@
         android:layout_alignBottom="@+id/loginRegister"
         android:layout_alignParentStart="true"
         android:layout_marginStart="22dp"
-        android:text="Пароль:"
+        android:text="@string/passColon"
         android:textSize="25sp"
         android:textColor="@color/black"
         />
@@ -44,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/loginRegister"
         android:layout_toStartOf="@+id/loginRegister"
-        android:text="Логин:"
+        android:text="@string/loginColon"
         android:textColor="@color/black"
         android:textSize="25sp" />
 
@@ -52,9 +53,9 @@
         android:id="@+id/registerBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rememberMe"
+        android:layout_below="@+id/rememberMeReg"
         android:layout_centerHorizontal="true"
-        android:text="Регистрация" />
+        android:text="@string/registration" />
 
     <Button
         android:id="@+id/authorizeLink"
@@ -63,15 +64,15 @@
         android:layout_below="@+id/registerBtn"
         android:layout_centerHorizontal="true"
         android:background="@color/white"
-        android:text="@string/authorize"
+        android:text="@string/authorizeLink"
         android:textAllCaps="false"
         android:textColor="@color/blue" />
 
     <CheckBox
-        android:id="@+id/rememberMe"
+        android:id="@+id/rememberMeReg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/passwordRegister"
         android:layout_below="@+id/passwordRegister"
-        android:text="@string/rememberme" />
+        android:text="@string/rememberMe" />
 </RelativeLayout>

@@ -9,19 +9,20 @@
         android:layout_centerVertical="true"
         android:id="@+id/space" />
 
-    <EditText
-        android:id="@+id/login"
+    <EditText android:labelFor="@+id/loginAuthorization"
+        android:id="@+id/loginAuthorization"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/space"
-        android:layout_alignStart="@+id/password"
+        android:layout_alignStart="@+id/passwordAuthorization"
+        android:inputType="textShortMessage"
         android:ems="10" />
 
-    <EditText
-        android:id="@+id/password"
+    <EditText android:labelFor="@+id/passwordAuthorization"
+        android:id="@+id/passwordAuthorization"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/login"
+        android:layout_below="@+id/loginAuthorization"
         android:layout_toEndOf="@+id/textView"
         android:ems="10"
         android:inputType="textPassword" />
@@ -30,12 +31,12 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/password"
-        android:layout_alignBottom="@+id/login"
+        android:layout_alignBaseline="@+id/passwordAuthorization"
+        android:layout_alignBottom="@+id/loginAuthorization"
         android:layout_alignParentStart="true"
         android:layout_marginStart="22dp"
-        android:text="Пароль:"
-        android:textSize="20dp"
+        android:text="@string/passColon"
+        android:textSize="20sp"
         android:textColor="@color/black"
         />
 
@@ -43,19 +44,19 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/login"
-        android:layout_toStartOf="@+id/login"
-        android:text="Логин:"
+        android:layout_alignTop="@+id/loginAuthorization"
+        android:layout_toStartOf="@+id/loginAuthorization"
+        android:text="@string/loginColon"
         android:textColor="@color/black"
-        android:textSize="20dp" />
+        android:textSize="25sp" />
 
     <Button
         android:id="@+id/authorizeBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rememberMe"
+        android:layout_below="@+id/rememberMeAuth"
         android:layout_centerHorizontal="true"
-        android:text="Авторизация" />
+        android:text="@string/authorization" />
 
     <Button
         android:id="@+id/registerLink"
@@ -64,15 +65,24 @@
         android:layout_below="@+id/authorizeBtn"
         android:layout_centerHorizontal="true"
         android:background="@color/white"
-        android:text="@string/register"
+        android:text="@string/registerLink"
         android:textAllCaps="false"
         android:textColor="@color/blue" />
-
     <CheckBox
-        android:id="@+id/rememberMe"
+        android:id="@+id/rememberMeAuth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/password"
-        android:layout_below="@+id/password"
-        android:text="@string/rememberme" />
+        android:layout_alignStart="@+id/passwordAuthorization"
+        android:layout_below="@+id/passwordAuthorization"
+        android:text="@string/rememberMe" />
+
+    <TextView
+        android:id="@+id/incorrectPassOrLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/registerLink"
+        android:layout_centerHorizontal="true"
+        android:text="@string/incorrectPassOrLogin"
+        android:textColor="@color/darkRed"
+        android:visibility="invisible"/>
 </RelativeLayout>
