@@ -86,7 +86,7 @@ public class TasksForToday extends Fragment {
 
         View rootView = inflater.inflate(R.layout.tasksfortoday, container, false);
 
-        FloatingActionButton fab = rootView.findViewById(R.id.fab);
+        final FloatingActionButton fab = rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
@@ -94,7 +94,6 @@ public class TasksForToday extends Fragment {
               intent.putExtra("id", nextId);
               startActivityForResult(intent, NEW_TASK_CODE);
               nextId++;
-
           }
         });
 
@@ -120,6 +119,24 @@ public class TasksForToday extends Fragment {
         });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
+                if (dy > 0 && fab.isShown())
+                    fab.hide();
+                if (dy < 0)
+                    fab.show();
+            }
+        });
+
+        /*List <Item> list = DatabaseHelper.getTasksAtCurrentDate(databaseHelper.getWritableDatabase(), year, month, dayOfMonth);
+
+        for (Item item : list) {
+            item.setId(nextId);
+            nextId++;
+            dataSource.addItem(item);
+        }*/
 
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
 
