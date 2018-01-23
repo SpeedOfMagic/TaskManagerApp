@@ -7,3 +7,7 @@
 /build
 /captures
 .externalNativeBuild
+<<<<<<< HEAD
+=======
+.idea
+>>>>>>> 285d44c6b4b7d3e6f80dbeee1eef6c5241b505a1
