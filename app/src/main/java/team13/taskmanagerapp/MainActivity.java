@@ -46,7 +46,19 @@ public class MainActivity extends AppCompatActivity
 
         databaseHelper = new DatabaseHelper(getApplicationContext());
 
-        if (false) { // Проверка того, авторизован ли пользователь
+        if (getIntent().hasExtra("checkAuth")){
+            Log.d("MyLog","AUTH complete !!!");
+        }
+        else {
+            Intent intent = new Intent(MainActivity.this, WebLog.class);
+            startActivity(intent);
+        }
+
+        Fragment fragment = new TasksForToday();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
+
+        /*if (false) { // Проверка того, авторизован ли пользователь
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
             View rootView = getLayoutInflater().inflate(R.layout.activity_log, (RelativeLayout) findViewById(R.id.layout), false);
@@ -69,7 +81,7 @@ public class MainActivity extends AppCompatActivity
             Fragment fragment = new TasksForToday();
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
-        }
+        }*/
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

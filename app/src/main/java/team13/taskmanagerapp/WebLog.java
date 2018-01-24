@@ -1,46 +1,61 @@
 package team13.taskmanagerapp;
 
-import android.annotation.TargetApi;
+/**
+ * Created by ilyauyutov on 23.01.2018.
+ */
+
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.*;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.widget.Toast;
+
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKCallback;
+import com.vk.sdk.VKScope;
+import com.vk.sdk.VKSdk;
+import com.vk.sdk.WebView;
+import com.vk.sdk.api.VKError;
+
+import java.util.Arrays;
 
 public class WebLog extends AppCompatActivity {
 
-    public String code = "";
+    private String[] scope = new String[]{VKScope.MESSAGES, VKScope.FRIENDS, VKScope.WALL};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_log);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        setTitle("Браузер");
+        VKSdk.login(this, scope);
 
-        WebView webView;
-        webView = findViewById(R.id.webLogin);
-        webView.setWebViewClient(new WebViewClient(){
+
+        //String[] fingerprints = VKUtil.getCertificateFingerprint(this, this.getPackageName());
+        //System.out.println("FINGERPRIIIINTTT");
+        //System.out.println(Arrays.asList(fingerprints));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view,  String url) {
-                android.util.Log.d("MyLog", url);
-                view.loadUrl(url);
-                if(url.substring(18,22).equals("code")){
-                     code = url.substring(23);
-                    Log.d("MyLog",code);
-                    Intent intent = new Intent(WebLog.this, Auth.class);
-                    intent.putExtra("authcode",code);
-                    startActivity(intent);
-                }
-                return true;
+            public void onResult(VKAccessToken res) {
+
+                Toast.makeText(getApplicationContext(), "Вы успешно авторизовались!", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(WebLog.this, MainActivity.class);
+                intent.putExtra("checkAuth","O");
+                startActivity(intent);
             }
-        });
-        //webView.loadUrl("https://google.com");
-        webView.loadUrl("https://www.wrike.com/oauth2/authorize?client_id=01a00I4c&response_type=code");
+
+            @Override
+            public void onError(VKError error) {
+
+                Intent intent = new Intent(WebLog.this, AuthErrorActivity.class);
+                startActivity(intent);
+
+            }
+        })) {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }
