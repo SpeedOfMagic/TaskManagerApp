@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:id="@+id/lin_layout">
 
@@ -11,17 +12,8 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:elevation="3dp"
-            android:gravity="end"
             android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-            android:translationZ="3dp">
-
-                <Button
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/ic_check_box_24dp" />
-
-        </android.support.v7.widget.Toolbar>
+            android:theme="?attr/actionBarTheme" />
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
@@ -127,25 +119,5 @@
             android:layout_alignTop="@id/notif_title"
             android:layout_toEndOf="@id/notif_title"/> -->
 
-        <Button
-            android:id="@+id/save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_toStartOf="@id/cancel"
-            android:text="@string/save"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/colorPrimary" />
-
-        <Button
-            android:id="@+id/cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/save"
-            android:layout_marginStart="10dp"
-            android:layout_alignParentEnd="true"
-            android:text="@string/cancel"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/colorAccent"/>
         </RelativeLayout>
 </LinearLayout>

@@ -58,31 +58,6 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
 
-        /*if (false) { // Проверка того, авторизован ли пользователь
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-            View rootView = getLayoutInflater().inflate(R.layout.activity_log, (RelativeLayout) findViewById(R.id.layout), false);
-
-            (rootView.findViewById(R.id.sendBtn)).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(MainActivity.this, WebLog.class);
-                    startActivity(intent);
-                }
-            });
-
-            builder.setView(rootView);
-
-            AlertDialog alert = builder.create();
-            alert.setCanceledOnTouchOutside(false);
-            alert.show();
-            //alert.cancel();
-        } else {
-            Fragment fragment = new TasksForToday();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
-        }*/
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
