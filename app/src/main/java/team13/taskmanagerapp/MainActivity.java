@@ -54,6 +54,10 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         }
 
+        Fragment fragment = new CalendarFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
