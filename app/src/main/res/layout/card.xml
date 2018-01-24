@@ -44,9 +44,10 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minHeight="40dp"
+            android:layout_centerVertical="true"
             android:layout_toEndOf="@id/begin"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@id/begin">
+            android:layout_alignParentEnd="true">
 
             <TextView
                 android:layout_centerVertical="true"
@@ -61,22 +62,22 @@
                 android:textColor="@color/colorPrimaryDark" />
 
             <Button
-                android:layout_alignBaseline="@id/text1"
+                android:layout_alignBaseline="@id/dlttsk"
                 android:id="@+id/dlttsk"
                 android:layout_toStartOf="@id/checkBox"
-                android:layout_marginRight="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_width="30dp"
                 android:layout_height="35dp"
                 android:background="@drawable/ic_delete_24dp" />
 
             <Button
-                android:layout_alignBaseline="@id/text1"
+                android:layout_alignBaseline="@id/edttsk"
                 android:id="@+id/edttsk"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:background="@drawable/ic_edit_24dp"
                 android:layout_toStartOf="@id/dlttsk"
-                android:layout_marginRight="8dp" />
+                android:layout_marginEnd="8dp" />
 
             <android.support.v7.widget.AppCompatCheckBox
                 android:layout_alignBaseline="@id/text1"

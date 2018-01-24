@@ -1,10 +1,6 @@
 package team13.taskmanagerapp;
 
-import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.pm.ActivityInfo;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Intent;
@@ -18,27 +14,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import team13.taskmanagerapp.Database.Contract;
-import team13.taskmanagerapp.Database.DatabaseHelper;
-
-import static android.provider.BaseColumns._ID;
-import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_DESCRIP;
-import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_END_HOUR;
-import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_END_MIN;
-import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_START_HOUR;
-import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_START_MIN;
-import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_STATUS;
-import static team13.taskmanagerapp.Database.Contract.TaskEntry.COL_TASK_TITLE;
-import static team13.taskmanagerapp.Database.Contract.TaskEntry.TABLE_TASK;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-    DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +25,13 @@ public class MainActivity extends AppCompatActivity
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        databaseHelper = new DatabaseHelper(getApplicationContext());
-
         if (getIntent().hasExtra("checkAuth")){
             Log.d("MyLog","AUTH complete !!!");
         }
         else {
             Intent intent = new Intent(MainActivity.this, WebLog.class);
             startActivity(intent);
+            this.finish();
         }
 
         Fragment fragment = new TasksForToday();
@@ -83,7 +60,8 @@ public class MainActivity extends AppCompatActivity
         } else if (getSupportFragmentManager().getBackStackEntryCount() > 0){
             getSupportFragmentManager().popBackStack();
         } else {
-            super.onBackPressed();
+            //super.onBackPressed();
+            finishAffinity();
         }
     }
 

@@ -43,7 +43,9 @@ public class WebLog extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Оффлайн режим.", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(WebLog.this, MainActivity.class);
             intent.putExtra("checkAuth","O");
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+            this.finish();
         }
 
         //String[] fingerprints = VKUtil.getCertificateFingerprint(this, this.getPackageName());
@@ -60,14 +62,17 @@ public class WebLog extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Вы успешно авторизовались!", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(WebLog.this, MainActivity.class);
                 intent.putExtra("checkAuth","O");
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                WebLog.this.finish();
             }
 
             @Override
             public void onError(VKError error) {
-                    Intent intent = new Intent(WebLog.this, AuthErrorActivity.class);
-                    startActivity(intent);
-
+                Intent intent = new Intent(WebLog.this, AuthErrorActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                WebLog.this.finish();
             }
         })) {
             super.onActivityResult(requestCode, resultCode, data);

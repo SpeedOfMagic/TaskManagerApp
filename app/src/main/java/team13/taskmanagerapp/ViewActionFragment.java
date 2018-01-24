@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -98,7 +99,16 @@ public class ViewActionFragment extends Fragment {
         if (descript.equals(""))
             description.setText("Описание отсутствует");
 
-        (rootView.findViewById(R.id.change)).setOnClickListener(new View.OnClickListener() {
+        final Button change = rootView.findViewById(R.id.change);
+
+        description.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                change.callOnClick();
+            }
+        });
+
+        change.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 TasksForToday.EDIT = true;

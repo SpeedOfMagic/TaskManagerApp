@@ -93,6 +93,7 @@ public class NewActionActivity extends AppCompatActivity {
                     null, null, null, null);
             while (cursor.moveToNext()) {
                 taskName.setText(DBMethods.getString(cursor, COL_TASK_TITLE));
+                taskName.setSelection(taskName.getText().length());
                 begin_hour.setText(DBMethods.getString(cursor, COL_TASK_START_HOUR));
                 begin_min.setText(DBMethods.getString(cursor, COL_TASK_START_MIN));
                 end_hour.setText(DBMethods.getString(cursor, COL_TASK_END_HOUR));
