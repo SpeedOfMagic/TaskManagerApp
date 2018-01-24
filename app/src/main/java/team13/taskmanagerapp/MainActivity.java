@@ -2,6 +2,7 @@ package team13.taskmanagerapp;
 
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.Fragment;
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         databaseHelper = new DatabaseHelper(getApplicationContext());
 
         if (getIntent().hasExtra("checkAuth")){
@@ -54,7 +57,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         }
 
-        Fragment fragment = new CalendarFragment();
+        Fragment fragment = new TasksForToday();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
 

@@ -24,12 +24,6 @@ public class Contract {
         static final String NOT_DONE = "not_done";
     }
 
-    public class UserEntry implements BaseColumns {
-        public static final String TABLE_USER = "users";
-        public static final String COL_USER = "user";
-        public static final String COL_PASSWORD = "password";
-    }
-
     public static String status(boolean ready) {
         if (ready)
             return TaskEntry.DONE;

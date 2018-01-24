@@ -313,7 +313,7 @@ public class TasksForToday extends Fragment {
 
     void editTask(long databaseID, int id) {
         Intent intent = new Intent(getActivity(), NewActionActivity.class);
-        intent.putExtra("title", "Редактирование события");
+        intent.putExtra("title", "Редактирование");
         intent.putExtra("id", id);
         intent.putExtra("databaseID", databaseID);
         startActivityForResult(intent, NEW_TASK_CODE);
