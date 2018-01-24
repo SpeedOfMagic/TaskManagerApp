@@ -25,6 +25,8 @@
         <activity
             android:name=".WebLog"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <receiver android:name=".TimeNotification" />
     </application>
 
 </manifest>

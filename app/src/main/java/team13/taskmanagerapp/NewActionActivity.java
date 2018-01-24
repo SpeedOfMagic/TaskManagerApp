@@ -1,6 +1,9 @@
 package team13.taskmanagerapp;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -31,8 +34,8 @@ import team13.taskmanagerapp.Database.DatabaseHelper;
 
 public class NewActionActivity extends AppCompatActivity {
     private RecyclerView notif_container;
-    /*private Integer next_id = 0;
-    final NotificationDataSource notif = new NotificationDataSource();*/
+    private Integer next_id = 0;
+    final NotificationDataSource notif = new NotificationDataSource();
     DatabaseHelper databaseHelper;
 
     @Override
@@ -87,8 +90,8 @@ public class NewActionActivity extends AppCompatActivity {
         });
 
         notif_container = findViewById(R.id.notif_cont);
-        notif_container.setVisibility(View.GONE);
-        /*notif_container.setLayoutManager(new LinearLayoutManager(this));
+        //notif_container.setVisibility(View.GONE);
+        notif_container.setLayoutManager(new LinearLayoutManager(this));
         notif_container.setAdapter(new RecyclerView.Adapter() {
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -106,11 +109,11 @@ public class NewActionActivity extends AppCompatActivity {
                 return notif.getCount();
             }
 
-        });*/
+        });
 
         Button add = findViewById(R.id.add);
-        add.setVisibility(View.GONE);
-        /*add.setOnClickListener(new View.OnClickListener() {
+        //add.setVisibility(View.GONE);
+        add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Bundle args = new Bundle();
@@ -118,9 +121,9 @@ public class NewActionActivity extends AppCompatActivity {
                 popupWindow(args);
                 next_id++;
             }
-        });*/
+        });
 
-        findViewById(R.id.notif_title).setVisibility(View.GONE);
+        //findViewById(R.id.notif_title).setVisibility(View.GONE);
 
         Button cancel = findViewById(R.id.cancel);
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -223,7 +226,7 @@ public class NewActionActivity extends AppCompatActivity {
         return hours * 60 + minutes;
     }
 
-    /*public static void changeData(Bundle data, NotificationDataSource notif) {
+    public static void changeData(Bundle data, NotificationDataSource notif) {
         if (data != null) {
             String message = data.getString("message", "");
             int minutes = data.getInt("minutes", 0);
@@ -287,6 +290,20 @@ public class NewActionActivity extends AppCompatActivity {
                     break;
                 }
             }
+            Calendar stamp = Calendar.getInstance();
+            if (item.getHours() >= 12)
+            stamp.set(Calendar.HOUR, item.getHours() - 12);
+            else stamp.set(Calendar.HOUR, item.getHours());
+            stamp.set(Calendar.MINUTE, item.getMinutes());
+            stamp.set(Calendar.SECOND,0);
+
+            AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(getApplicationContext(), team13.taskmanagerapp.TimeNotification.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0,
+                    intent, PendingIntent.FLAG_CANCEL_CURRENT );
+            am.cancel(pendingIntent);
+            am.set(AlarmManager.RTC_WAKEUP, stamp.getTimeInMillis(), pendingIntent);
+
             items.add(position, item);
             notif_container.getAdapter().notifyItemInserted(position);
             notif_container.scrollToPosition(position);
@@ -343,5 +360,5 @@ public class NewActionActivity extends AppCompatActivity {
                 }
             });
         }
-    }*/
+    }
 }
