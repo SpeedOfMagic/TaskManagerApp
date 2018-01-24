@@ -4,7 +4,10 @@ package team13.taskmanagerapp;
  * Created by ilyauyutov on 23.01.2018.
  */
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -22,6 +25,13 @@ public class WebLog extends AppCompatActivity {
 
     private String[] scope = new String[]{VKScope.MESSAGES, VKScope.FRIENDS, VKScope.WALL};
 
+
+    public boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +39,12 @@ public class WebLog extends AppCompatActivity {
 
         VKSdk.login(this, scope);
 
+        if(isOnline() == false) {
+            Toast.makeText(getApplicationContext(), "Оффлайн режим.", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(WebLog.this, MainActivity.class);
+            intent.putExtra("checkAuth","O");
+            startActivity(intent);
+        }
 
         //String[] fingerprints = VKUtil.getCertificateFingerprint(this, this.getPackageName());
         //System.out.println("FINGERPRIIIINTTT");
@@ -49,9 +65,8 @@ public class WebLog extends AppCompatActivity {
 
             @Override
             public void onError(VKError error) {
-
-                Intent intent = new Intent(WebLog.this, AuthErrorActivity.class);
-                startActivity(intent);
+                    Intent intent = new Intent(WebLog.this, AuthErrorActivity.class);
+                    startActivity(intent);
 
             }
         })) {
