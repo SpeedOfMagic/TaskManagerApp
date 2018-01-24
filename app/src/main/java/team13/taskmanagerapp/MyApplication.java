@@ -1,6 +1,10 @@
 package team13.taskmanagerapp;
 
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
@@ -29,9 +33,25 @@ public class MyApplication extends Application {
         }
     }
 
+    static Context context;
+
     @Override
     public void onCreate() {
         super.onCreate();
         VKSdk.initialize(getApplicationContext());
+        context = getApplicationContext();
+    }
+
+    public static Context getContext() {
+        return context;
+    }
+
+    public static void factoryReset() {
+        Intent mStartActivity = new Intent(context, MainActivity.class);
+        int mPendingIntentId = 123456;
+        PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+        System.exit(0);
     }
 }

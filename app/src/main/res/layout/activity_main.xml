@@ -52,7 +52,8 @@
 				android:layout_margin="10dp"
 				android:textColor="@color/white"
 				android:backgroundTint="@color/colorPrimary"
-				android:textStyle="bold"/>
+				android:textStyle="bold"
+				android:id="@+id/btnLogout"/>
 		</LinearLayout>
 
 	</android.support.design.widget.NavigationView>

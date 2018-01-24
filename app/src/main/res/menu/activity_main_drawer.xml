@@ -6,7 +6,8 @@
 
 	<item
 		android:icon="@drawable/ic_face_default_24dp"
-		android:title="Гость" />
+		android:title="Оффлайн режим"
+		android:id="@+id/profileName"/>
 
 	<item android:title="Меню">
 		<menu>
